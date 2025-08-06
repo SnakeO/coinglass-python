@@ -1161,7 +1161,7 @@ economic_calendar = cg.calendar.get_economic_data()
 # ]
 ```
 
-### Top-Level Indicator Endpoints (9 endpoints)
+### Top-Level Indicator Endpoints (11 endpoints)
 
 #### 108. Get Coinbase Premium Index
 ```python
@@ -1247,29 +1247,6 @@ golden_ratio = cg.get_golden_ratio_multiplier()
 # }
 ```
 
-#### 117. Get Bitcoin Profitable Days
-```python
-profitable_days = cg.get_bitcoin_profitable_days()
-# Output: {'percent_profitable_days': 95.2, 'total_days': 5000, 'profitable_days': 4760}
-```
-
-#### 118. Get Bitcoin Rainbow Chart
-```python
-rainbow_chart = cg.get_bitcoin_rainbow_chart()
-# Output: {
-#   'current_price': 84000,
-#   'rainbow_position': 'accumulate',
-#   'bands': {
-#     'maximum_bubble': 150000,
-#     'sell': 120000,
-#     'fomo': 95000,
-#     'hold': 70000,
-#     'accumulate': 50000,
-#     'buy': 35000,
-#     'fire_sale': 25000
-#   }
-# }
-```
 
 ## Advanced Usage
 
