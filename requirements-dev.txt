@@ -1,0 +1,27 @@
+# Include base requirements
+-r requirements.txt
+
+# Development and testing
+pytest>=7.0.0
+pytest-cov>=3.0.0
+pytest-asyncio>=0.18.0
+pytest-mock>=3.6.0
+
+# Code quality
+black>=22.0.0
+flake8>=4.0.0
+mypy>=0.950
+isort>=5.10.0
+
+# Documentation
+sphinx>=4.5.0
+sphinx-rtd-theme>=1.0.0
+sphinx-autodoc-typehints>=1.18.0
+
+# Async support for testing
+aiohttp>=3.8.0
+
+# Other development tools
+ipython>=8.0.0
+jupyter>=1.0.0
+pre-commit>=2.18.0
