@@ -148,7 +148,9 @@ class CoinGlass:
                 - startTime (int): Start timestamp in milliseconds
                 - endTime (int): End timestamp in milliseconds
         """
-        return borrow_interest_rate.history.get_history(self.client, **kwargs)
+        from .borrow_interest_rate import BorrowInterestRateAPI
+        borrow_api = BorrowInterestRateAPI(self.client)
+        return borrow_api.get_history(**kwargs)
     
     def get_ahr999(self, **kwargs):
         """

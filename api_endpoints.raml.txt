@@ -1,0 +1,2432 @@
+#%RAML 1.0
+title: CoinGlass API v4.0 Complete Specification
+version: v4
+baseUri: https://open-api-v4.coinglass.com
+mediaType: application/json
+description: |
+  Complete cryptocurrency market data API covering all 100+ endpoints for futures, spot, options, ETF, 
+  on-chain, and advanced market indicators from CoinGlass.
+
+securitySchemes:
+  apiKey:
+    description: API Key authentication
+    type: Pass Through
+    describedBy:
+      headers:
+        CG-API-KEY:
+          description: Your CoinGlass API key
+          type: string
+          required: true
+
+types:
+  # Common Response Types
+  StandardResponse:
+    type: object
+    properties:
+      code:
+        type: string
+        description: Response code (0 indicates success)
+        example: "0"
+      msg:
+        type: string
+        description: Response message
+        example: "success"
+      data:
+        type: any
+        description: Response payload
+
+  ErrorResponse:
+    type: object
+    properties:
+      code:
+        type: string
+        description: Error code
+      msg:
+        type: string
+        description: Error message
+
+  # Time Series Data Types
+  OHLCData:
+    type: object
+    properties:
+      time:
+        type: integer
+        format: int64
+        description: Timestamp in milliseconds
+      open:
+        type: number
+        description: Opening value
+      high:
+        type: number
+        description: High value
+      low:
+        type: number
+        description: Low value
+      close:
+        type: number
+        description: Closing value
+
+  TimeValueData:
+    type: object
+    properties:
+      time:
+        type: integer
+        format: int64
+        description: Timestamp in milliseconds
+      value:
+        type: number
+        description: Data value
+
+  # Market Data Types
+  MarketData:
+    type: object
+    properties:
+      symbol:
+        type: string
+      price:
+        type: number
+      price_change:
+        type: number
+      price_change_percent:
+        type: number
+      volume:
+        type: number
+      open_interest:
+        type: number
+      funding_rate:
+        type: number
+
+  # Common Query Parameters
+  CommonTimeParams:
+    type: object
+    properties:
+      startTime:
+        type: integer
+        format: int64
+        required: false
+        description: Start timestamp in milliseconds
+      endTime:
+        type: integer
+        format: int64
+        required: false
+        description: End timestamp in milliseconds
+      limit:
+        type: integer
+        required: false
+        description: Number of results (max varies by endpoint)
+        default: 100
+
+# Root endpoint
+/:
+  displayName: API Root
+
+# Futures Market Endpoints
+/api/futures/supported-coins:
+  displayName: Futures Supported Coins
+  description: Get all supported futures coins
+  securedBy: [apiKey]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/futures/supported-exchange-pairs:
+  displayName: Futures Exchange Pairs
+  description: Get supported exchanges and trading pairs
+  securedBy: [apiKey]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/futures/coins-markets:
+  displayName: Futures Coins Markets
+  description: |
+    Futures coins market performance data
+    **Plan Availability:** Standard+ only
+  securedBy: [apiKey]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/futures/pairs-markets:
+  displayName: Futures Pairs Markets
+  description: Futures pairs market performance data
+  securedBy: [apiKey]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/futures/coins-price-change:
+  displayName: Futures Price Changes
+  description: Price change data for futures coins
+  securedBy: [apiKey]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/futures/price/history:
+  displayName: Futures Price History
+  description: Historical price data for futures
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      symbol:
+        type: string
+        required: true
+      interval:
+        type: string
+        required: true
+        enum: [1m, 3m, 5m, 15m, 30m, 1h, 4h, 6h, 8h, 12h, 1d, 1w]
+      startTime:
+        type: integer
+        format: int64
+        required: false
+      endTime:
+        type: integer
+        format: int64
+        required: false
+      limit:
+        type: integer
+        required: false
+        maximum: 1000
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/futures/delisted-pairs:
+  displayName: Delisted Futures Pairs
+  description: List of delisted futures trading pairs
+  securedBy: [apiKey]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/futures/exchange-rank:
+  displayName: Futures Exchange Ranking
+  description: Ranking of futures exchanges by metrics
+  securedBy: [apiKey]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+# Open Interest Endpoints
+/api/futures/open-interest/history:
+  displayName: Open Interest History
+  description: Historical open interest data
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      symbol:
+        type: string
+        required: true
+      ex:
+        type: string
+        required: true
+        description: Exchange name
+      interval:
+        type: string
+        required: true
+        enum: [1m, 3m, 5m, 15m, 30m, 1h, 4h, 6h, 8h, 12h, 1d, 1w]
+      startTime:
+        type: integer
+        format: int64
+        required: false
+      endTime:
+        type: integer
+        format: int64
+        required: false
+      limit:
+        type: integer
+        required: false
+        maximum: 1000
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/futures/open-interest/aggregated-history:
+  displayName: Aggregated Open Interest History
+  description: Aggregated open interest across exchanges
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      symbol:
+        type: string
+        required: true
+      interval:
+        type: string
+        required: true
+        enum: [1m, 3m, 5m, 15m, 30m, 1h, 4h, 6h, 8h, 12h, 1d, 1w]
+      startTime:
+        type: integer
+        format: int64
+        required: false
+      endTime:
+        type: integer
+        format: int64
+        required: false
+      limit:
+        type: integer
+        required: false
+        maximum: 1000
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/futures/open-interest/aggregated-stablecoin-margin-history:
+  displayName: Aggregated Stablecoin Margin OI History
+  description: Aggregated open interest for stablecoin margin contracts
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      symbol:
+        type: string
+        required: true
+      interval:
+        type: string
+        required: true
+        enum: [1m, 3m, 5m, 15m, 30m, 1h, 4h, 6h, 8h, 12h, 1d, 1w]
+      startTime:
+        type: integer
+        format: int64
+        required: false
+      endTime:
+        type: integer
+        format: int64
+        required: false
+      limit:
+        type: integer
+        required: false
+        maximum: 1000
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/futures/open-interest/aggregated-coin-margin-history:
+  displayName: Aggregated Coin Margin OI History
+  description: Aggregated open interest for coin margin contracts
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      symbol:
+        type: string
+        required: true
+      interval:
+        type: string
+        required: true
+        enum: [1m, 3m, 5m, 15m, 30m, 1h, 4h, 6h, 8h, 12h, 1d, 1w]
+      startTime:
+        type: integer
+        format: int64
+        required: false
+      endTime:
+        type: integer
+        format: int64
+        required: false
+      limit:
+        type: integer
+        required: false
+        maximum: 1000
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/futures/open-interest/exchange-list:
+  displayName: Open Interest by Exchange
+  description: |
+    Current open interest by exchange
+    **Cache:** Every 10 seconds
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      symbol:
+        type: string
+        required: false
+      ex:
+        type: string
+        required: false
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/futures/open-interest/exchange-history-chart:
+  displayName: OI Exchange History Chart
+  description: Open interest history chart data by exchange
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      symbol:
+        type: string
+        required: true
+      interval:
+        type: string
+        required: true
+        enum: [1h, 4h, 1d]
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+# Funding Rate Endpoints
+/api/futures/funding-rate/history:
+  displayName: Funding Rate History
+  description: Historical funding rate data
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      symbol:
+        type: string
+        required: true
+      ex:
+        type: string
+        required: true
+      interval:
+        type: string
+        required: true
+        enum: [1m, 3m, 5m, 15m, 30m, 1h, 4h, 6h, 8h, 12h, 1d, 1w]
+      startTime:
+        type: integer
+        format: int64
+        required: false
+      endTime:
+        type: integer
+        format: int64
+        required: false
+      limit:
+        type: integer
+        required: false
+        maximum: 1000
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/futures/funding-rate/oi-weight-history:
+  displayName: OI-Weighted Funding Rate History
+  description: Open interest weighted funding rate history
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      symbol:
+        type: string
+        required: true
+      interval:
+        type: string
+        required: true
+        enum: [1m, 3m, 5m, 15m, 30m, 1h, 4h, 6h, 8h, 12h, 1d, 1w]
+      startTime:
+        type: integer
+        format: int64
+        required: false
+      endTime:
+        type: integer
+        format: int64
+        required: false
+      limit:
+        type: integer
+        required: false
+        maximum: 1000
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/futures/funding-rate/vol-weight-history:
+  displayName: Volume-Weighted Funding Rate History
+  description: Volume weighted funding rate history
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      symbol:
+        type: string
+        required: true
+      interval:
+        type: string
+        required: true
+        enum: [1m, 3m, 5m, 15m, 30m, 1h, 4h, 6h, 8h, 12h, 1d, 1w]
+      startTime:
+        type: integer
+        format: int64
+        required: false
+      endTime:
+        type: integer
+        format: int64
+        required: false
+      limit:
+        type: integer
+        required: false
+        maximum: 1000
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/futures/funding-rate/exchange-list:
+  displayName: Funding Rate by Exchange
+  description: |
+    Current funding rates by exchange
+    **Cache:** Every 20 seconds
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      symbol:
+        type: string
+        required: false
+      ex:
+        type: string
+        required: false
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/futures/funding-rate/accumulated-exchange-list:
+  displayName: Accumulated Funding Rate by Exchange
+  description: Accumulated funding rate data by exchange
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      symbol:
+        type: string
+        required: false
+      ex:
+        type: string
+        required: false
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/futures/funding-rate/arbitrage:
+  displayName: Funding Rate Arbitrage
+  description: |
+    Funding rate arbitrage opportunities
+    **Plan Availability:** Standard+ only
+    **Cache:** Every 30 seconds
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      symbol:
+        type: string
+        required: true
+      minSpread:
+        type: number
+        required: false
+      limit:
+        type: integer
+        required: false
+        maximum: 100
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+# Long/Short Ratio Endpoints
+/api/futures/global-long-short-account-ratio/history:
+  displayName: Global Long/Short Account Ratio
+  description: Historical global account ratio data
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      symbol:
+        type: string
+        required: true
+      interval:
+        type: string
+        required: true
+        enum: [5m, 15m, 30m, 1h, 4h, 1d]
+      startTime:
+        type: integer
+        format: int64
+        required: false
+      endTime:
+        type: integer
+        format: int64
+        required: false
+      limit:
+        type: integer
+        required: false
+        maximum: 1000
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/futures/top-long-short-account-ratio/history:
+  displayName: Top Long/Short Account Ratio
+  description: Historical top trader account ratio data
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      symbol:
+        type: string
+        required: true
+      ex:
+        type: string
+        required: true
+      interval:
+        type: string
+        required: true
+        enum: [5m, 15m, 30m, 1h, 4h, 1d]
+      startTime:
+        type: integer
+        format: int64
+        required: false
+      endTime:
+        type: integer
+        format: int64
+        required: false
+      limit:
+        type: integer
+        required: false
+        maximum: 1000
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/futures/top-long-short-position-ratio/history:
+  displayName: Top Long/Short Position Ratio
+  description: Historical top trader position ratio data
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      symbol:
+        type: string
+        required: true
+      ex:
+        type: string
+        required: true
+      interval:
+        type: string
+        required: true
+        enum: [5m, 15m, 30m, 1h, 4h, 1d]
+      startTime:
+        type: integer
+        format: int64
+        required: false
+      endTime:
+        type: integer
+        format: int64
+        required: false
+      limit:
+        type: integer
+        required: false
+        maximum: 1000
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+# Taker Buy/Sell Volume Endpoints
+/api/futures/taker-buy-sell-volume/exchange-list:
+  displayName: Taker Buy/Sell Volume by Exchange
+  description: Current taker buy/sell volume by exchange
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      symbol:
+        type: string
+        required: false
+      ex:
+        type: string
+        required: false
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/futures/taker-buy-sell-volume/history:
+  displayName: Taker Buy/Sell Volume History
+  description: Historical taker buy/sell volume data
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      symbol:
+        type: string
+        required: true
+      ex:
+        type: string
+        required: true
+      interval:
+        type: string
+        required: true
+        enum: [1m, 3m, 5m, 15m, 30m, 1h, 4h, 6h, 8h, 12h, 1d, 1w]
+      startTime:
+        type: integer
+        format: int64
+        required: false
+      endTime:
+        type: integer
+        format: int64
+        required: false
+      limit:
+        type: integer
+        required: false
+        maximum: 1000
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/futures/aggregated-taker-buy-sell-volume/history:
+  displayName: Aggregated Taker Buy/Sell Volume History
+  description: Aggregated taker buy/sell volume across exchanges
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      symbol:
+        type: string
+        required: true
+      interval:
+        type: string
+        required: true
+        enum: [1m, 3m, 5m, 15m, 30m, 1h, 4h, 6h, 8h, 12h, 1d, 1w]
+      startTime:
+        type: integer
+        format: int64
+        required: false
+      endTime:
+        type: integer
+        format: int64
+        required: false
+      limit:
+        type: integer
+        required: false
+        maximum: 1000
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+# Liquidation Endpoints
+/api/futures/liquidation/history:
+  displayName: Liquidation History
+  description: Historical liquidation data for pairs
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      ex:
+        type: string
+        required: true
+      symbol:
+        type: string
+        required: true
+      interval:
+        type: string
+        required: true
+        enum: [1m, 3m, 5m, 15m, 30m, 1h, 4h, 6h, 8h, 12h, 1d, 1w]
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/futures/liquidation/aggregated-history:
+  displayName: Aggregated Liquidation History
+  description: Aggregated liquidation data across exchanges
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      symbol:
+        type: string
+        required: true
+      interval:
+        type: string
+        required: true
+        enum: [1m, 3m, 5m, 15m, 30m, 1h, 4h, 6h, 8h, 12h, 1d, 1w]
+      startTime:
+        type: integer
+        format: int64
+        required: false
+      endTime:
+        type: integer
+        format: int64
+        required: false
+      limit:
+        type: integer
+        required: false
+        maximum: 1000
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/futures/liquidation/coin-list:
+  displayName: Liquidation by Coin
+  description: |
+    Liquidation data grouped by coin
+    **Plan Availability:** Startup+ only
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      ex:
+        type: string
+        required: false
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/futures/liquidation/exchange-list:
+  displayName: Liquidation by Exchange
+  description: Current liquidation data by exchange
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      symbol:
+        type: string
+        required: false
+      ex:
+        type: string
+        required: false
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/futures/liquidation/order:
+  displayName: Liquidation Orders
+  description: |
+    Recent liquidation orders
+    **Plan Availability:** Standard+ only
+    **Cache:** Every 1 second
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      ex:
+        type: string
+        required: true
+      symbol:
+        type: string
+        required: true
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+# Liquidation Heatmap Endpoints
+/api/futures/liquidation/heatmap/model1:
+  displayName: Liquidation Heatmap Model 1
+  description: |
+    Liquidation heatmap visualization data
+    **Plan Availability:** Professional+ only
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      ex:
+        type: string
+        required: true
+      symbol:
+        type: string
+        required: true
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/futures/liquidation/heatmap/model2:
+  displayName: Liquidation Heatmap Model 2
+  description: |
+    Alternative liquidation heatmap model
+    **Plan Availability:** Professional+ only
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      ex:
+        type: string
+        required: true
+      symbol:
+        type: string
+        required: true
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/futures/liquidation/heatmap/model3:
+  displayName: Liquidation Heatmap Model 3
+  description: |
+    Third liquidation heatmap model
+    **Plan Availability:** Professional+ only
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      ex:
+        type: string
+        required: true
+      symbol:
+        type: string
+        required: true
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/futures/liquidation/aggregated-heatmap/model1:
+  displayName: Aggregated Liquidation Heatmap Model 1
+  description: |
+    Aggregated liquidation heatmap across exchanges
+    **Plan Availability:** Professional+ only
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      symbol:
+        type: string
+        required: true
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/futures/liquidation/aggregated-heatmap/model2:
+  displayName: Aggregated Liquidation Heatmap Model 2
+  description: |
+    Alternative aggregated liquidation heatmap
+    **Plan Availability:** Professional+ only
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      symbol:
+        type: string
+        required: true
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/futures/liquidation/aggregated-heatmap/model3:
+  displayName: Aggregated Liquidation Heatmap Model 3
+  description: |
+    Third aggregated liquidation heatmap model
+    **Plan Availability:** Professional+ only
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      symbol:
+        type: string
+        required: true
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/futures/liquidation/map:
+  displayName: Liquidation Map
+  description: |
+    Liquidation map visualization
+    **Plan Availability:** Professional+ only
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      ex:
+        type: string
+        required: true
+      symbol:
+        type: string
+        required: true
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/futures/liquidation/aggregated-map:
+  displayName: Aggregated Liquidation Map
+  description: |
+    Aggregated liquidation map across exchanges
+    **Plan Availability:** Professional+ only
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      symbol:
+        type: string
+        required: true
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+# Orderbook Endpoints
+/api/futures/orderbook/ask-bids-history:
+  displayName: Futures Ask/Bids History
+  description: Historical ask/bid data for futures
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      symbol:
+        type: string
+        required: true
+      ex:
+        type: string
+        required: true
+      interval:
+        type: string
+        required: true
+        enum: [1m, 3m, 5m, 15m, 30m, 1h, 4h, 6h, 8h, 12h, 1d, 1w]
+      startTime:
+        type: integer
+        format: int64
+        required: false
+      endTime:
+        type: integer
+        format: int64
+        required: false
+      limit:
+        type: integer
+        required: false
+        maximum: 1000
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/futures/orderbook/aggregated-ask-bids-history:
+  displayName: Aggregated Futures Ask/Bids History
+  description: Aggregated ask/bid data across exchanges
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      symbol:
+        type: string
+        required: true
+      interval:
+        type: string
+        required: true
+        enum: [1m, 3m, 5m, 15m, 30m, 1h, 4h, 6h, 8h, 12h, 1d, 1w]
+      startTime:
+        type: integer
+        format: int64
+        required: false
+      endTime:
+        type: integer
+        format: int64
+        required: false
+      limit:
+        type: integer
+        required: false
+        maximum: 1000
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/futures/orderbook/history:
+  displayName: Futures Orderbook History
+  description: Historical orderbook data
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      symbol:
+        type: string
+        required: true
+      ex:
+        type: string
+        required: true
+      startTime:
+        type: integer
+        format: int64
+        required: false
+      endTime:
+        type: integer
+        format: int64
+        required: false
+      limit:
+        type: integer
+        required: false
+        maximum: 1000
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/futures/orderbook/large-limit-order:
+  displayName: Futures Large Limit Orders
+  description: |
+    Current large limit orders in futures
+    **Plan Availability:** Standard+ only
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      symbol:
+        type: string
+        required: true
+      ex:
+        type: string
+        required: true
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/futures/orderbook/large-limit-order-history:
+  displayName: Futures Large Limit Order History
+  description: |
+    Historical large limit orders for futures
+    **Plan Availability:** Standard+ only
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      symbol:
+        type: string
+        required: true
+      ex:
+        type: string
+        required: true
+      startTime:
+        type: integer
+        format: int64
+        required: false
+      endTime:
+        type: integer
+        format: int64
+        required: false
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+# Hyperliquid Endpoints
+/api/hyperliquid/whale-alert:
+  displayName: Hyperliquid Whale Alert
+  description: |
+    Real-time whale alerts on Hyperliquid (positions >$1M)
+    **Cache:** Real-time
+  securedBy: [apiKey]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/hyperliquid/whale-position:
+  displayName: Hyperliquid Whale Position
+  description: |
+    Whale positions on Hyperliquid (>$1M notional)
+    **Cache:** Real-time
+  securedBy: [apiKey]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+# Spot Market Endpoints
+/api/spot/supported-coins:
+  displayName: Spot Supported Coins
+  description: |
+    Get all supported spot coins
+    **Cache:** Every 1 minute
+  securedBy: [apiKey]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/spot/supported-exchange-pairs:
+  displayName: Spot Exchange Pairs
+  description: Get supported spot exchanges and trading pairs
+  securedBy: [apiKey]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/spot/coins-markets:
+  displayName: Spot Coins Markets
+  description: |
+    Spot coin market performance metrics
+    **Plan Availability:** Standard+ only
+  securedBy: [apiKey]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/spot/pairs-markets:
+  displayName: Spot Pairs Markets
+  description: Spot pairs market performance data
+  securedBy: [apiKey]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/spot/price/history:
+  displayName: Spot Price History
+  description: |
+    Historical OHLC price data for spot markets
+    **Interval Limits:** Hobbyist >=4h, Startup >=30m, Standard+ no limit
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      symbol:
+        type: string
+        required: true
+      interval:
+        type: string
+        required: true
+        enum: [1m, 3m, 5m, 15m, 30m, 1h, 4h, 6h, 8h, 12h, 1d, 1w]
+      startTime:
+        type: integer
+        format: int64
+        required: false
+      endTime:
+        type: integer
+        format: int64
+        required: false
+      limit:
+        type: integer
+        required: false
+        maximum: 1000
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+# Spot Orderbook Endpoints
+/api/spot/orderbook/ask-bids-history:
+  displayName: Spot Ask/Bids History
+  description: Historical ask/bid data for spot
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      symbol:
+        type: string
+        required: true
+      ex:
+        type: string
+        required: true
+      interval:
+        type: string
+        required: true
+        enum: [1m, 3m, 5m, 15m, 30m, 1h, 4h, 6h, 8h, 12h, 1d, 1w]
+      startTime:
+        type: integer
+        format: int64
+        required: false
+      endTime:
+        type: integer
+        format: int64
+        required: false
+      limit:
+        type: integer
+        required: false
+        maximum: 1000
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/spot/orderbook/aggregated-ask-bids-history:
+  displayName: Aggregated Spot Ask/Bids History
+  description: Aggregated spot ask/bid data across exchanges
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      symbol:
+        type: string
+        required: true
+      interval:
+        type: string
+        required: true
+        enum: [1m, 3m, 5m, 15m, 30m, 1h, 4h, 6h, 8h, 12h, 1d, 1w]
+      startTime:
+        type: integer
+        format: int64
+        required: false
+      endTime:
+        type: integer
+        format: int64
+        required: false
+      limit:
+        type: integer
+        required: false
+        maximum: 1000
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/spot/orderbook/history:
+  displayName: Spot Orderbook History
+  description: Historical spot orderbook data
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      symbol:
+        type: string
+        required: true
+      ex:
+        type: string
+        required: true
+      startTime:
+        type: integer
+        format: int64
+        required: false
+      endTime:
+        type: integer
+        format: int64
+        required: false
+      limit:
+        type: integer
+        required: false
+        maximum: 1000
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/spot/orderbook/large-limit-order:
+  displayName: Spot Large Limit Orders
+  description: |
+    Current large limit orders in spot markets
+    **Plan Availability:** Standard+ only
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      symbol:
+        type: string
+        required: true
+      ex:
+        type: string
+        required: true
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/spot/orderbook/large-limit-order-history:
+  displayName: Spot Large Limit Order History
+  description: |
+    Historical large limit orders for spot markets
+    **Plan Availability:** Standard+ only
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      symbol:
+        type: string
+        required: true
+      ex:
+        type: string
+        required: true
+      startTime:
+        type: integer
+        format: int64
+        required: false
+      endTime:
+        type: integer
+        format: int64
+        required: false
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+# Spot Taker Volume Endpoints
+/api/spot/taker-buy-sell-volume/history:
+  displayName: Spot Taker Buy/Sell Volume History
+  description: Historical spot taker buy/sell volume data
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      symbol:
+        type: string
+        required: true
+      ex:
+        type: string
+        required: true
+      interval:
+        type: string
+        required: true
+        enum: [1m, 3m, 5m, 15m, 30m, 1h, 4h, 6h, 8h, 12h, 1d, 1w]
+      startTime:
+        type: integer
+        format: int64
+        required: false
+      endTime:
+        type: integer
+        format: int64
+        required: false
+      limit:
+        type: integer
+        required: false
+        maximum: 1000
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/spot/aggregated-taker-buy-sell-volume/history:
+  displayName: Aggregated Spot Taker Buy/Sell Volume History
+  description: Aggregated spot taker buy/sell volume across exchanges
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      symbol:
+        type: string
+        required: true
+      interval:
+        type: string
+        required: true
+        enum: [1m, 3m, 5m, 15m, 30m, 1h, 4h, 6h, 8h, 12h, 1d, 1w]
+      startTime:
+        type: integer
+        format: int64
+        required: false
+      endTime:
+        type: integer
+        format: int64
+        required: false
+      limit:
+        type: integer
+        required: false
+        maximum: 1000
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+# Options Endpoints
+/api/option/max-pain:
+  displayName: Options Max Pain
+  description: |
+    Options max pain calculation
+    **Cache:** Every 1 minute
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      symbol:
+        type: string
+        required: false
+        description: Symbol (default: BTC)
+        default: BTC
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/option/info:
+  displayName: Options Market Info
+  description: |
+    Options market overview
+    **Cache:** Every 30 seconds
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      symbol:
+        type: string
+        required: false
+        description: Symbol (default: BTC)
+        default: BTC
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/option/exchange-oi-history:
+  displayName: Options OI History by Exchange
+  description: Historical open interest by exchange for options
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      symbol:
+        type: string
+        required: true
+      time_type:
+        type: string
+        required: true
+      currency:
+        type: string
+        required: false
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/option/exchange-vol-history:
+  displayName: Options Volume History by Exchange
+  description: Historical volume by exchange for options
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      symbol:
+        type: string
+        required: true
+      time_type:
+        type: string
+        required: true
+      currency:
+        type: string
+        required: false
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+# On-Chain Endpoints
+/api/exchange/assets:
+  displayName: Exchange Assets
+  description: |
+    Exchange wallet assets and addresses
+    **Cache:** Every 1 hour
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      symbol:
+        type: string
+        required: true
+      exchange:
+        type: string
+        required: false
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/exchange/balance/list:
+  displayName: Exchange Balance List
+  description: Exchange balance summary and changes
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      symbol:
+        type: string
+        required: true
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/exchange/balance/chart:
+  displayName: Exchange Balance Chart
+  description: Exchange balance chart data over time
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      symbol:
+        type: string
+        required: true
+      exchange:
+        type: string
+        required: false
+      startTime:
+        type: integer
+        format: int64
+        required: false
+      endTime:
+        type: integer
+        format: int64
+        required: false
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/exchange/chain/tx/list:
+  displayName: Exchange Chain Transactions
+  description: ERC-20 token transfers and on-chain transactions
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      symbol:
+        type: string
+        required: true
+      exchange:
+        type: string
+        required: false
+      limit:
+        type: integer
+        required: false
+        maximum: 1000
+      type:
+        type: string
+        required: false
+        enum: [in, out]
+      start_time:
+        type: integer
+        format: int64
+        required: false
+      end_time:
+        type: integer
+        format: int64
+        required: false
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+# ETF Endpoints
+/api/etf/bitcoin/list:
+  displayName: Bitcoin ETF List
+  description: Bitcoin ETF status, metrics, and holdings data
+  securedBy: [apiKey]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/etf/bitcoin/net-assets/history:
+  displayName: Bitcoin ETF Net Assets History
+  description: Historical Bitcoin ETF net assets data
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      startTime:
+        type: integer
+        format: int64
+        required: false
+      endTime:
+        type: integer
+        format: int64
+        required: false
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/etf/bitcoin/flow-history:
+  displayName: Bitcoin ETF Flow History
+  description: Historical Bitcoin ETF flow data
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      startTime:
+        type: integer
+        format: int64
+        required: false
+      endTime:
+        type: integer
+        format: int64
+        required: false
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/etf/bitcoin/premium-discount/history:
+  displayName: Bitcoin ETF Premium/Discount History
+  description: Historical Bitcoin ETF premium/discount data
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      startTime:
+        type: integer
+        format: int64
+        required: false
+      endTime:
+        type: integer
+        format: int64
+        required: false
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/etf/bitcoin/history:
+  displayName: Bitcoin ETF History
+  description: Comprehensive Bitcoin ETF historical data
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      startTime:
+        type: integer
+        format: int64
+        required: false
+      endTime:
+        type: integer
+        format: int64
+        required: false
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/etf/bitcoin/price/history:
+  displayName: Bitcoin ETF Price History
+  description: Bitcoin ETF price historical data
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      startTime:
+        type: integer
+        format: int64
+        required: false
+      endTime:
+        type: integer
+        format: int64
+        required: false
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/etf/bitcoin/detail:
+  displayName: Bitcoin ETF Detail
+  description: Detailed Bitcoin ETF information
+  securedBy: [apiKey]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/etf/bitcoin/aum:
+  displayName: Bitcoin ETF AUM
+  description: Bitcoin ETF assets under management
+  securedBy: [apiKey]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/etf/ethereum/list:
+  displayName: Ethereum ETF List
+  description: Ethereum ETF status and metrics
+  securedBy: [apiKey]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/etf/ethereum/net-assets/history:
+  displayName: Ethereum ETF Net Assets History
+  description: Historical Ethereum ETF net assets data
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      startTime:
+        type: integer
+        format: int64
+        required: false
+      endTime:
+        type: integer
+        format: int64
+        required: false
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/etf/ethereum/flow-history:
+  displayName: Ethereum ETF Flow History
+  description: Historical Ethereum ETF flow data
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      startTime:
+        type: integer
+        format: int64
+        required: false
+      endTime:
+        type: integer
+        format: int64
+        required: false
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/hk-etf/bitcoin/flow-history:
+  displayName: Hong Kong Bitcoin ETF Flow History
+  description: Hong Kong Bitcoin ETF flow data
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      startTime:
+        type: integer
+        format: int64
+        required: false
+      endTime:
+        type: integer
+        format: int64
+        required: false
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+# Grayscale Endpoints
+/api/grayscale/holdings/list:
+  displayName: Grayscale Holdings List
+  description: Grayscale holdings and trust data
+  securedBy: [apiKey]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/grayscale/premium/history:
+  displayName: Grayscale Premium History
+  description: Historical Grayscale premium/discount data
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      startTime:
+        type: integer
+        format: int64
+        required: false
+      endTime:
+        type: integer
+        format: int64
+        required: false
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+# Market Indicator Endpoints
+/api/futures/rsi/list:
+  displayName: Futures RSI List
+  description: |
+    RSI values across multiple timeframes
+    **Plan Availability:** Standard+ only
+    **Cache:** Every 10 seconds
+  securedBy: [apiKey]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/futures/basis:
+  displayName: Futures Basis
+  description: |
+    Current futures basis data
+    **Cache:** Real-time
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      symbol:
+        type: string
+        required: false
+      exchange:
+        type: string
+        required: false
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/futures/whale-index:
+  displayName: Futures Whale Index
+  description: |
+    Whale index for futures markets
+    **Cache:** Every 1 minute
+    **Plan Availability:** Startup+ only
+  securedBy: [apiKey]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "data": [
+                  {
+                    "time": 1665532800000,
+                    "whale_index_value": -184.8
+                  }
+                ]
+              }
+
+/api/futures/cgdi-index:
+  displayName: CGDI Index
+  description: |
+    CoinGlass Derivatives Index
+    **Cache:** Real-time
+  securedBy: [apiKey]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/futures/cdri-index:
+  displayName: CDRI Index
+  description: |
+    Crypto Derivatives Risk Index
+    **Cache:** Real-time
+  securedBy: [apiKey]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/coinbase-premium-index:
+  displayName: Coinbase Premium Index
+  description: |
+    Coinbase premium index data
+    **Cache:** Every 1 minute
+  securedBy: [apiKey]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/bitfinex-margin-long-short:
+  displayName: Bitfinex Margin Long/Short
+  description: Bitfinex margin long/short ratio data
+  securedBy: [apiKey]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/borrow-interest-rate/history:
+  displayName: Borrow Interest Rate History
+  description: Historical borrow interest rate data
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      symbol:
+        type: string
+        required: true
+      startTime:
+        type: integer
+        format: int64
+        required: false
+      endTime:
+        type: integer
+        format: int64
+        required: false
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+# Bitcoin Analysis Indicators
+/api/ahr999:
+  displayName: AHR999 Indicator
+  description: |
+    AHR999 Bitcoin indicator
+    **Cache:** Daily updates
+  securedBy: [apiKey]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/bull-market-peak-indicator:
+  displayName: Bull Market Peak Indicators
+  description: |
+    Multiple bull market peak indicator metrics
+    **Cache:** Daily updates
+  securedBy: [apiKey]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/puell-multiple:
+  displayName: Puell Multiple
+  description: |
+    Bitcoin Puell Multiple indicator
+    **Cache:** Daily updates
+  securedBy: [apiKey]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/stock-to-flow:
+  displayName: Stock-to-Flow Model
+  description: |
+    Bitcoin Stock-to-Flow model data
+    **Cache:** Daily updates
+  securedBy: [apiKey]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/pi-cycle-top-indicator:
+  displayName: Pi Cycle Top Indicator
+  description: |
+    Bitcoin Pi Cycle Top indicator
+    **Cache:** Daily updates
+  securedBy: [apiKey]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/golden-ratio-multiplier:
+  displayName: Golden Ratio Multiplier
+  description: |
+    Bitcoin Golden Ratio Multiplier
+    **Cache:** Daily updates
+  securedBy: [apiKey]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/bitcoin-profitable-days:
+  displayName: Bitcoin Profitable Days
+  description: |
+    Bitcoin profitable days indicator
+    **Cache:** Daily updates
+  securedBy: [apiKey]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/bitcoin-rainbow-chart:
+  displayName: Bitcoin Rainbow Chart
+  description: |
+    Bitcoin Rainbow Chart data
+    **Cache:** Daily updates
+  securedBy: [apiKey]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+# Advanced Index Endpoints
+/api/index/fear-greed-history:
+  displayName: Fear & Greed Index History
+  description: |
+    Crypto Fear & Greed Index historical data
+    **Cache:** Daily updates
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      startTime:
+        type: integer
+        format: int64
+        required: false
+      endTime:
+        type: integer
+        format: int64
+        required: false
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/index/option-vs-futures-oi-ratio:
+  displayName: Option vs Futures OI Ratio
+  description: Options vs futures open interest ratio
+  securedBy: [apiKey]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/index/bitcoin-vs-global-m2-growth:
+  displayName: Bitcoin vs Global M2 Growth
+  description: Bitcoin performance vs global M2 money supply growth
+  securedBy: [apiKey]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/index/bitcoin-vs-us-m2-growth:
+  displayName: Bitcoin vs US M2 Growth
+  description: Bitcoin performance vs US M2 money supply growth
+  securedBy: [apiKey]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/index/ahr999:
+  displayName: Index AHR999
+  description: AHR999 index data
+  securedBy: [apiKey]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/index/2-year-ma-multiplier:
+  displayName: 2-Year MA Multiplier
+  description: 2-Year Moving Average Multiplier
+  securedBy: [apiKey]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/index/200-week-moving-avg-heatmap:
+  displayName: 200-Week MA Heatmap
+  description: 200-Week Moving Average Heatmap
+  securedBy: [apiKey]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/index/altcoin-season-index:
+  displayName: Altcoin Season Index
+  description: Altcoin season performance index
+  securedBy: [apiKey]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+# Bitcoin On-Chain Indicators
+/api/index/bitcoin-short-term-holder-sopr:
+  displayName: Bitcoin Short-Term Holder SOPR
+  description: Bitcoin Short-Term Holder Spent Output Profit Ratio
+  securedBy: [apiKey]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/index/bitcoin-long-term-holder-sopr:
+  displayName: Bitcoin Long-Term Holder SOPR
+  description: Bitcoin Long-Term Holder Spent Output Profit Ratio
+  securedBy: [apiKey]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/index/bitcoin-short-term-holder-realized-price:
+  displayName: Bitcoin STH Realized Price
+  description: Bitcoin Short-Term Holder Realized Price
+  securedBy: [apiKey]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/index/bitcoin-long-term-holder-realized-price:
+  displayName: Bitcoin LTH Realized Price
+  description: Bitcoin Long-Term Holder Realized Price
+  securedBy: [apiKey]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/index/bitcoin-short-term-holder-supply:
+  displayName: Bitcoin STH Supply
+  description: Bitcoin Short-Term Holder Supply
+  securedBy: [apiKey]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/index/bitcoin-long-term-holder-supply:
+  displayName: Bitcoin LTH Supply
+  description: Bitcoin Long-Term Holder Supply
+  securedBy: [apiKey]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/index/bitcoin-rhodl-ratio:
+  displayName: Bitcoin RHODL Ratio
+  description: Bitcoin RHODL (Realized Cap Hold Waves) Ratio
+  securedBy: [apiKey]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/index/bitcoin-reserve-risk:
+  displayName: Bitcoin Reserve Risk
+  description: Bitcoin Reserve Risk indicator
+  securedBy: [apiKey]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/index/bitcoin-active-addresses:
+  displayName: Bitcoin Active Addresses
+  description: Bitcoin active addresses count
+  securedBy: [apiKey]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/index/bitcoin-new-addresses:
+  displayName: Bitcoin New Addresses
+  description: Bitcoin new addresses count
+  securedBy: [apiKey]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/index/bitcoin-net-unrealized-pnl:
+  displayName: Bitcoin Net Unrealized PnL
+  description: Bitcoin network unrealized profit/loss
+  securedBy: [apiKey]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/index/btc-correlations:
+  displayName: BTC Correlations
+  description: Bitcoin correlations with other assets
+  securedBy: [apiKey]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+/api/index/bitcoin-macro-oscillator:
+  displayName: Bitcoin Macro Oscillator
+  description: Bitcoin macro economic oscillator
+  securedBy: [apiKey]
+  get:
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+# Economic Calendar
+/api/calendar/economic_data:
+  displayName: Economic Calendar Data
+  description: Economic calendar events and data
+  securedBy: [apiKey]
+  get:
+    queryParameters:
+      startTime:
+        type: integer
+        format: int64
+        required: false
+      endTime:
+        type: integer
+        format: int64
+        required: false
+      importance:
+        type: string
+        required: false
+        enum: [low, medium, high]
+    responses:
+      200:
+        body:
+          application/json:
+            type: StandardResponse
+
+# Global Error Responses for all endpoints
+/:
+  securedBy: [apiKey]
+  get:
+    responses:
+      400:
+        description: Bad Request - Invalid parameters
+        body:
+          application/json:
+            type: ErrorResponse
+            example: |
+              {
+                "code": "400",
+                "msg": "Invalid parameters"
+              }
+      401:
+        description: Unauthorized - Invalid or missing API key
+        body:
+          application/json:
+            type: ErrorResponse
+            example: |
+              {
+                "code": "401",
+                "msg": "Unauthorized"
+              }
+      429:
+        description: Too Many Requests - Rate limit exceeded
+        body:
+          application/json:
+            type: ErrorResponse
+            example: |
+              {
+                "code": "429",
+                "msg": "Rate limit exceeded"
+              }
+      500:
+        description: Internal Server Error
+        body:
+          application/json:
+            type: ErrorResponse
+            example: |
+              {
+                "code": "500",
+                "msg": "Internal server error"
+              }

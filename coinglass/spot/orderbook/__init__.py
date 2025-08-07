@@ -12,12 +12,13 @@ class OrderbookAPI:
         """Initialize Orderbook API with client."""
         self.client = client
 
-    def get_ask_bids_history(self, symbol: str, interval: str, range: Optional[str]= None) -> List[Dict[str, Any]]:
+    def get_ask_bids_history(self, symbol: str, exchange: str, interval: str, range: Optional[str]= None) -> List[Dict[str, Any]]:
         """
         Get ask bids history.
         
         Args:
             symbol: Symbol
+            exchange: Exchange name
             interval: Interval
             range: Range (optional)
         
@@ -26,18 +27,20 @@ class OrderbookAPI:
         """
         params = {
             'symbol': symbol,
+            'exchange': exchange,
             'interval': interval,
             'range': range,
         }
         params = {k: v for k, v in params.items() if v is not None}
         response = self.client.get('/spot/orderbook/ask-bids-history', params=params)
         return response.get('data', [])
-    def get_aggregated_ask_bids_history(self, symbol: str, interval: str, range: Optional[str]= None) -> List[Dict[str, Any]]:
+    def get_aggregated_ask_bids_history(self, symbol: str, exchange_list: str, interval: str, range: Optional[str]= None) -> List[Dict[str, Any]]:
         """
         Get aggregated ask bids history.
         
         Args:
             symbol: Symbol
+            exchange_list: Comma-separated list of exchanges
             interval: Interval
             range: Range (optional)
         
@@ -46,6 +49,7 @@ class OrderbookAPI:
         """
         params = {
             'symbol': symbol,
+            'exchange_list': exchange_list,
             'interval': interval,
             'range': range,
         }

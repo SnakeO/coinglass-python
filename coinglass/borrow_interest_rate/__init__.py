@@ -19,5 +19,5 @@ class BorrowInterestRateAPI:
         Returns:
             List of data
         """
-        response = self.client.get('/borrow_interest_rate/history')
+        response = self.client.get('/index/borrow-interest-rate/history')
         return response.get('data', [])

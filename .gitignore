@@ -196,3 +196,10 @@ logs/
 
 # Generated files
 generate_endpoints.py
+
+# Test result files
+test_results_*.txt
+test_results_*.json
+test_output_*.txt
+test_report_*.html
+*_test_results.*
