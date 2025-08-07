@@ -3,7 +3,7 @@ Aggregated Liquidation Heatmap API for CoinGlass
 """
 from typing import Optional, List, Dict, Any
 from ....client import CoinGlassClient
-from ....constants import PlanTier
+from ....constants import PlanLevel
 
 
 class AggregatedHeatmapAPI:
@@ -20,7 +20,7 @@ class AggregatedHeatmapAPI:
         """
         Get aggregated liquidation heatmap across exchanges (Model 1).
         
-        Plan Availability: Professional+
+        Min Plan Level: 4
         
         Args:
             symbol: Symbol (e.g., 'BTC')
@@ -41,7 +41,7 @@ class AggregatedHeatmapAPI:
         """
         Get alternative aggregated liquidation heatmap (Model 2).
         
-        Plan Availability: Professional+
+        Min Plan Level: 4
         
         Args:
             symbol: Symbol (e.g., 'BTC')
@@ -62,7 +62,7 @@ class AggregatedHeatmapAPI:
         """
         Get third aggregated liquidation heatmap model (Model 3).
         
-        Plan Availability: Professional+
+        Min Plan Level: 4
         
         Args:
             symbol: Symbol (e.g., 'BTC')

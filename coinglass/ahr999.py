@@ -3,7 +3,7 @@ Ahr999 endpoint
 """
 from typing import Optional, Dict, Any
 from .client import CoinGlassClient
-from .constants import PlanTier
+from .constants import PlanLevel
 
 
 def get_ahr999(
@@ -16,7 +16,7 @@ def get_ahr999(
     """
     Get AHR999 index (Bitcoin investment timing indicator).
     
-    Plan Availability: All plans
+    Min Plan Level: 1
     
     Args:
         client: CoinGlass API client

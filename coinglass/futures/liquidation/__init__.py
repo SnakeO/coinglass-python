@@ -3,7 +3,7 @@ Liquidation API for CoinGlass
 """
 from typing import Optional, List, Dict, Any
 from ...client import CoinGlassClient
-from ...constants import PlanTier, CacheTime
+from ...constants import PlanLevel, CacheTime
 
 
 class LiquidationAPI:
@@ -28,7 +28,7 @@ class LiquidationAPI:
         """
         Get historical liquidation data for pairs.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             ex: Exchange name (e.g., 'Binance')
@@ -59,7 +59,7 @@ class LiquidationAPI:
         """
         Get aggregated liquidation data across exchanges.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             symbol: Symbol (e.g., 'BTC')
@@ -93,7 +93,7 @@ class LiquidationAPI:
         """
         Get liquidation data grouped by coin.
         
-        Plan Availability: Startup+
+        Min Plan Level: 2
         
         Args:
             **kwargs: Optional parameters:
@@ -119,7 +119,7 @@ class LiquidationAPI:
         """
         Get current liquidation data by exchange.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             **kwargs: Optional parameters:
@@ -145,7 +145,7 @@ class LiquidationAPI:
         """
         Get recent liquidation orders.
         
-        Plan Availability: Standard+
+        Min Plan Level: 3
         Cache: Every 1 second
         
         Args:
@@ -170,7 +170,7 @@ class LiquidationAPI:
         """
         Get liquidation map visualization data.
         
-        Plan Availability: Professional+
+        Min Plan Level: 4
         
         Args:
             ex: Exchange name (e.g., 'Binance')
@@ -193,7 +193,7 @@ class LiquidationAPI:
         """
         Get aggregated liquidation map across exchanges.
         
-        Plan Availability: Professional+
+        Min Plan Level: 4
         
         Args:
             symbol: Symbol (e.g., 'BTC')

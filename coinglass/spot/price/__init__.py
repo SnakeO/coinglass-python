@@ -3,7 +3,7 @@ Price API for CoinGlass Spot
 """
 from typing import Optional, List, Dict, Any
 from ...client import CoinGlassClient
-from ...constants import PlanTier
+from ...constants import PlanLevel
 
 
 class PriceAPI:

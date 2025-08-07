@@ -4,7 +4,7 @@ Provides access to all futures-related endpoints
 """
 from typing import Optional, Dict, Any, List
 from ..client import CoinGlassClient
-from ..constants import PlanTier, CacheTime
+from ..constants import PlanLevel, CacheTime
 
 
 class FuturesAPI:
@@ -44,7 +44,7 @@ class FuturesAPI:
         """
         Get all supported futures coins on CoinGlass.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Returns:
             List of supported coin symbols
@@ -56,7 +56,7 @@ class FuturesAPI:
         """
         Get all supported futures trading exchanges and their trading pairs.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Returns:
             Dictionary mapping exchange names to their trading pairs
@@ -68,7 +68,7 @@ class FuturesAPI:
         """
         Get performance metrics for all futures coins.
         
-        Plan Availability: Standard+
+        Min Plan Level: 3
         
         Returns:
             List of coin market data
@@ -80,7 +80,7 @@ class FuturesAPI:
         """
         Get performance metrics for all futures trading pairs.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Returns:
             List of pair market data
@@ -92,7 +92,7 @@ class FuturesAPI:
         """
         Get percentage price changes and price amplitude for all supported coins.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Returns:
             List of coin price change data
@@ -104,7 +104,7 @@ class FuturesAPI:
         """
         Get list of delisted futures trading pairs.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Returns:
             List of delisted pair identifiers
@@ -116,7 +116,7 @@ class FuturesAPI:
         """
         Get ranking of futures exchanges.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Returns:
             List of exchange ranking data
@@ -134,7 +134,7 @@ class FuturesAPI:
         """
         Get futures basis data.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         Cache: Real-time
         
         Args:
@@ -155,7 +155,7 @@ class FuturesAPI:
         """
         Get Whale Index data.
         
-        Plan Availability: Startup+
+        Min Plan Level: 2
         Cache: Every 1 minute
         
         Returns:
@@ -168,7 +168,7 @@ class FuturesAPI:
         """
         Get CoinGlass Derivatives Index (CGDI).
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         Cache: Real-time
         
         Returns:
@@ -181,7 +181,7 @@ class FuturesAPI:
         """
         Get CoinGlass Derivatives Risk Index (CDRI).
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         Cache: Real-time
         
         Returns:

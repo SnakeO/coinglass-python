@@ -3,7 +3,7 @@ Global Long/Short Account Ratio API for CoinGlass
 """
 from typing import Optional, List, Dict, Any
 from ...client import CoinGlassClient
-from ...constants import PlanTier
+from ...constants import PlanLevel
 
 
 class GlobalLongShortAccountRatioAPI:
@@ -26,7 +26,7 @@ class GlobalLongShortAccountRatioAPI:
         """
         Get historical global account ratio data.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             symbol: Symbol (e.g., 'BTC')

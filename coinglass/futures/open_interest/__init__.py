@@ -3,7 +3,7 @@ Futures Open Interest API
 """
 from typing import List, Dict, Any, Optional
 from ...client import CoinGlassClient
-from ...constants import PlanTier, CacheTime, Interval
+from ...constants import PlanLevel, CacheTime, Interval
 
 
 class OpenInterestAPI:
@@ -27,7 +27,7 @@ class OpenInterestAPI:
         """
         Get futures open interest history in OHLC format.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             symbol: Futures instrument identifier (e.g., 'BTCUSDT_PERP')
@@ -67,7 +67,7 @@ class OpenInterestAPI:
         """
         Get aggregated futures open interest OHLC data across all exchanges.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             symbol: Cryptocurrency symbol (e.g., 'BTC')
@@ -105,7 +105,7 @@ class OpenInterestAPI:
         """
         Get aggregated open interest OHLC data for stablecoin-margined futures.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             symbol: Cryptocurrency symbol (e.g., 'BTC')
@@ -143,7 +143,7 @@ class OpenInterestAPI:
         """
         Get aggregated open interest OHLC data for coin-margined futures.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             symbol: Cryptocurrency symbol (e.g., 'BTC')
@@ -178,7 +178,7 @@ class OpenInterestAPI:
         """
         Get current open interest for a coin, broken down by exchange.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         Cache: Every 10 seconds
         
         Args:
@@ -206,7 +206,7 @@ class OpenInterestAPI:
         """
         Get historical open interest distribution across exchanges for charting.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             symbol: Cryptocurrency symbol (e.g., 'BTC')

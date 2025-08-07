@@ -3,7 +3,7 @@ Hyperliquid API for CoinGlass
 """
 from typing import Optional, List, Dict, Any
 from ..client import CoinGlassClient
-from ..constants import PlanTier, CacheTime
+from ..constants import PlanLevel, CacheTime
 
 
 class HyperliquidAPI:
@@ -17,7 +17,7 @@ class HyperliquidAPI:
         """
         Get real-time whale alerts on Hyperliquid (positions >$1M).
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         Cache: Real-time
         
         Returns:
@@ -30,7 +30,7 @@ class HyperliquidAPI:
         """
         Get whale positions on Hyperliquid (>$1M notional).
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         Cache: Real-time
         
         Returns:

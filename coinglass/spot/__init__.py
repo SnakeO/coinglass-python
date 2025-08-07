@@ -3,7 +3,7 @@ Spot API for CoinGlass
 """
 from typing import Optional, List, Dict, Any
 from ..client import CoinGlassClient
-from ..constants import PlanTier, CacheTime
+from ..constants import PlanLevel, CacheTime
 
 
 class SpotAPI:
@@ -28,7 +28,7 @@ class SpotAPI:
         """
         Get all supported spot coins.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         Cache: Every 1 minute
         
         Returns:
@@ -41,7 +41,7 @@ class SpotAPI:
         """
         Get supported spot exchanges and trading pairs.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Returns:
             List of supported exchange pairs
@@ -53,7 +53,7 @@ class SpotAPI:
         """
         Get spot coin market performance metrics.
         
-        Plan Availability: Standard+
+        Min Plan Level: 3
         
         Returns:
             List of coin market data
@@ -65,7 +65,7 @@ class SpotAPI:
         """
         Get spot pairs market performance data.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Returns:
             List of pairs market data

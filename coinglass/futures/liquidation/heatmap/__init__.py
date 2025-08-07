@@ -3,7 +3,7 @@ Liquidation Heatmap API for CoinGlass
 """
 from typing import Optional, List, Dict, Any
 from ....client import CoinGlassClient
-from ....constants import PlanTier
+from ....constants import PlanLevel
 
 
 class HeatmapAPI:
@@ -21,7 +21,7 @@ class HeatmapAPI:
         """
         Get liquidation heatmap visualization data (Model 1).
         
-        Plan Availability: Professional+
+        Min Plan Level: 4
         
         Args:
             ex: Exchange name (e.g., 'Binance')
@@ -45,7 +45,7 @@ class HeatmapAPI:
         """
         Get alternative liquidation heatmap model (Model 2).
         
-        Plan Availability: Professional+
+        Min Plan Level: 4
         
         Args:
             ex: Exchange name (e.g., 'Binance')
@@ -69,7 +69,7 @@ class HeatmapAPI:
         """
         Get third liquidation heatmap model (Model 3).
         
-        Plan Availability: Professional+
+        Min Plan Level: 4
         
         Args:
             ex: Exchange name (e.g., 'Binance')

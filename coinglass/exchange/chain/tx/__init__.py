@@ -3,7 +3,7 @@ Tx API for CoinGlass
 """
 from typing import Optional, List, Dict, Any
 from ....client import CoinGlassClient
-from ....constants import PlanTier
+from ....constants import PlanLevel
 
 
 class TxAPI:
@@ -26,7 +26,7 @@ class TxAPI:
         """
         Get on-chain transaction list for an exchange.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             exchange: Exchange name (e.g., 'Binance', 'Coinbase')

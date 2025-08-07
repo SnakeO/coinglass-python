@@ -3,7 +3,7 @@ Index API for CoinGlass
 """
 from typing import Optional, List, Dict, Any
 from ..client import CoinGlassClient
-from ..constants import PlanTier
+from ..constants import PlanLevel
 
 
 class IndexAPI:
@@ -23,7 +23,7 @@ class IndexAPI:
         """
         Get historical Fear & Greed Index data.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         Cache: Daily update
         
         Args:
@@ -52,7 +52,7 @@ class IndexAPI:
         """
         Get option vs futures open interest ratio.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             **kwargs: Optional parameters:
@@ -79,7 +79,7 @@ class IndexAPI:
         """
         Get Bitcoin vs Global M2 money supply growth comparison.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             **kwargs: Optional parameters:
@@ -106,7 +106,7 @@ class IndexAPI:
         """
         Get Bitcoin vs US M2 money supply growth comparison.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             **kwargs: Optional parameters:
@@ -133,7 +133,7 @@ class IndexAPI:
         """
         Get AHR999 index (Bitcoin investment timing indicator).
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             **kwargs: Optional parameters:
@@ -160,7 +160,7 @@ class IndexAPI:
         """
         Get 2-Year MA Multiplier indicator.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             **kwargs: Optional parameters:
@@ -187,7 +187,7 @@ class IndexAPI:
         """
         Get 200-Week Moving Average Heatmap.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             **kwargs: Optional parameters:
@@ -214,7 +214,7 @@ class IndexAPI:
         """
         Get Altcoin Season Index.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             **kwargs: Optional parameters:
@@ -241,7 +241,7 @@ class IndexAPI:
         """
         Get Bitcoin Short-Term Holder SOPR (Spent Output Profit Ratio).
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             **kwargs: Optional parameters:
@@ -268,7 +268,7 @@ class IndexAPI:
         """
         Get Bitcoin Long-Term Holder SOPR (Spent Output Profit Ratio).
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             **kwargs: Optional parameters:
@@ -295,7 +295,7 @@ class IndexAPI:
         """
         Get Bitcoin Short-Term Holder Realized Price.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             **kwargs: Optional parameters:
@@ -322,7 +322,7 @@ class IndexAPI:
         """
         Get Bitcoin Long-Term Holder Realized Price.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             **kwargs: Optional parameters:
@@ -349,7 +349,7 @@ class IndexAPI:
         """
         Get Bitcoin Short-Term Holder Supply.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             **kwargs: Optional parameters:
@@ -376,7 +376,7 @@ class IndexAPI:
         """
         Get Bitcoin Long-Term Holder Supply.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             **kwargs: Optional parameters:
@@ -403,7 +403,7 @@ class IndexAPI:
         """
         Get Bitcoin RHODL Ratio (Realized HODL Ratio).
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             **kwargs: Optional parameters:
@@ -430,7 +430,7 @@ class IndexAPI:
         """
         Get Bitcoin Reserve Risk indicator.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             **kwargs: Optional parameters:
@@ -457,7 +457,7 @@ class IndexAPI:
         """
         Get Bitcoin Active Addresses count.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             **kwargs: Optional parameters:
@@ -484,7 +484,7 @@ class IndexAPI:
         """
         Get Bitcoin New Addresses count.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             **kwargs: Optional parameters:
@@ -511,7 +511,7 @@ class IndexAPI:
         """
         Get Bitcoin Net Unrealized Profit/Loss (NUPL).
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             **kwargs: Optional parameters:
@@ -539,7 +539,7 @@ class IndexAPI:
         """
         Get Bitcoin correlations with other assets.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             **kwargs: Optional parameters:
@@ -567,7 +567,7 @@ class IndexAPI:
         """
         Get Bitcoin Macro Oscillator indicator.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             **kwargs: Optional parameters:

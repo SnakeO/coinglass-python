@@ -3,7 +3,7 @@ Coinbase Premium Index endpoint
 """
 from typing import Optional, Dict, Any
 from .client import CoinGlassClient
-from .constants import PlanTier
+from .constants import PlanLevel
 
 
 def get_coinbase_premium_index(
@@ -17,7 +17,7 @@ def get_coinbase_premium_index(
     """
     Get Coinbase Premium Index data.
     
-    Plan Availability: All plans
+    Min Plan Level: 1
     
     Args:
         client: CoinGlass API client

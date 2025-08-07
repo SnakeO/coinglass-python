@@ -19,73 +19,36 @@ from urllib.parse import urljoin
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
 from coinglass import CoinGlass
-from coinglass.constants import PlanTier
+from coinglass.constants import PlanLevel
+from coinglass.endpoints import EndpointRegistry
 
 # Load environment variables
 load_dotenv()
 
-# Plan availability mapping for endpoints
-ENDPOINT_PLANS = {
-    # Futures endpoints
-    "futures.get_supported_coins": PlanTier.ALL,
-    "futures.get_supported_exchange_pairs": PlanTier.ALL,
-    "futures.get_coins_markets": PlanTier.STANDARD_PLUS,
-    "futures.get_pairs_markets": PlanTier.ALL,
-    "futures.get_coins_price_change": PlanTier.ALL,
-    "futures.get_delisted_pairs": PlanTier.ALL,
-    "futures.get_exchange_rank": PlanTier.ALL,
-    "futures.get_basis": PlanTier.ALL,
-    "futures.get_whale_index": PlanTier.STARTUP_PLUS,
-    "futures.get_cgdi_index": PlanTier.ALL,
-    "futures.get_cdri_index": PlanTier.ALL,
-    "futures.price.get_history": PlanTier.ALL,
-    "futures.open_interest.get_history": PlanTier.ALL,
-    "futures.open_interest.get_aggregated_history": PlanTier.ALL,
-    "futures.open_interest.get_exchange_list": PlanTier.ALL,
-    "futures.open_interest.get_exchange_history_chart": PlanTier.ALL,
-    "futures.funding_rate.get_history": PlanTier.ALL,
-    "futures.funding_rate.get_oi_weight_history": PlanTier.ALL,
-    "futures.funding_rate.get_vol_weight_history": PlanTier.ALL,
-    "futures.funding_rate.get_exchange_list": PlanTier.ALL,
-    "futures.funding_rate.get_accumulated_exchange_list": PlanTier.ALL,
-    "futures.funding_rate.get_arbitrage": PlanTier.STANDARD_PLUS,
-    "futures.liquidation.get_history": PlanTier.ALL,
-    "futures.liquidation.get_aggregated_history": PlanTier.ALL,
-    "futures.liquidation.get_coin_list": PlanTier.STARTUP_PLUS,
-    "futures.liquidation.get_exchange_list": PlanTier.ALL,
-    "futures.liquidation.get_order": PlanTier.STANDARD_PLUS,
-    "futures.liquidation.get_map": PlanTier.PROFESSIONAL_PLUS,
-    "futures.liquidation.get_aggregated_map": PlanTier.PROFESSIONAL_PLUS,
-    "futures.liquidation.heatmap.get_model1": PlanTier.PROFESSIONAL_PLUS,
-    "futures.liquidation.heatmap.get_model2": PlanTier.PROFESSIONAL_PLUS,
-    "futures.liquidation.heatmap.get_model3": PlanTier.PROFESSIONAL_PLUS,
-    "futures.liquidation.aggregated_heatmap.get_model1": PlanTier.PROFESSIONAL_PLUS,
-    "futures.liquidation.aggregated_heatmap.get_model2": PlanTier.PROFESSIONAL_PLUS,
-    "futures.liquidation.aggregated_heatmap.get_model3": PlanTier.PROFESSIONAL_PLUS,
-    "futures.orderbook.get_large_limit_order": PlanTier.STANDARD_PLUS,
-    "futures.orderbook.get_large_limit_order_history": PlanTier.STANDARD_PLUS,
-    "futures.rsi.get_list": PlanTier.STANDARD_PLUS,
-    # Spot endpoints
-    "spot.get_coins_markets": PlanTier.STANDARD_PLUS,
-    "spot.orderbook.get_large_limit_order": PlanTier.STANDARD_PLUS,
-    "spot.orderbook.get_large_limit_order_history": PlanTier.STANDARD_PLUS,
-    # Options endpoints
-    "option.get_max_pain": PlanTier.ALL,
-    "option.get_info": PlanTier.ALL,
-    # Hyperliquid
-    "hyperliquid.get_whale_alert": PlanTier.ALL,
-    "hyperliquid.get_whale_position": PlanTier.ALL,
-}
+# Use the endpoint registry to get plan requirements
+ENDPOINT_REGISTRY = EndpointRegistry()
 
 
 class EndpointTester:
     """Test all CoinGlass API endpoints comprehensively."""
     
-    def __init__(self, api_key: str = None):
-        """Initialize the tester with API key."""
+    def __init__(self, api_key: str = None, plan_level: int = None):
+        """Initialize the tester with API key and plan level."""
         self.api_key = api_key or os.getenv('CG_API_KEY')
         if not self.api_key:
             raise ValueError("API key required. Set CG_API_KEY in .env file")
+        
+        # Get plan level from environment or default to 1 (Hobbyist)
+        self.plan_level = plan_level or int(os.getenv('PLAN_LEVEL', '1'))
+        if self.plan_level < 1 or self.plan_level > 5:
+            raise ValueError(f"Invalid PLAN_LEVEL: {self.plan_level}. Must be between 1-5")
+        
+        print(f"\nTesting with Plan Level: {self.plan_level} ({PlanLevel.get_name(self.plan_level)})")
+        
+        # Get available endpoints for this plan level
+        self.available_endpoints = ENDPOINT_REGISTRY.get_available_endpoints(self.plan_level)
+        total_endpoints = len(ENDPOINT_REGISTRY.get_all_endpoints())
+        print(f"Available endpoints: {len(self.available_endpoints)} out of {total_endpoints} total")
         
         self.cg = CoinGlass(api_key=self.api_key)
         self.results = []
@@ -93,9 +56,14 @@ class EndpointTester:
         self.rate_limit_wait = 0  # Dynamic rate limit wait time
         self.last_request_time = 0
     
-    def test_endpoint(self, name: str, func: callable, params: Dict = None) -> Tuple[str, str, str, str, str, str]:
+    def test_endpoint(self, name: str, func: callable, params: Dict = None) -> Tuple[str, str, str, str, str, int]:
         """
         Test a single endpoint and return results.
+        
+        Args:
+            name: Endpoint name
+            func: Function to call
+            params: Parameters to pass
         
         Returns:
             Tuple of (endpoint_name, url, plan_required, params_str, status, result_str)
@@ -113,8 +81,15 @@ class EndpointTester:
         # Construct the URL based on the endpoint name
         url = self._construct_url(name)
         
-        # Get plan requirement
-        plan_required = ENDPOINT_PLANS.get(name, PlanTier.ALL)
+        # Get plan requirement for this endpoint
+        required_level = ENDPOINT_REGISTRY.get_endpoint_requirement(name)
+        plan_required = f"Level {required_level}" if required_level else "Unknown"
+        
+        # Check if user has access to this endpoint
+        if required_level and self.plan_level < required_level:
+            status = "⏭️ SKIPPED"
+            result_str = f"Requires plan level {required_level} ({PlanLevel.get_name(required_level)})"
+            return name, url, plan_required, params_str, status, result_str
         
         try:
             # Smart rate limiting - wait if needed
@@ -169,7 +144,7 @@ class EndpointTester:
             else:
                 result_str = f"❌ ERROR: {error_msg[:150]}"
                 status = "❌ FAILED"
-            
+        
         return name, url, plan_required, params_str, status, result_str
     
     def _construct_url(self, endpoint_name: str) -> str:

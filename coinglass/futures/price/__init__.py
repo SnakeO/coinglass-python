@@ -3,7 +3,7 @@ Price API for CoinGlass Futures
 """
 from typing import Optional, List, Dict, Any
 from ...client import CoinGlassClient
-from ...constants import PlanTier
+from ...constants import PlanLevel
 
 
 class PriceAPI:
@@ -26,7 +26,7 @@ class PriceAPI:
         """
         Get historical price data for futures.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             symbol: Symbol (e.g., 'BTC' or 'BTCUSDT')

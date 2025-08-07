@@ -3,7 +3,7 @@ Premium API for CoinGlass
 """
 from typing import Optional, List, Dict, Any
 from ...client import CoinGlassClient
-from ...constants import PlanTier
+from ...constants import PlanLevel
 
 
 class PremiumAPI:
@@ -24,7 +24,7 @@ class PremiumAPI:
         """
         Get Grayscale premium history.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             symbol: Symbol (e.g., 'GBTC', 'ETHE') - optional

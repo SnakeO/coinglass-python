@@ -2,7 +2,7 @@
 Main CoinGlass API interface
 Aggregates all API modules for easy access
 """
-from typing import Optional
+from typing import Optional, List, Dict, Any
 import requests
 
 from .client import CoinGlassClient
@@ -16,6 +16,7 @@ from .grayscale import GrayscaleAPI
 from .index import IndexAPI
 from .hyperliquid import HyperliquidAPI
 from .calendar import CalendarAPI
+from .endpoints import EndpointRegistry
 
 # Import top-level indicator modules
 from . import (
@@ -66,7 +67,8 @@ class CoinGlass:
         base_url: Optional[str] = None,
         timeout: int = 30,
         max_retries: int = 3,
-        session: Optional[requests.Session] = None
+        session: Optional[requests.Session] = None,
+        plan_level: Optional[int] = None
     ):
         """
         Initialize CoinGlass API interface.
@@ -77,6 +79,7 @@ class CoinGlass:
             timeout: Request timeout in seconds
             max_retries: Maximum number of retry attempts for failed requests
             session: Optional requests.Session to use for HTTP requests
+            plan_level: Your API plan level (1-5). If not provided, will look for PLAN_LEVEL env var.
         """
         # Initialize base client
         self.client = CoinGlassClient(
@@ -86,6 +89,13 @@ class CoinGlass:
             max_retries=max_retries,
             session=session
         )
+        
+        # Store plan level (default to 1 if not specified)
+        import os
+        self.plan_level = plan_level or int(os.getenv('PLAN_LEVEL', '1'))
+        
+        # Initialize endpoint registry
+        self.endpoint_registry = EndpointRegistry()
         
         # Initialize API modules
         self.futures = FuturesAPI(self.client)
@@ -104,7 +114,7 @@ class CoinGlass:
         """
         Get Coinbase Premium Index data.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             interval: Time interval (e.g., '1h', '4h', '1d') - optional
@@ -118,7 +128,7 @@ class CoinGlass:
         """
         Get Bitfinex margin long vs short positions data.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             **kwargs: Optional parameters:
@@ -131,7 +141,7 @@ class CoinGlass:
         """
         Get historical borrow interest rate data.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             **kwargs: Optional parameters:
@@ -144,7 +154,7 @@ class CoinGlass:
         """
         Get AHR999 indicator data.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             **kwargs: Optional parameters:
@@ -157,7 +167,7 @@ class CoinGlass:
         """
         Get bull market peak indicators.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             **kwargs: Optional parameters:
@@ -170,7 +180,7 @@ class CoinGlass:
         """
         Get Puell Multiple data.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             **kwargs: Optional parameters:
@@ -183,7 +193,7 @@ class CoinGlass:
         """
         Get Stock-to-Flow model data.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             **kwargs: Optional parameters:
@@ -196,7 +206,7 @@ class CoinGlass:
         """
         Get Pi Cycle Top Indicator data.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             **kwargs: Optional parameters:
@@ -209,7 +219,7 @@ class CoinGlass:
         """
         Get Golden Ratio Multiplier data.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             **kwargs: Optional parameters:
@@ -222,7 +232,7 @@ class CoinGlass:
         """
         Get percentage of profitable days in Bitcoin history.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             **kwargs: Optional parameters:
@@ -235,7 +245,7 @@ class CoinGlass:
         """
         Get Bitcoin Rainbow Chart data.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             **kwargs: Optional parameters:
@@ -243,6 +253,66 @@ class CoinGlass:
                 - endTime (int): End timestamp in milliseconds
         """
         return bitcoin_rainbow_chart.get_bitcoin_rainbow_chart(self.client, **kwargs)
+    
+    # Utility methods for endpoint access management
+    def get_available_endpoints(self, plan_level: Optional[int] = None) -> List[str]:
+        """
+        Get list of endpoints available for the current or specified plan level.
+        
+        Args:
+            plan_level: Optional plan level to check (1-5). Uses instance plan_level if not provided.
+            
+        Returns:
+            List of endpoint names available for the plan level
+        """
+        level = plan_level or self.plan_level
+        return self.endpoint_registry.get_available_endpoints(level)
+    
+    def check_endpoint_access(self, endpoint_name: str, plan_level: Optional[int] = None) -> bool:
+        """
+        Check if an endpoint is accessible with the current or specified plan level.
+        
+        Args:
+            endpoint_name: Name of the endpoint to check
+            plan_level: Optional plan level to check (1-5). Uses instance plan_level if not provided.
+            
+        Returns:
+            True if endpoint is accessible, False otherwise
+        """
+        level = plan_level or self.plan_level
+        return self.endpoint_registry.check_endpoint_access(endpoint_name, level)
+    
+    def get_plan_level(self) -> int:
+        """
+        Get the current plan level.
+        
+        Returns:
+            Current plan level (1-5)
+        """
+        return self.plan_level
+    
+    def get_plan_name(self) -> str:
+        """
+        Get the name of the current plan level.
+        
+        Returns:
+            Plan name (e.g., 'Hobbyist', 'Professional')
+        """
+        from .constants import PlanLevel
+        return PlanLevel.get_name(self.plan_level)
+    
+    def get_endpoint_statistics(self) -> Dict[str, any]:
+        """
+        Get statistics about endpoint availability for current plan.
+        
+        Returns:
+            Dictionary with statistics including total available endpoints
+        """
+        stats = self.endpoint_registry.get_statistics()
+        stats['current_plan_level'] = self.plan_level
+        stats['current_plan_name'] = self.get_plan_name()
+        stats['available_endpoints_count'] = len(self.get_available_endpoints())
+        return stats
     
     def close(self):
         """Close the underlying session."""

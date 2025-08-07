@@ -3,7 +3,7 @@ Bitcoin API for CoinGlass
 """
 from typing import Optional, List, Dict, Any
 from ...client import CoinGlassClient
-from ...constants import PlanTier
+from ...constants import PlanLevel
 
 
 class BitcoinAPI:
@@ -31,7 +31,7 @@ class BitcoinAPI:
         """
         Get list of Bitcoin ETFs.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             **kwargs: Optional parameters:
@@ -57,7 +57,7 @@ class BitcoinAPI:
         """
         Get Bitcoin ETF flow history.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             **kwargs: Optional parameters:
@@ -84,7 +84,7 @@ class BitcoinAPI:
         """
         Get Bitcoin ETF historical data.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             **kwargs: Optional parameters:
@@ -105,7 +105,7 @@ class BitcoinAPI:
         """
         Get Bitcoin ETF detailed information.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Returns:
             Bitcoin ETF detailed data dictionary
@@ -116,7 +116,7 @@ class BitcoinAPI:
         """
         Get Bitcoin ETF Assets Under Management (AUM).
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Returns:
             Bitcoin ETF AUM data dictionary

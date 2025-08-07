@@ -3,7 +3,7 @@ Exchange API for CoinGlass
 """
 from typing import Optional, List, Dict, Any
 from ..client import CoinGlassClient
-from ..constants import PlanTier
+from ..constants import PlanLevel
 
 
 class ExchangeAPI:
@@ -30,7 +30,7 @@ class ExchangeAPI:
         """
         Get exchange assets and balances.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         Cache: Every 1 hour
         
         Args:

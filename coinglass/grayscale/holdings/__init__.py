@@ -3,7 +3,7 @@ Holdings API for CoinGlass
 """
 from typing import Optional, List, Dict, Any
 from ...client import CoinGlassClient
-from ...constants import PlanTier
+from ...constants import PlanLevel
 
 
 class HoldingsAPI:
@@ -23,7 +23,7 @@ class HoldingsAPI:
         """
         Get Grayscale holdings list.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             **kwargs: Optional parameters:

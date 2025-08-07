@@ -3,7 +3,7 @@ Orderbook API for CoinGlass Futures
 """
 from typing import Optional, List, Dict, Any
 from ...client import CoinGlassClient
-from ...constants import PlanTier
+from ...constants import PlanLevel
 
 
 class OrderbookAPI:
@@ -27,7 +27,7 @@ class OrderbookAPI:
         """
         Get historical ask/bid data for futures.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             symbol: Symbol (e.g., 'BTCUSDT')
@@ -67,7 +67,7 @@ class OrderbookAPI:
         """
         Get aggregated ask/bid data across exchanges.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             symbol: Symbol (e.g., 'BTC')
@@ -105,7 +105,7 @@ class OrderbookAPI:
         """
         Get historical orderbook data.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             symbol: Symbol (e.g., 'BTCUSDT')
@@ -138,7 +138,7 @@ class OrderbookAPI:
         """
         Get current large limit orders in futures.
         
-        Plan Availability: Standard+
+        Min Plan Level: 3
         
         Args:
             symbol: Symbol (e.g., 'BTCUSDT')
@@ -166,7 +166,7 @@ class OrderbookAPI:
         """
         Get historical large limit orders for futures.
         
-        Plan Availability: Standard+
+        Min Plan Level: 3
         
         Args:
             symbol: Symbol (e.g., 'BTCUSDT')

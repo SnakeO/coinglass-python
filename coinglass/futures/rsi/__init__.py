@@ -3,7 +3,7 @@ RSI API for CoinGlass Futures
 """
 from typing import Optional, List, Dict, Any
 from ...client import CoinGlassClient
-from ...constants import PlanTier, CacheTime
+from ...constants import PlanLevel, CacheTime
 
 
 class RsiAPI:
@@ -17,7 +17,7 @@ class RsiAPI:
         """
         Get RSI values across multiple timeframes.
         
-        Plan Availability: Standard+
+        Min Plan Level: 3
         Cache: Every 10 seconds
         
         Returns:

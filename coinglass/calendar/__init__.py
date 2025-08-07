@@ -3,7 +3,7 @@ Calendar API for CoinGlass
 """
 from typing import Optional, List, Dict, Any
 from ..client import CoinGlassClient
-from ..constants import PlanTier, Importance
+from ..constants import PlanLevel, Importance
 
 
 class CalendarAPI:
@@ -24,7 +24,7 @@ class CalendarAPI:
         """
         Get economic calendar events and data.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             **kwargs: Optional parameters:

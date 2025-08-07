@@ -3,7 +3,7 @@ Balance API for CoinGlass
 """
 from typing import Optional, List, Dict, Any
 from ...client import CoinGlassClient
-from ...constants import PlanTier
+from ...constants import PlanLevel
 
 
 class BalanceAPI:
@@ -24,7 +24,7 @@ class BalanceAPI:
         """
         Get exchange balance list for a symbol.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             symbol: Symbol (e.g., 'BTC', 'ETH')
@@ -56,7 +56,7 @@ class BalanceAPI:
         """
         Get exchange balance chart data.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             symbol: Symbol (e.g., 'BTC', 'ETH')

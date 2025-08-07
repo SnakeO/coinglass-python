@@ -2,8 +2,50 @@
 Constants and enums for CoinGlass API
 """
 
+# Plan Level System (1-5)
+class PlanLevel:
+    """API Plan levels with numeric hierarchy"""
+    HOBBYIST = 1       # Level 1: Hobbyist plan
+    STARTUP = 2        # Level 2: Startup plan
+    STANDARD = 3       # Level 3: Standard plan
+    PROFESSIONAL = 4   # Level 4: Professional plan
+    ENTERPRISE = 5     # Level 5: Enterprise plan
+    
+    # Mappings for display and conversion
+    LEVEL_TO_NAME = {
+        1: "Hobbyist",
+        2: "Startup",
+        3: "Standard", 
+        4: "Professional",
+        5: "Enterprise"
+    }
+    
+    NAME_TO_LEVEL = {
+        "Hobbyist": 1,
+        "Startup": 2,
+        "Standard": 3,
+        "Professional": 4,
+        "Enterprise": 5
+    }
+    
+    @classmethod
+    def get_name(cls, level: int) -> str:
+        """Get plan name from level number."""
+        return cls.LEVEL_TO_NAME.get(level, f"Level {level}")
+    
+    @classmethod
+    def get_level(cls, name: str) -> int:
+        """Get level number from plan name."""
+        return cls.NAME_TO_LEVEL.get(name, 1)
+    
+    @classmethod
+    def meets_requirement(cls, user_level: int, required_level: int) -> bool:
+        """Check if user's plan level meets the requirement."""
+        return user_level >= required_level
+
+# Legacy support - will be removed in future versions
 class PlanTier:
-    """API Plan tiers with hierarchy: Hobbyist -> Startup -> Standard -> Professional -> Enterprise"""
+    """DEPRECATED: Use PlanLevel instead. API Plan tiers with hierarchy"""
     HOBBYIST = "Hobbyist"
     STARTUP = "Startup" 
     STANDARD = "Standard"

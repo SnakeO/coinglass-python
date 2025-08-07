@@ -3,7 +3,7 @@ Option API for CoinGlass
 """
 from typing import Optional, List, Dict, Any
 from ..client import CoinGlassClient
-from ..constants import PlanTier, CacheTime
+from ..constants import PlanLevel, CacheTime
 
 
 class OptionAPI:
@@ -22,7 +22,7 @@ class OptionAPI:
         """
         Get options max pain calculation.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         Cache: Every 1 minute
         
         Args:
@@ -48,7 +48,7 @@ class OptionAPI:
         """
         Get options market overview info.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         Cache: Every 30 seconds
         
         Args:
@@ -76,7 +76,7 @@ class OptionAPI:
         """
         Get historical open interest by exchange for options.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             symbol: Symbol (e.g., 'BTC')
@@ -108,7 +108,7 @@ class OptionAPI:
         """
         Get historical volume by exchange for options.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             symbol: Symbol (e.g., 'BTC')

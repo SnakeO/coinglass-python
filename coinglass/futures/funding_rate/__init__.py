@@ -3,7 +3,7 @@ Funding Rate API for CoinGlass
 """
 from typing import Optional, List, Dict, Any
 from ...client import CoinGlassClient
-from ...constants import PlanTier, CacheTime, Interval
+from ...constants import PlanLevel, CacheTime, Interval
 
 
 class FundingRateAPI:
@@ -27,7 +27,7 @@ class FundingRateAPI:
         """
         Get historical funding rate data.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             symbol: Symbol (e.g., 'BTCUSDT')
@@ -67,7 +67,7 @@ class FundingRateAPI:
         """
         Get open interest weighted funding rate history.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             symbol: Symbol (e.g., 'BTC')
@@ -105,7 +105,7 @@ class FundingRateAPI:
         """
         Get volume weighted funding rate history.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             symbol: Symbol (e.g., 'BTC')
@@ -140,7 +140,7 @@ class FundingRateAPI:
         """
         Get current funding rates by exchange.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         Cache: Every 20 seconds
         
         Args:
@@ -170,7 +170,7 @@ class FundingRateAPI:
         """
         Get accumulated funding rate data by exchange.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             **kwargs: Optional parameters:
@@ -200,7 +200,7 @@ class FundingRateAPI:
         """
         Get funding rate arbitrage opportunities.
         
-        Plan Availability: Standard+
+        Min Plan Level: 3
         Cache: Every 30 seconds
         
         Args:

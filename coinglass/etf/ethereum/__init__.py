@@ -3,7 +3,7 @@ Ethereum API for CoinGlass
 """
 from typing import Optional, List, Dict, Any
 from ...client import CoinGlassClient
-from ...constants import PlanTier
+from ...constants import PlanLevel
 
 
 class EthereumAPI:
@@ -27,7 +27,7 @@ class EthereumAPI:
         """
         Get list of Ethereum ETFs.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             **kwargs: Optional parameters:
@@ -53,7 +53,7 @@ class EthereumAPI:
         """
         Get Ethereum ETF flow history.
         
-        Plan Availability: All plans
+        Min Plan Level: 1
         
         Args:
             **kwargs: Optional parameters:
