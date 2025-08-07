@@ -31,7 +31,7 @@ class OpenInterestAPI:
         
         Args:
             symbol: Futures instrument identifier (e.g., 'BTCUSDT_PERP')
-            ex: Exchange name (e.g., 'Binance')
+            exchange: Exchange name (e.g., 'Binance')
             interval: Candlestick interval (1m, 3m, 5m, 15m, 30m, 1h, 4h, 6h, 8h, 12h, 1d, 1w)
             **kwargs: Optional parameters:
                 - startTime (int): Start timestamp in milliseconds
@@ -43,7 +43,7 @@ class OpenInterestAPI:
         """
         params = {
             'symbol': symbol,
-            'ex': ex,
+            'exchange': exchange,
             'interval': interval
         }
         # Add optional params from kwargs

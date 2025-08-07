@@ -308,7 +308,8 @@ class EndpointTester:
         
         self.results.append(self.test_endpoint(
             "futures.get_pairs_markets",
-            self.cg.futures.get_pairs_markets
+            self.cg.futures.get_pairs_markets,
+            {"symbol": "BTC"}
         ))
         
         self.results.append(self.test_endpoint(
@@ -358,7 +359,7 @@ class EndpointTester:
         self.results.append(self.test_endpoint(
             "futures.open_interest.get_history",
             self.cg.futures.open_interest.get_history,
-            {"symbol": "BTC", "ex": "Binance", "interval": "4h"}
+            {"symbol": "BTC", "exchange": "Binance", "interval": "4h"}
         ))
         
         self.results.append(self.test_endpoint(
@@ -382,7 +383,7 @@ class EndpointTester:
         self.results.append(self.test_endpoint(
             "futures.open_interest.get_exchange_list",
             self.cg.futures.open_interest.get_exchange_list,
-            {"symbol": "BTC", "range": "1d"}  # Added required range parameter
+            {"symbol": "BTC", "period": "1d"}  # Added required range parameter
         ))
         
         self.results.append(self.test_endpoint(
@@ -395,7 +396,7 @@ class EndpointTester:
         self.results.append(self.test_endpoint(
             "futures.funding_rate.get_history",
             self.cg.futures.funding_rate.get_history,
-            {"symbol": "BTC", "ex": "Binance", "interval": "8h"}
+            {"symbol": "BTC", "exchange": "Binance", "interval": "8h"}
         ))
         
         self.results.append(self.test_endpoint(
@@ -413,7 +414,7 @@ class EndpointTester:
         self.results.append(self.test_endpoint(
             "futures.funding_rate.get_exchange_list",
             self.cg.futures.funding_rate.get_exchange_list,
-            {"symbol": "BTC", "range": "1d"}  # Added required range parameter
+            {"symbol": "BTC", "period": "1d"}  # Added required range parameter
         ))
         
         self.results.append(self.test_endpoint(
@@ -451,7 +452,7 @@ class EndpointTester:
         self.results.append(self.test_endpoint(
             "futures.liquidation.get_history",
             self.cg.futures.liquidation.get_history,
-            {"symbol": "BTC", "ex": "Binance", "interval": "1h"}
+            {"symbol": "BTC", "exchange": "Binance", "interval": "1h"}
         ))
         
         self.results.append(self.test_endpoint(
@@ -468,7 +469,7 @@ class EndpointTester:
         self.results.append(self.test_endpoint(
             "futures.liquidation.get_exchange_list",
             self.cg.futures.liquidation.get_exchange_list,
-            {"range": "1d"}
+            {"period": "1d"}
         ))
         
         self.results.append(self.test_endpoint(
@@ -529,7 +530,7 @@ class EndpointTester:
         self.results.append(self.test_endpoint(
             "futures.orderbook.get_ask_bids_history",
             self.cg.futures.orderbook.get_ask_bids_history,
-            {"symbol": "BTC", "ex": "Binance", "interval": "1h"}
+            {"symbol": "BTC", "exchange": "Binance", "interval": "1h"}
         ))
         
         self.results.append(self.test_endpoint(
@@ -541,7 +542,7 @@ class EndpointTester:
         self.results.append(self.test_endpoint(
             "futures.orderbook.get_history",
             self.cg.futures.orderbook.get_history,
-            {"symbol": "BTC", "ex": "Binance", "interval": "1h"}
+            {"symbol": "BTC", "exchange": "Binance", "interval": "1h"}
         ))
         
         self.results.append(self.test_endpoint(
@@ -602,7 +603,8 @@ class EndpointTester:
         
         self.results.append(self.test_endpoint(
             "spot.get_pairs_markets",
-            self.cg.spot.get_pairs_markets
+            self.cg.spot.get_pairs_markets,
+            {"symbol": "BTC"}
         ))
         
         self.results.append(self.test_endpoint(

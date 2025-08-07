@@ -76,16 +76,20 @@ class FuturesAPI:
         response = self.client.get('/futures/coins-markets')
         return response.get('data', [])
     
-    def get_pairs_markets(self) -> List[Dict[str, Any]]:
+    def get_pairs_markets(self, symbol: str) -> List[Dict[str, Any]]:
         """
-        Get performance metrics for all futures trading pairs.
+        Get performance metrics for futures trading pairs.
         
         Min Plan Level: 1
+        
+        Args:
+            symbol: Cryptocurrency symbol (e.g., 'BTC')
         
         Returns:
             List of pair market data
         """
-        response = self.client.get('/futures/pairs-markets')
+        params = {'symbol': symbol}
+        response = self.client.get('/futures/pairs-markets', params=params)
         return response.get('data', [])
     
     def get_coins_price_change(self) -> List[Dict[str, Any]]:

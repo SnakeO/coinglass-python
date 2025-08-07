@@ -31,7 +31,7 @@ class LiquidationAPI:
         Min Plan Level: 1
         
         Args:
-            ex: Exchange name (e.g., 'Binance')
+            exchange: Exchange name (e.g., 'Binance')
             symbol: Symbol (e.g., 'BTCUSDT')
             interval: Interval (1m, 3m, 5m, 15m, 30m, 1h, 4h, 6h, 8h, 12h, 1d, 1w)
         
@@ -39,7 +39,7 @@ class LiquidationAPI:
             List of liquidation history data
         """
         params = {
-            'ex': ex,
+            'exchange': exchange,
             'symbol': symbol,
             'interval': interval,
         }
@@ -149,14 +149,14 @@ class LiquidationAPI:
         Cache: Every 1 second
         
         Args:
-            ex: Exchange name (e.g., 'Binance')
+            exchange: Exchange name (e.g., 'Binance')
             symbol: Symbol (e.g., 'BTCUSDT')
         
         Returns:
             List of recent liquidation orders
         """
         params = {
-            'ex': ex,
+            'exchange': exchange,
             'symbol': symbol
         }
         response = self.client.get('/futures/liquidation/order', params=params)
@@ -173,14 +173,14 @@ class LiquidationAPI:
         Min Plan Level: 4
         
         Args:
-            ex: Exchange name (e.g., 'Binance')
+            exchange: Exchange name (e.g., 'Binance')
             symbol: Symbol (e.g., 'BTCUSDT')
         
         Returns:
             List of liquidation map data
         """
         params = {
-            'ex': ex,
+            'exchange': exchange,
             'symbol': symbol,
         }
         response = self.client.get('/futures/liquidation/map', params=params)

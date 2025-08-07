@@ -137,20 +137,21 @@ class CoinGlass:
         """
         return bitfinex_margin_long_short.get_bitfinex_margin_long_short(self.client, **kwargs)
     
-    def get_borrow_interest_rate_history(self, **kwargs):
+    def get_borrow_interest_rate_history(self, symbol: str = 'BTC', **kwargs):
         """
         Get historical borrow interest rate data.
         
         Min Plan Level: 1
         
         Args:
+            symbol: Symbol (default: 'BTC')
             **kwargs: Optional parameters:
                 - startTime (int): Start timestamp in milliseconds
                 - endTime (int): End timestamp in milliseconds
         """
         from .borrow_interest_rate import BorrowInterestRateAPI
         borrow_api = BorrowInterestRateAPI(self.client)
-        return borrow_api.get_history(**kwargs)
+        return borrow_api.get_history(symbol, **kwargs)
     
     def get_ahr999(self, **kwargs):
         """

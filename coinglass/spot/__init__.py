@@ -61,14 +61,18 @@ class SpotAPI:
         response = self.client.get('/spot/coins-markets')
         return response.get('data', [])
     
-    def get_pairs_markets(self) -> List[Dict[str, Any]]:
+    def get_pairs_markets(self, symbol: str) -> List[Dict[str, Any]]:
         """
         Get spot pairs market performance data.
         
         Min Plan Level: 1
         
+        Args:
+            symbol: Cryptocurrency symbol (e.g., 'BTC')
+        
         Returns:
             List of pairs market data
         """
-        response = self.client.get('/spot/pairs-markets')
+        params = {'symbol': symbol}
+        response = self.client.get('/spot/pairs-markets', params=params)
         return response.get('data', [])

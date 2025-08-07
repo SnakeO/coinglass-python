@@ -51,7 +51,7 @@ class OrderbookAPI:
             if key in kwargs:
                 params[key] = kwargs[key]
         
-        response = self.client.get('/futures/orderbook-ask-bids/history', params=params)
+        response = self.client.get('/futures/orderbook/ask-bids-history', params=params)
         return response.get('data', [])
     
     def get_aggregated_ask_bids_history(
@@ -89,7 +89,7 @@ class OrderbookAPI:
             if key in kwargs:
                 params[key] = kwargs[key]
         
-        response = self.client.get('/futures/orderbook-aggregated-ask-bids/history', params=params)
+        response = self.client.get('/futures/orderbook/aggregated-ask-bids-history', params=params)
         return response.get('data', [])
     
     def get_history(
