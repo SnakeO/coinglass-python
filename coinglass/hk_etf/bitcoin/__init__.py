@@ -2,7 +2,7 @@
 Bitcoin API for CoinGlass
 """
 from typing import Optional, List, Dict, Any
-from ..client import CoinGlassClient
+from ...client import CoinGlassClient
 
 
 class BitcoinAPI:
@@ -19,5 +19,5 @@ class BitcoinAPI:
         Returns:
             List of data
         """
-        response = self.client.get('/hk_etf/bitcoin/flow-history')
+        response = self.client.get('/hk-etf/bitcoin/flow-history')
         return response.get('data', [])

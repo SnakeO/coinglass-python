@@ -2,7 +2,8 @@
 Option API for CoinGlass
 """
 from typing import Optional, List, Dict, Any
-from .client import CoinGlassClient
+from ..client import CoinGlassClient
+from ..constants import PlanTier, CacheTime
 
 
 class OptionAPI:
@@ -12,73 +13,118 @@ class OptionAPI:
         """Initialize Option API with client."""
         self.client = client
 
-    def get_max_pain(self, symbol: str) -> List[Dict[str, Any]]:
+    def get_max_pain(
+        self,
+        # Optional parameters (can be passed as kwargs):
+        # symbol: str = 'BTC' - Symbol (defaults to BTC)
+        **kwargs
+    ) -> List[Dict[str, Any]]:
         """
-        Get max pain.
+        Get options max pain calculation.
+        
+        Plan Availability: All plans
+        Cache: Every 1 minute
         
         Args:
-            symbol: Symbol
+            **kwargs: Optional parameters:
+                - symbol (str): Symbol (default: 'BTC')
         
         Returns:
-            List of data
+            List of max pain data
         """
-        params = {
-            'symbol': symbol,
-        }
-        response = self.client.get('/option/max-pain', params=params)
+        params = {}
+        if 'symbol' in kwargs:
+            params['symbol'] = kwargs['symbol']
+        
+        response = self.client.get('/option/max-pain', params=params if params else None)
         return response.get('data', [])
-    def get_info(self, symbol: str) -> Dict[Dict[str, Any]]:
+    
+    def get_info(
+        self,
+        # Optional parameters (can be passed as kwargs):
+        # symbol: str = 'BTC' - Symbol (defaults to BTC)
+        **kwargs
+    ) -> Dict[str, Any]:
         """
-        Get info.
+        Get options market overview info.
+        
+        Plan Availability: All plans
+        Cache: Every 30 seconds
         
         Args:
-            symbol: Symbol
+            **kwargs: Optional parameters:
+                - symbol (str): Symbol (default: 'BTC')
         
         Returns:
-            Data dictionary
+            Options market info data dictionary
         """
-        params = {
-            'symbol': symbol,
-        }
-        response = self.client.get('/option/info', params=params)
+        params = {}
+        if 'symbol' in kwargs:
+            params['symbol'] = kwargs['symbol']
+        
+        response = self.client.get('/option/info', params=params if params else None)
         return response.get('data', {})
-    def get_exchange_oi_history(self, symbol: str, unit: Optional[str]= None, range: Optional[str]= None) -> List[Dict[str, Any]]:
+    
+    def get_exchange_oi_history(
+        self,
+        symbol: str,
+        time_type: str,
+        # Optional parameters (can be passed as kwargs):
+        # currency: str = None - Currency type
+        **kwargs
+    ) -> List[Dict[str, Any]]:
         """
-        Get exchange oi history.
+        Get historical open interest by exchange for options.
+        
+        Plan Availability: All plans
         
         Args:
-            symbol: Symbol
-            unit: Unit (optional)
-            range: Range (optional)
+            symbol: Symbol (e.g., 'BTC')
+            time_type: Time type for aggregation
+            **kwargs: Optional parameters:
+                - currency (str): Currency type
         
         Returns:
-            List of data
+            List of OI history data by exchange
         """
         params = {
             'symbol': symbol,
-            'unit': unit,
-            'range': range,
+            'time_type': time_type,
         }
-        params = {k: v for k, v in params.items() if v is not None}
+        if 'currency' in kwargs:
+            params['currency'] = kwargs['currency']
+        
         response = self.client.get('/option/exchange-oi-history', params=params)
         return response.get('data', [])
-    def get_exchange_vol_history(self, symbol: str, unit: Optional[str]= None, range: Optional[str]= None) -> List[Dict[str, Any]]:
+    
+    def get_exchange_vol_history(
+        self,
+        symbol: str,
+        time_type: str,
+        # Optional parameters (can be passed as kwargs):
+        # currency: str = None - Currency type
+        **kwargs
+    ) -> List[Dict[str, Any]]:
         """
-        Get exchange vol history.
+        Get historical volume by exchange for options.
+        
+        Plan Availability: All plans
         
         Args:
-            symbol: Symbol
-            unit: Unit (optional)
-            range: Range (optional)
+            symbol: Symbol (e.g., 'BTC')
+            time_type: Time type for aggregation
+            **kwargs: Optional parameters:
+                - currency (str): Currency type
         
         Returns:
-            List of data
+            List of volume history data by exchange
         """
         params = {
             'symbol': symbol,
-            'unit': unit,
-            'range': range,
+            'time_type': time_type,
         }
-        params = {k: v for k, v in params.items() if v is not None}
+        if 'currency' in kwargs:
+            params['currency'] = kwargs['currency']
+        
         response = self.client.get('/option/exchange-vol-history', params=params)
         return response.get('data', [])

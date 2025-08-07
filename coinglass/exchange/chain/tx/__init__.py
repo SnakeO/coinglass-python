@@ -2,7 +2,8 @@
 Tx API for CoinGlass
 """
 from typing import Optional, List, Dict, Any
-from ...client import CoinGlassClient
+from ....client import CoinGlassClient
+from ....constants import PlanTier
 
 
 class TxAPI:
@@ -12,21 +13,41 @@ class TxAPI:
         """Initialize Tx API with client."""
         self.client = client
 
-    def get_list(self, exchange: str, symbol: Optional[str]= None) -> List[Dict[str, Any]]:
+    def get_list(
+        self,
+        exchange: str,
+        symbol: Optional[str] = None,
+        # Optional parameters (can be passed as kwargs):
+        # chain: str = None - Specific blockchain network
+        # txType: str = None - Transaction type (deposit/withdrawal)
+        # limit: int = None - Number of results to return
+        **kwargs
+    ) -> List[Dict[str, Any]]:
         """
-        Get list.
+        Get on-chain transaction list for an exchange.
+        
+        Plan Availability: All plans
         
         Args:
-            exchange: Exchange
-            symbol: Symbol (optional)
+            exchange: Exchange name (e.g., 'Binance', 'Coinbase')
+            symbol: Symbol (e.g., 'BTC', 'ETH') - optional
+            **kwargs: Optional parameters:
+                - chain (str): Specific blockchain network
+                - txType (str): Transaction type (deposit/withdrawal)
+                - limit (int): Number of results to return
         
         Returns:
-            List of data
+            List of on-chain transaction data
         """
         params = {
             'exchange': exchange,
-            'symbol': symbol,
         }
-        params = {k: v for k, v in params.items() if v is not None}
+        if symbol is not None:
+            params['symbol'] = symbol
+        
+        # Add optional params from kwargs
+        for key in ['chain', 'txType', 'limit']:
+            if key in kwargs:
+                params[key] = kwargs[key]
         response = self.client.get('/exchange/chain/tx/list', params=params)
         return response.get('data', [])

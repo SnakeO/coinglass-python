@@ -16,5 +16,5 @@ def get_puell_multiple(client: CoinGlassClient) -> Dict[str, Any]:
     Returns:
         Data dictionary
     """
-    response = client.get('/puell-multiple')
+    response = client.get('/index/puell-multiple')
     return response.get('data', {})

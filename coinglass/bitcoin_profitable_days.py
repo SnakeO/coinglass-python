@@ -16,5 +16,5 @@ def get_bitcoin_profitable_days(client: CoinGlassClient) -> Dict[str, Any]:
     Returns:
         Data dictionary
     """
-    response = client.get('/bitcoin-profitable-days')
+    response = client.get('/index/bitcoin/profitable-days')
     return response.get('data', {})

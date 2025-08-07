@@ -16,5 +16,5 @@ def get_pi_cycle_top_indicator(client: CoinGlassClient) -> Dict[str, Any]:
     Returns:
         Data dictionary
     """
-    response = client.get('/pi-cycle-top-indicator')
+    response = client.get('/index/pi-cycle-indicator')
     return response.get('data', {})

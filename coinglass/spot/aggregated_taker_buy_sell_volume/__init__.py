@@ -2,7 +2,7 @@
 AggregatedTakerBuySellVolume API for CoinGlass
 """
 from typing import Optional, List, Dict, Any
-from ..client import CoinGlassClient
+from ...client import CoinGlassClient
 
 
 class AggregatedTakerBuySellVolumeAPI:
@@ -27,5 +27,5 @@ class AggregatedTakerBuySellVolumeAPI:
             'symbol': symbol,
             'interval': interval,
         }
-        response = self.client.get('/spot/aggregated_taker_buy_sell_volume/history', params=params)
+        response = self.client.get('/spot/aggregated-taker-buy-sell-volume/history', params=params)
         return response.get('data', [])

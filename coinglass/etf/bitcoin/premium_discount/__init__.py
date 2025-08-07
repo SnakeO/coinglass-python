@@ -2,7 +2,7 @@
 PremiumDiscount API for CoinGlass
 """
 from typing import Optional, List, Dict, Any
-from ...client import CoinGlassClient
+from ....client import CoinGlassClient
 
 
 class PremiumDiscountAPI:
@@ -19,5 +19,5 @@ class PremiumDiscountAPI:
         Returns:
             List of data
         """
-        response = self.client.get('/etf/bitcoin/premium_discount/history')
+        response = self.client.get('/etf/bitcoin/premium-discount/history')
         return response.get('data', [])

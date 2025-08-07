@@ -2,7 +2,7 @@
 TakerBuySellVolume API for CoinGlass
 """
 from typing import Optional, List, Dict, Any
-from ..client import CoinGlassClient
+from ...client import CoinGlassClient
 
 
 class TakerBuySellVolumeAPI:
@@ -27,7 +27,7 @@ class TakerBuySellVolumeAPI:
             'symbol': symbol,
             'interval': interval,
         }
-        response = self.client.get('/futures/taker_buy_sell_volume/history', params=params)
+        response = self.client.get('/futures/taker-buy-sell-volume/history', params=params)
         return response.get('data', [])
     def get_exchange_list(self, symbol: str) -> List[Dict[str, Any]]:
         """
@@ -42,5 +42,5 @@ class TakerBuySellVolumeAPI:
         params = {
             'symbol': symbol,
         }
-        response = self.client.get('/futures/taker_buy_sell_volume/exchange-list', params=params)
+        response = self.client.get('/futures/taker-buy-sell-volume/exchange-list', params=params)
         return response.get('data', [])

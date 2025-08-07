@@ -100,49 +100,149 @@ class CoinGlass:
         self.calendar = CalendarAPI(self.client)
     
     # Top-level indicator methods
-    def get_coinbase_premium_index(self, interval: Optional[str] = None):
-        """Get Coinbase Premium Index data."""
-        return coinbase_premium_index.get_coinbase_premium_index(self.client, interval)
+    def get_coinbase_premium_index(self, interval: Optional[str] = None, **kwargs):
+        """
+        Get Coinbase Premium Index data.
+        
+        Plan Availability: All plans
+        
+        Args:
+            interval: Time interval (e.g., '1h', '4h', '1d') - optional
+            **kwargs: Optional parameters:
+                - startTime (int): Start timestamp in milliseconds
+                - endTime (int): End timestamp in milliseconds
+        """
+        return coinbase_premium_index.get_coinbase_premium_index(self.client, interval, **kwargs)
     
-    def get_bitfinex_margin_long_short(self):
-        """Get Bitfinex margin long vs short positions data."""
-        return bitfinex_margin_long_short.get_bitfinex_margin_long_short(self.client)
+    def get_bitfinex_margin_long_short(self, **kwargs):
+        """
+        Get Bitfinex margin long vs short positions data.
+        
+        Plan Availability: All plans
+        
+        Args:
+            **kwargs: Optional parameters:
+                - startTime (int): Start timestamp in milliseconds
+                - endTime (int): End timestamp in milliseconds
+        """
+        return bitfinex_margin_long_short.get_bitfinex_margin_long_short(self.client, **kwargs)
     
-    def get_borrow_interest_rate_history(self):
-        """Get historical borrow interest rate data."""
-        return borrow_interest_rate.history.get_history(self.client)
+    def get_borrow_interest_rate_history(self, **kwargs):
+        """
+        Get historical borrow interest rate data.
+        
+        Plan Availability: All plans
+        
+        Args:
+            **kwargs: Optional parameters:
+                - startTime (int): Start timestamp in milliseconds
+                - endTime (int): End timestamp in milliseconds
+        """
+        return borrow_interest_rate.history.get_history(self.client, **kwargs)
     
-    def get_ahr999(self):
-        """Get AHR999 indicator data."""
-        return ahr999.get_ahr999(self.client)
+    def get_ahr999(self, **kwargs):
+        """
+        Get AHR999 indicator data.
+        
+        Plan Availability: All plans
+        
+        Args:
+            **kwargs: Optional parameters:
+                - startTime (int): Start timestamp in milliseconds
+                - endTime (int): End timestamp in milliseconds
+        """
+        return ahr999.get_ahr999(self.client, **kwargs)
     
-    def get_bull_market_peak_indicator(self):
-        """Get bull market peak indicators."""
-        return bull_market_peak_indicator.get_bull_market_peak_indicator(self.client)
+    def get_bull_market_peak_indicator(self, **kwargs):
+        """
+        Get bull market peak indicators.
+        
+        Plan Availability: All plans
+        
+        Args:
+            **kwargs: Optional parameters:
+                - startTime (int): Start timestamp in milliseconds
+                - endTime (int): End timestamp in milliseconds
+        """
+        return bull_market_peak_indicator.get_bull_market_peak_indicator(self.client, **kwargs)
     
-    def get_puell_multiple(self):
-        """Get Puell Multiple data."""
-        return puell_multiple.get_puell_multiple(self.client)
+    def get_puell_multiple(self, **kwargs):
+        """
+        Get Puell Multiple data.
+        
+        Plan Availability: All plans
+        
+        Args:
+            **kwargs: Optional parameters:
+                - startTime (int): Start timestamp in milliseconds
+                - endTime (int): End timestamp in milliseconds
+        """
+        return puell_multiple.get_puell_multiple(self.client, **kwargs)
     
-    def get_stock_to_flow(self):
-        """Get Stock-to-Flow model data."""
-        return stock_to_flow.get_stock_to_flow(self.client)
+    def get_stock_to_flow(self, **kwargs):
+        """
+        Get Stock-to-Flow model data.
+        
+        Plan Availability: All plans
+        
+        Args:
+            **kwargs: Optional parameters:
+                - startTime (int): Start timestamp in milliseconds
+                - endTime (int): End timestamp in milliseconds
+        """
+        return stock_to_flow.get_stock_to_flow(self.client, **kwargs)
     
-    def get_pi_cycle_top_indicator(self):
-        """Get Pi Cycle Top Indicator data."""
-        return pi_cycle_top_indicator.get_pi_cycle_top_indicator(self.client)
+    def get_pi_cycle_top_indicator(self, **kwargs):
+        """
+        Get Pi Cycle Top Indicator data.
+        
+        Plan Availability: All plans
+        
+        Args:
+            **kwargs: Optional parameters:
+                - startTime (int): Start timestamp in milliseconds
+                - endTime (int): End timestamp in milliseconds
+        """
+        return pi_cycle_top_indicator.get_pi_cycle_top_indicator(self.client, **kwargs)
     
-    def get_golden_ratio_multiplier(self):
-        """Get Golden Ratio Multiplier data."""
-        return golden_ratio_multiplier.get_golden_ratio_multiplier(self.client)
+    def get_golden_ratio_multiplier(self, **kwargs):
+        """
+        Get Golden Ratio Multiplier data.
+        
+        Plan Availability: All plans
+        
+        Args:
+            **kwargs: Optional parameters:
+                - startTime (int): Start timestamp in milliseconds
+                - endTime (int): End timestamp in milliseconds
+        """
+        return golden_ratio_multiplier.get_golden_ratio_multiplier(self.client, **kwargs)
     
-    def get_bitcoin_profitable_days(self):
-        """Get percentage of profitable days in Bitcoin history."""
-        return bitcoin_profitable_days.get_bitcoin_profitable_days(self.client)
+    def get_bitcoin_profitable_days(self, **kwargs):
+        """
+        Get percentage of profitable days in Bitcoin history.
+        
+        Plan Availability: All plans
+        
+        Args:
+            **kwargs: Optional parameters:
+                - startTime (int): Start timestamp in milliseconds
+                - endTime (int): End timestamp in milliseconds
+        """
+        return bitcoin_profitable_days.get_bitcoin_profitable_days(self.client, **kwargs)
     
-    def get_bitcoin_rainbow_chart(self):
-        """Get Bitcoin Rainbow Chart data."""
-        return bitcoin_rainbow_chart.get_bitcoin_rainbow_chart(self.client)
+    def get_bitcoin_rainbow_chart(self, **kwargs):
+        """
+        Get Bitcoin Rainbow Chart data.
+        
+        Plan Availability: All plans
+        
+        Args:
+            **kwargs: Optional parameters:
+                - startTime (int): Start timestamp in milliseconds
+                - endTime (int): End timestamp in milliseconds
+        """
+        return bitcoin_rainbow_chart.get_bitcoin_rainbow_chart(self.client, **kwargs)
     
     def close(self):
         """Close the underlying session."""

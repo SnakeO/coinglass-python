@@ -16,5 +16,5 @@ def get_bitcoin_rainbow_chart(client: CoinGlassClient) -> Dict[str, Any]:
     Returns:
         Data dictionary
     """
-    response = client.get('/bitcoin-rainbow-chart')
+    response = client.get('/index/bitcoin/rainbow-chart')
     return response.get('data', {})

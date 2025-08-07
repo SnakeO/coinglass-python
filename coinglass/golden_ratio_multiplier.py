@@ -16,5 +16,5 @@ def get_golden_ratio_multiplier(client: CoinGlassClient) -> Dict[str, Any]:
     Returns:
         Data dictionary
     """
-    response = client.get('/golden-ratio-multiplier')
+    response = client.get('/index/golden-ratio-multiplier')
     return response.get('data', {})

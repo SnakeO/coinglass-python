@@ -3,23 +3,39 @@ Coinbase Premium Index endpoint
 """
 from typing import Optional, Dict, Any
 from .client import CoinGlassClient
+from .constants import PlanTier
 
 
-def get_coinbase_premium_index(client: CoinGlassClient, interval: Optional[str]= None) -> Dict[str, Any]:
+def get_coinbase_premium_index(
+    client: CoinGlassClient,
+    interval: Optional[str] = None,
+    # Optional parameters (can be passed as kwargs):
+    # startTime: int = None - Start timestamp in milliseconds
+    # endTime: int = None - End timestamp in milliseconds
+    **kwargs
+) -> Dict[str, Any]:
     """
-    Get coinbase premium index.
+    Get Coinbase Premium Index data.
+    
+    Plan Availability: All plans
     
     Args:
         client: CoinGlass API client
-
-        interval: Interval (optional)
+        interval: Time interval (e.g., '1h', '4h', '1d') - optional
+        **kwargs: Optional parameters:
+            - startTime (int): Start timestamp in milliseconds
+            - endTime (int): End timestamp in milliseconds
     
     Returns:
-        Data dictionary
+        Coinbase Premium Index data dictionary
     """
-    params = {
-        'interval': interval,
-    }
-    params = {k: v for k, v in params.items() if v is not None}
-    response = client.get('/coinbase-premium-index', params=params)
+    params = {}
+    if interval is not None:
+        params['interval'] = interval
+    
+    # Add optional params from kwargs
+    for key in ['startTime', 'endTime']:
+        if key in kwargs:
+            params[key] = kwargs[key]
+    response = client.get('/coinbase-premium-index', params=params if params else None)
     return response.get('data', {})

@@ -16,5 +16,5 @@ def get_stock_to_flow(client: CoinGlassClient) -> Dict[str, Any]:
     Returns:
         Data dictionary
     """
-    response = client.get('/stock-to-flow')
+    response = client.get('/index/stock-flow')
     return response.get('data', {})

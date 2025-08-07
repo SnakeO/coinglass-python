@@ -2,7 +2,7 @@
 TopLongShortAccountRatio API for CoinGlass
 """
 from typing import Optional, List, Dict, Any
-from ..client import CoinGlassClient
+from ...client import CoinGlassClient
 
 
 class TopLongShortAccountRatioAPI:
@@ -27,5 +27,5 @@ class TopLongShortAccountRatioAPI:
             'symbol': symbol,
             'interval': interval,
         }
-        response = self.client.get('/futures/top_long_short_account_ratio/history', params=params)
+        response = self.client.get('/futures/top-long-short-account-ratio/history', params=params)
         return response.get('data', [])

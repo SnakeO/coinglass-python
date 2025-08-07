@@ -3,6 +3,7 @@ Exchange API for CoinGlass
 """
 from typing import Optional, List, Dict, Any
 from ..client import CoinGlassClient
+from ..constants import PlanTier
 
 
 class ExchangeAPI:
@@ -19,18 +20,33 @@ class ExchangeAPI:
         self.balance = BalanceAPI(client)
         self.chain = type('ChainAPI', (), {'tx': TxAPI(client)})()
 
-    def get_assets(self, exchange: str) -> List[Dict[str, Any]]:
+    def get_assets(
+        self,
+        exchange: str,
+        # Optional parameters (can be passed as kwargs):
+        # limit: int = None - Number of results to return
+        **kwargs
+    ) -> List[Dict[str, Any]]:
         """
-        Get assets.
+        Get exchange assets and balances.
+        
+        Plan Availability: All plans
+        Cache: Every 1 hour
         
         Args:
-            exchange: Exchange
+            exchange: Exchange name (e.g., 'Binance', 'Coinbase')
+            **kwargs: Optional parameters:
+                - limit (int): Number of results to return
         
         Returns:
-            List of data
+            List of exchange asset data
         """
         params = {
             'exchange': exchange,
         }
+        # Add optional params from kwargs
+        for key in ['limit']:
+            if key in kwargs:
+                params[key] = kwargs[key]
         response = self.client.get('/exchange/assets', params=params)
         return response.get('data', [])

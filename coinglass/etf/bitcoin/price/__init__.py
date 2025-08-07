@@ -2,7 +2,7 @@
 Price API for CoinGlass
 """
 from typing import Optional, List, Dict, Any
-from ...client import CoinGlassClient
+from ....client import CoinGlassClient
 
 
 class PriceAPI:

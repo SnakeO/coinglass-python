@@ -2,7 +2,7 @@
 NetAssets API for CoinGlass
 """
 from typing import Optional, List, Dict, Any
-from ...client import CoinGlassClient
+from ....client import CoinGlassClient
 
 
 class NetAssetsAPI:
@@ -19,5 +19,5 @@ class NetAssetsAPI:
         Returns:
             List of data
         """
-        response = self.client.get('/etf/ethereum/net_assets/history')
+        response = self.client.get('/etf/ethereum/net-assets/history')
         return response.get('data', [])

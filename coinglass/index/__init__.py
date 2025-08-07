@@ -2,7 +2,8 @@
 Index API for CoinGlass
 """
 from typing import Optional, List, Dict, Any
-from .client import CoinGlassClient
+from ..client import CoinGlassClient
+from ..constants import PlanTier
 
 
 class IndexAPI:
@@ -12,192 +13,574 @@ class IndexAPI:
         """Initialize Index API with client."""
         self.client = client
 
-    def get_fear_greed_history(self) -> List[Dict[str, Any]]:
+    def get_fear_greed_history(
+        self,
+        # Optional parameters (can be passed as kwargs):
+        # startTime: int = None - Start timestamp in milliseconds
+        # endTime: int = None - End timestamp in milliseconds
+        **kwargs
+    ) -> List[Dict[str, Any]]:
         """
-        Get fear greed history.
+        Get historical Fear & Greed Index data.
+        
+        Plan Availability: All plans
+        Cache: Daily update
+        
+        Args:
+            **kwargs: Optional parameters:
+                - startTime (int): Start timestamp in milliseconds
+                - endTime (int): End timestamp in milliseconds
         
         Returns:
-            List of data
+            List of fear & greed index historical data
         """
-        response = self.client.get('/index/fear-greed-history')
+        params = {}
+        # Add optional params from kwargs
+        for key in ['startTime', 'endTime']:
+            if key in kwargs:
+                params[key] = kwargs[key]
+        
+        response = self.client.get('/index/fear-greed-history', params=params if params else None)
         return response.get('data', [])
-    def get_option_vs_futures_oi_ratio(self) -> List[Dict[str, Any]]:
+    def get_option_vs_futures_oi_ratio(
+        self,
+        # Optional parameters (can be passed as kwargs):
+        # startTime: int = None - Start timestamp in milliseconds
+        # endTime: int = None - End timestamp in milliseconds
+        **kwargs
+    ) -> List[Dict[str, Any]]:
         """
-        Get option vs futures oi ratio.
+        Get option vs futures open interest ratio.
+        
+        Plan Availability: All plans
+        
+        Args:
+            **kwargs: Optional parameters:
+                - startTime (int): Start timestamp in milliseconds
+                - endTime (int): End timestamp in milliseconds
         
         Returns:
-            List of data
+            List of option vs futures OI ratio data
         """
-        response = self.client.get('/index/option-vs-futures-oi-ratio')
+        params = {}
+        for key in ['startTime', 'endTime']:
+            if key in kwargs:
+                params[key] = kwargs[key]
+        
+        response = self.client.get('/index/option-vs-futures-oi-ratio', params=params if params else None)
         return response.get('data', [])
-    def get_bitcoin_vs_global_m2_growth(self) -> List[Dict[str, Any]]:
+    def get_bitcoin_vs_global_m2_growth(
+        self,
+        # Optional parameters (can be passed as kwargs):
+        # startTime: int = None - Start timestamp in milliseconds
+        # endTime: int = None - End timestamp in milliseconds
+        **kwargs
+    ) -> List[Dict[str, Any]]:
         """
-        Get bitcoin vs global m2 growth.
+        Get Bitcoin vs Global M2 money supply growth comparison.
+        
+        Plan Availability: All plans
+        
+        Args:
+            **kwargs: Optional parameters:
+                - startTime (int): Start timestamp in milliseconds
+                - endTime (int): End timestamp in milliseconds
         
         Returns:
-            List of data
+            List of Bitcoin vs Global M2 growth data
         """
-        response = self.client.get('/index/bitcoin-vs-global-m2-growth')
+        params = {}
+        for key in ['startTime', 'endTime']:
+            if key in kwargs:
+                params[key] = kwargs[key]
+        
+        response = self.client.get('/index/bitcoin-vs-global-m2-growth', params=params if params else None)
         return response.get('data', [])
-    def get_bitcoin_vs_us_m2_growth(self) -> List[Dict[str, Any]]:
+    def get_bitcoin_vs_us_m2_growth(
+        self,
+        # Optional parameters (can be passed as kwargs):
+        # startTime: int = None - Start timestamp in milliseconds
+        # endTime: int = None - End timestamp in milliseconds
+        **kwargs
+    ) -> List[Dict[str, Any]]:
         """
-        Get bitcoin vs us m2 growth.
+        Get Bitcoin vs US M2 money supply growth comparison.
+        
+        Plan Availability: All plans
+        
+        Args:
+            **kwargs: Optional parameters:
+                - startTime (int): Start timestamp in milliseconds
+                - endTime (int): End timestamp in milliseconds
         
         Returns:
-            List of data
+            List of Bitcoin vs US M2 growth data
         """
-        response = self.client.get('/index/bitcoin-vs-us-m2-growth')
+        params = {}
+        for key in ['startTime', 'endTime']:
+            if key in kwargs:
+                params[key] = kwargs[key]
+        
+        response = self.client.get('/index/bitcoin-vs-us-m2-growth', params=params if params else None)
         return response.get('data', [])
-    def get_ahr999(self) -> List[Dict[str, Any]]:
+    def get_ahr999(
+        self,
+        # Optional parameters (can be passed as kwargs):
+        # startTime: int = None - Start timestamp in milliseconds
+        # endTime: int = None - End timestamp in milliseconds
+        **kwargs
+    ) -> List[Dict[str, Any]]:
         """
-        Get ahr999.
+        Get AHR999 index (Bitcoin investment timing indicator).
+        
+        Plan Availability: All plans
+        
+        Args:
+            **kwargs: Optional parameters:
+                - startTime (int): Start timestamp in milliseconds
+                - endTime (int): End timestamp in milliseconds
         
         Returns:
-            List of data
+            List of AHR999 index data
         """
-        response = self.client.get('/index/ahr999')
+        params = {}
+        for key in ['startTime', 'endTime']:
+            if key in kwargs:
+                params[key] = kwargs[key]
+        
+        response = self.client.get('/index/ahr999', params=params if params else None)
         return response.get('data', [])
-    def get_two_year_ma_multiplier(self) -> List[Dict[str, Any]]:
+    def get_two_year_ma_multiplier(
+        self,
+        # Optional parameters (can be passed as kwargs):
+        # startTime: int = None - Start timestamp in milliseconds
+        # endTime: int = None - End timestamp in milliseconds
+        **kwargs
+    ) -> List[Dict[str, Any]]:
         """
-        Get two year ma multiplier.
+        Get 2-Year MA Multiplier indicator.
+        
+        Plan Availability: All plans
+        
+        Args:
+            **kwargs: Optional parameters:
+                - startTime (int): Start timestamp in milliseconds
+                - endTime (int): End timestamp in milliseconds
         
         Returns:
-            List of data
+            List of 2-Year MA Multiplier data
         """
-        response = self.client.get('/index/2-year-ma-multiplier')
+        params = {}
+        for key in ['startTime', 'endTime']:
+            if key in kwargs:
+                params[key] = kwargs[key]
+        
+        response = self.client.get('/index/2-year-ma-multiplier', params=params if params else None)
         return response.get('data', [])
-    def get_two_hundred_week_moving_avg_heatmap(self) -> List[Dict[str, Any]]:
+    def get_two_hundred_week_moving_avg_heatmap(
+        self,
+        # Optional parameters (can be passed as kwargs):
+        # startTime: int = None - Start timestamp in milliseconds
+        # endTime: int = None - End timestamp in milliseconds
+        **kwargs
+    ) -> List[Dict[str, Any]]:
         """
-        Get two hundred week moving avg heatmap.
+        Get 200-Week Moving Average Heatmap.
+        
+        Plan Availability: All plans
+        
+        Args:
+            **kwargs: Optional parameters:
+                - startTime (int): Start timestamp in milliseconds
+                - endTime (int): End timestamp in milliseconds
         
         Returns:
-            List of data
+            List of 200-Week MA Heatmap data
         """
-        response = self.client.get('/index/200-week-moving-avg-heatmap')
+        params = {}
+        for key in ['startTime', 'endTime']:
+            if key in kwargs:
+                params[key] = kwargs[key]
+        
+        response = self.client.get('/index/200-week-moving-average-heatmap', params=params if params else None)
         return response.get('data', [])
-    def get_altcoin_season_index(self) -> List[Dict[str, Any]]:
+    def get_altcoin_season_index(
+        self,
+        # Optional parameters (can be passed as kwargs):
+        # startTime: int = None - Start timestamp in milliseconds
+        # endTime: int = None - End timestamp in milliseconds
+        **kwargs
+    ) -> List[Dict[str, Any]]:
         """
-        Get altcoin season index.
+        Get Altcoin Season Index.
+        
+        Plan Availability: All plans
+        
+        Args:
+            **kwargs: Optional parameters:
+                - startTime (int): Start timestamp in milliseconds
+                - endTime (int): End timestamp in milliseconds
         
         Returns:
-            List of data
+            List of Altcoin Season Index data
         """
-        response = self.client.get('/index/altcoin-season-index')
+        params = {}
+        for key in ['startTime', 'endTime']:
+            if key in kwargs:
+                params[key] = kwargs[key]
+        
+        response = self.client.get('/index/altcoin-season', params=params if params else None)
         return response.get('data', [])
-    def get_bitcoin_short_term_holder_sopr(self) -> List[Dict[str, Any]]:
+    def get_bitcoin_short_term_holder_sopr(
+        self,
+        # Optional parameters (can be passed as kwargs):
+        # startTime: int = None - Start timestamp in milliseconds
+        # endTime: int = None - End timestamp in milliseconds
+        **kwargs
+    ) -> List[Dict[str, Any]]:
         """
-        Get bitcoin short term holder sopr.
+        Get Bitcoin Short-Term Holder SOPR (Spent Output Profit Ratio).
+        
+        Plan Availability: All plans
+        
+        Args:
+            **kwargs: Optional parameters:
+                - startTime (int): Start timestamp in milliseconds
+                - endTime (int): End timestamp in milliseconds
         
         Returns:
-            List of data
+            List of Bitcoin STH SOPR data
         """
-        response = self.client.get('/index/bitcoin-short-term-holder-sopr')
+        params = {}
+        for key in ['startTime', 'endTime']:
+            if key in kwargs:
+                params[key] = kwargs[key]
+        
+        response = self.client.get('/index/bitcoin-sth-sopr', params=params if params else None)
         return response.get('data', [])
-    def get_bitcoin_long_term_holder_sopr(self) -> List[Dict[str, Any]]:
+    def get_bitcoin_long_term_holder_sopr(
+        self,
+        # Optional parameters (can be passed as kwargs):
+        # startTime: int = None - Start timestamp in milliseconds
+        # endTime: int = None - End timestamp in milliseconds
+        **kwargs
+    ) -> List[Dict[str, Any]]:
         """
-        Get bitcoin long term holder sopr.
+        Get Bitcoin Long-Term Holder SOPR (Spent Output Profit Ratio).
+        
+        Plan Availability: All plans
+        
+        Args:
+            **kwargs: Optional parameters:
+                - startTime (int): Start timestamp in milliseconds
+                - endTime (int): End timestamp in milliseconds
         
         Returns:
-            List of data
+            List of Bitcoin LTH SOPR data
         """
-        response = self.client.get('/index/bitcoin-long-term-holder-sopr')
+        params = {}
+        for key in ['startTime', 'endTime']:
+            if key in kwargs:
+                params[key] = kwargs[key]
+        
+        response = self.client.get('/index/bitcoin-lth-sopr', params=params if params else None)
         return response.get('data', [])
-    def get_bitcoin_short_term_holder_realized_price(self) -> List[Dict[str, Any]]:
+    def get_bitcoin_short_term_holder_realized_price(
+        self,
+        # Optional parameters (can be passed as kwargs):
+        # startTime: int = None - Start timestamp in milliseconds
+        # endTime: int = None - End timestamp in milliseconds
+        **kwargs
+    ) -> List[Dict[str, Any]]:
         """
-        Get bitcoin short term holder realized price.
+        Get Bitcoin Short-Term Holder Realized Price.
+        
+        Plan Availability: All plans
+        
+        Args:
+            **kwargs: Optional parameters:
+                - startTime (int): Start timestamp in milliseconds
+                - endTime (int): End timestamp in milliseconds
         
         Returns:
-            List of data
+            List of Bitcoin STH Realized Price data
         """
-        response = self.client.get('/index/bitcoin-short-term-holder-realized-price')
+        params = {}
+        for key in ['startTime', 'endTime']:
+            if key in kwargs:
+                params[key] = kwargs[key]
+        
+        response = self.client.get('/index/bitcoin-sth-realized-price', params=params if params else None)
         return response.get('data', [])
-    def get_bitcoin_long_term_holder_realized_price(self) -> List[Dict[str, Any]]:
+    def get_bitcoin_long_term_holder_realized_price(
+        self,
+        # Optional parameters (can be passed as kwargs):
+        # startTime: int = None - Start timestamp in milliseconds
+        # endTime: int = None - End timestamp in milliseconds
+        **kwargs
+    ) -> List[Dict[str, Any]]:
         """
-        Get bitcoin long term holder realized price.
+        Get Bitcoin Long-Term Holder Realized Price.
+        
+        Plan Availability: All plans
+        
+        Args:
+            **kwargs: Optional parameters:
+                - startTime (int): Start timestamp in milliseconds
+                - endTime (int): End timestamp in milliseconds
         
         Returns:
-            List of data
+            List of Bitcoin LTH Realized Price data
         """
-        response = self.client.get('/index/bitcoin-long-term-holder-realized-price')
+        params = {}
+        for key in ['startTime', 'endTime']:
+            if key in kwargs:
+                params[key] = kwargs[key]
+        
+        response = self.client.get('/index/bitcoin-lth-realized-price', params=params if params else None)
         return response.get('data', [])
-    def get_bitcoin_short_term_holder_supply(self) -> List[Dict[str, Any]]:
+    def get_bitcoin_short_term_holder_supply(
+        self,
+        # Optional parameters (can be passed as kwargs):
+        # startTime: int = None - Start timestamp in milliseconds
+        # endTime: int = None - End timestamp in milliseconds
+        **kwargs
+    ) -> List[Dict[str, Any]]:
         """
-        Get bitcoin short term holder supply.
+        Get Bitcoin Short-Term Holder Supply.
+        
+        Plan Availability: All plans
+        
+        Args:
+            **kwargs: Optional parameters:
+                - startTime (int): Start timestamp in milliseconds
+                - endTime (int): End timestamp in milliseconds
         
         Returns:
-            List of data
+            List of Bitcoin STH Supply data
         """
-        response = self.client.get('/index/bitcoin-short-term-holder-supply')
+        params = {}
+        for key in ['startTime', 'endTime']:
+            if key in kwargs:
+                params[key] = kwargs[key]
+        
+        response = self.client.get('/index/bitcoin-short-term-holder-supply', params=params if params else None)
         return response.get('data', [])
-    def get_bitcoin_long_term_holder_supply(self) -> List[Dict[str, Any]]:
+    def get_bitcoin_long_term_holder_supply(
+        self,
+        # Optional parameters (can be passed as kwargs):
+        # startTime: int = None - Start timestamp in milliseconds
+        # endTime: int = None - End timestamp in milliseconds
+        **kwargs
+    ) -> List[Dict[str, Any]]:
         """
-        Get bitcoin long term holder supply.
+        Get Bitcoin Long-Term Holder Supply.
+        
+        Plan Availability: All plans
+        
+        Args:
+            **kwargs: Optional parameters:
+                - startTime (int): Start timestamp in milliseconds
+                - endTime (int): End timestamp in milliseconds
         
         Returns:
-            List of data
+            List of Bitcoin LTH Supply data
         """
-        response = self.client.get('/index/bitcoin-long-term-holder-supply')
+        params = {}
+        for key in ['startTime', 'endTime']:
+            if key in kwargs:
+                params[key] = kwargs[key]
+        
+        response = self.client.get('/index/bitcoin-long-term-holder-supply', params=params if params else None)
         return response.get('data', [])
-    def get_bitcoin_rhodl_ratio(self) -> List[Dict[str, Any]]:
+    def get_bitcoin_rhodl_ratio(
+        self,
+        # Optional parameters (can be passed as kwargs):
+        # startTime: int = None - Start timestamp in milliseconds
+        # endTime: int = None - End timestamp in milliseconds
+        **kwargs
+    ) -> List[Dict[str, Any]]:
         """
-        Get bitcoin rhodl ratio.
+        Get Bitcoin RHODL Ratio (Realized HODL Ratio).
+        
+        Plan Availability: All plans
+        
+        Args:
+            **kwargs: Optional parameters:
+                - startTime (int): Start timestamp in milliseconds
+                - endTime (int): End timestamp in milliseconds
         
         Returns:
-            List of data
+            List of Bitcoin RHODL Ratio data
         """
-        response = self.client.get('/index/bitcoin-rhodl-ratio')
+        params = {}
+        for key in ['startTime', 'endTime']:
+            if key in kwargs:
+                params[key] = kwargs[key]
+        
+        response = self.client.get('/index/bitcoin-rhodl-ratio', params=params if params else None)
         return response.get('data', [])
-    def get_bitcoin_reserve_risk(self) -> List[Dict[str, Any]]:
+    def get_bitcoin_reserve_risk(
+        self,
+        # Optional parameters (can be passed as kwargs):
+        # startTime: int = None - Start timestamp in milliseconds
+        # endTime: int = None - End timestamp in milliseconds
+        **kwargs
+    ) -> List[Dict[str, Any]]:
         """
-        Get bitcoin reserve risk.
+        Get Bitcoin Reserve Risk indicator.
+        
+        Plan Availability: All plans
+        
+        Args:
+            **kwargs: Optional parameters:
+                - startTime (int): Start timestamp in milliseconds
+                - endTime (int): End timestamp in milliseconds
         
         Returns:
-            List of data
+            List of Bitcoin Reserve Risk data
         """
-        response = self.client.get('/index/bitcoin-reserve-risk')
+        params = {}
+        for key in ['startTime', 'endTime']:
+            if key in kwargs:
+                params[key] = kwargs[key]
+        
+        response = self.client.get('/index/bitcoin-reserve-risk', params=params if params else None)
         return response.get('data', [])
-    def get_bitcoin_active_addresses(self) -> List[Dict[str, Any]]:
+    def get_bitcoin_active_addresses(
+        self,
+        # Optional parameters (can be passed as kwargs):
+        # startTime: int = None - Start timestamp in milliseconds
+        # endTime: int = None - End timestamp in milliseconds
+        **kwargs
+    ) -> List[Dict[str, Any]]:
         """
-        Get bitcoin active addresses.
+        Get Bitcoin Active Addresses count.
+        
+        Plan Availability: All plans
+        
+        Args:
+            **kwargs: Optional parameters:
+                - startTime (int): Start timestamp in milliseconds
+                - endTime (int): End timestamp in milliseconds
         
         Returns:
-            List of data
+            List of Bitcoin Active Addresses data
         """
-        response = self.client.get('/index/bitcoin-active-addresses')
+        params = {}
+        for key in ['startTime', 'endTime']:
+            if key in kwargs:
+                params[key] = kwargs[key]
+        
+        response = self.client.get('/index/bitcoin-active-addresses', params=params if params else None)
         return response.get('data', [])
-    def get_bitcoin_new_addresses(self) -> List[Dict[str, Any]]:
+    def get_bitcoin_new_addresses(
+        self,
+        # Optional parameters (can be passed as kwargs):
+        # startTime: int = None - Start timestamp in milliseconds
+        # endTime: int = None - End timestamp in milliseconds
+        **kwargs
+    ) -> List[Dict[str, Any]]:
         """
-        Get bitcoin new addresses.
+        Get Bitcoin New Addresses count.
+        
+        Plan Availability: All plans
+        
+        Args:
+            **kwargs: Optional parameters:
+                - startTime (int): Start timestamp in milliseconds
+                - endTime (int): End timestamp in milliseconds
         
         Returns:
-            List of data
+            List of Bitcoin New Addresses data
         """
-        response = self.client.get('/index/bitcoin-new-addresses')
+        params = {}
+        for key in ['startTime', 'endTime']:
+            if key in kwargs:
+                params[key] = kwargs[key]
+        
+        response = self.client.get('/index/bitcoin-new-addresses', params=params if params else None)
         return response.get('data', [])
-    def get_bitcoin_net_unrealized_pnl(self) -> List[Dict[str, Any]]:
+    def get_bitcoin_net_unrealized_pnl(
+        self,
+        # Optional parameters (can be passed as kwargs):
+        # startTime: int = None - Start timestamp in milliseconds
+        # endTime: int = None - End timestamp in milliseconds
+        **kwargs
+    ) -> List[Dict[str, Any]]:
         """
-        Get bitcoin net unrealized pnl.
+        Get Bitcoin Net Unrealized Profit/Loss (NUPL).
+        
+        Plan Availability: All plans
+        
+        Args:
+            **kwargs: Optional parameters:
+                - startTime (int): Start timestamp in milliseconds
+                - endTime (int): End timestamp in milliseconds
         
         Returns:
-            List of data
+            List of Bitcoin NUPL data
         """
-        response = self.client.get('/index/bitcoin-net-unrealized-pnl')
+        params = {}
+        for key in ['startTime', 'endTime']:
+            if key in kwargs:
+                params[key] = kwargs[key]
+        
+        response = self.client.get('/index/bitcoin-net-unrealized-profit-loss', params=params if params else None)
         return response.get('data', [])
-    def get_btc_correlations(self) -> List[Dict[str, Any]]:
+    def get_btc_correlations(
+        self,
+        # Optional parameters (can be passed as kwargs):
+        # startTime: int = None - Start timestamp in milliseconds
+        # endTime: int = None - End timestamp in milliseconds
+        # period: int = None - Correlation period in days
+        **kwargs
+    ) -> List[Dict[str, Any]]:
         """
-        Get btc correlations.
+        Get Bitcoin correlations with other assets.
+        
+        Plan Availability: All plans
+        
+        Args:
+            **kwargs: Optional parameters:
+                - startTime (int): Start timestamp in milliseconds
+                - endTime (int): End timestamp in milliseconds
+                - period (int): Correlation period in days
         
         Returns:
-            List of data
+            List of Bitcoin correlation data
         """
-        response = self.client.get('/index/btc-correlations')
+        params = {}
+        for key in ['startTime', 'endTime', 'period']:
+            if key in kwargs:
+                params[key] = kwargs[key]
+        
+        response = self.client.get('/index/bitcoin-correlation', params=params if params else None)
         return response.get('data', [])
-    def get_bitcoin_macro_oscillator(self) -> List[Dict[str, Any]]:
+    def get_bitcoin_macro_oscillator(
+        self,
+        # Optional parameters (can be passed as kwargs):
+        # startTime: int = None - Start timestamp in milliseconds
+        # endTime: int = None - End timestamp in milliseconds
+        **kwargs
+    ) -> List[Dict[str, Any]]:
         """
-        Get bitcoin macro oscillator.
+        Get Bitcoin Macro Oscillator indicator.
+        
+        Plan Availability: All plans
+        
+        Args:
+            **kwargs: Optional parameters:
+                - startTime (int): Start timestamp in milliseconds
+                - endTime (int): End timestamp in milliseconds
         
         Returns:
-            List of data
+            List of Bitcoin Macro Oscillator data
         """
-        response = self.client.get('/index/bitcoin-macro-oscillator')
+        params = {}
+        for key in ['startTime', 'endTime']:
+            if key in kwargs:
+                params[key] = kwargs[key]
+        
+        response = self.client.get('/index/bitcoin-macro-oscillator', params=params if params else None)
         return response.get('data', [])
