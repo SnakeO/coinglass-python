@@ -40,7 +40,7 @@ class TxAPI:
             List of on-chain transaction data
         """
         params = {
-            'exchange': exchange,
+            'ex': exchange,
         }
         if symbol is not None:
             params['symbol'] = symbol

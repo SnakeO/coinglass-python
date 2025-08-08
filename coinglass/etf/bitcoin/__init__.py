@@ -101,7 +101,7 @@ class BitcoinAPI:
         
         response = self.client.get('/etf/bitcoin/history', params=params if params else None)
         return response.get('data', [])
-    def get_detail(self) -> Dict[str, Any]:
+    def get_detail(self, ticker: str) -> Dict[str, Any]:
         """
         Get Bitcoin ETF detailed information.
         
@@ -110,7 +110,8 @@ class BitcoinAPI:
         Returns:
             Bitcoin ETF detailed data dictionary
         """
-        response = self.client.get('/etf/bitcoin/detail')
+        params = {'ticker': ticker}
+        response = self.client.get('/etf/bitcoin/detail', params=params)
         return response.get('data', {})
     def get_aum(self) -> Dict[str, Any]:
         """

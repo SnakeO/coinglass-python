@@ -31,7 +31,7 @@ class LiquidationAPI:
         Min Plan Level: 1
         
         Args:
-            exchange: Exchange name (e.g., 'Binance')
+            ex: Exchange name (e.g., "Binance") (e.g., 'Binance')
             symbol: Symbol (e.g., 'BTCUSDT')
             interval: Interval (1m, 3m, 5m, 15m, 30m, 1h, 4h, 6h, 8h, 12h, 1d, 1w)
         
@@ -39,7 +39,7 @@ class LiquidationAPI:
             List of liquidation history data
         """
         params = {
-            'exchange': exchange,
+            'exchange': ex,
             'symbol': symbol,
             'interval': interval,
         }
@@ -111,6 +111,7 @@ class LiquidationAPI:
     
     def get_exchange_list(
         self,
+        range: str,  # Required parameter
         # Optional parameters (can be passed as kwargs):
         # symbol: str = None - Symbol
         # ex: str = None - Exchange name
@@ -122,6 +123,7 @@ class LiquidationAPI:
         Min Plan Level: 1
         
         Args:
+            range: Time range (e.g., '1h', '4h', '12h', '1d')
             **kwargs: Optional parameters:
                 - symbol (str): Symbol (e.g., 'BTC')
                 - ex (str): Exchange name
@@ -129,12 +131,12 @@ class LiquidationAPI:
         Returns:
             List of liquidation data by exchange
         """
-        params = {}
+        params = {'range': range}
         for key in ['symbol', 'ex']:
             if key in kwargs:
                 params[key] = kwargs[key]
         
-        response = self.client.get('/futures/liquidation/exchange-list', params=params if params else None)
+        response = self.client.get('/futures/liquidation/exchange-list', params=params)
         return response.get('data', [])
     
     def get_order(
@@ -149,14 +151,14 @@ class LiquidationAPI:
         Cache: Every 1 second
         
         Args:
-            exchange: Exchange name (e.g., 'Binance')
+            ex: Exchange name (e.g., "Binance") (e.g., 'Binance')
             symbol: Symbol (e.g., 'BTCUSDT')
         
         Returns:
             List of recent liquidation orders
         """
         params = {
-            'exchange': exchange,
+            'exchange': ex,
             'symbol': symbol
         }
         response = self.client.get('/futures/liquidation/order', params=params)
@@ -173,14 +175,14 @@ class LiquidationAPI:
         Min Plan Level: 4
         
         Args:
-            exchange: Exchange name (e.g., 'Binance')
+            ex: Exchange name (e.g., "Binance") (e.g., 'Binance')
             symbol: Symbol (e.g., 'BTCUSDT')
         
         Returns:
             List of liquidation map data
         """
         params = {
-            'exchange': exchange,
+            'exchange': ex,
             'symbol': symbol,
         }
         response = self.client.get('/futures/liquidation/map', params=params)

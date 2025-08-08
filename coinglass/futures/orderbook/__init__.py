@@ -43,7 +43,7 @@ class OrderbookAPI:
         """
         params = {
             'symbol': symbol,
-            'ex': ex,
+            'exchange': ex,
             'interval': interval,
         }
         # Add optional params from kwargs
@@ -149,15 +149,16 @@ class OrderbookAPI:
         """
         params = {
             'symbol': symbol,
-            'ex': ex,
+            'exchange': ex,
         }
-        response = self.client.get('/futures/orderbook/large-limit-order', params=params)
+        response = self.client.get('/futures/large-limit-order', params=params)
         return response.get('data', [])
     
     def get_large_limit_order_history(
         self,
         symbol: str,
         ex: str,
+        interval: str,
         # Optional parameters (can be passed as kwargs):
         # startTime: int = None - Start timestamp in milliseconds
         # endTime: int = None - End timestamp in milliseconds
@@ -171,6 +172,7 @@ class OrderbookAPI:
         Args:
             symbol: Symbol (e.g., 'BTCUSDT')
             ex: Exchange name (e.g., 'Binance')
+            interval: Interval
             **kwargs: Optional parameters:
                 - startTime (int): Start timestamp in milliseconds
                 - endTime (int): End timestamp in milliseconds
@@ -180,12 +182,13 @@ class OrderbookAPI:
         """
         params = {
             'symbol': symbol,
-            'ex': ex,
+            'exchange': ex,
+            'interval': interval,
         }
         # Add optional params from kwargs
         for key in ['startTime', 'endTime']:
             if key in kwargs:
                 params[key] = kwargs[key]
         
-        response = self.client.get('/futures/orderbook/large-limit-order-history', params=params)
+        response = self.client.get('/futures/large-limit-order/history', params=params)
         return response.get('data', [])

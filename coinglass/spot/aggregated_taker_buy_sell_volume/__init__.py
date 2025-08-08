@@ -12,7 +12,7 @@ class AggregatedTakerBuySellVolumeAPI:
         """Initialize AggregatedTakerBuySellVolume API with client."""
         self.client = client
 
-    def get_history(self, symbol: str, exchange_list: str, interval: str) -> List[Dict[str, Any]]:
+    def get_history(self, symbol: str, interval: str) -> List[Dict[str, Any]]:
         """
         Get history.
         
@@ -25,7 +25,6 @@ class AggregatedTakerBuySellVolumeAPI:
         """
         params = {
             'symbol': symbol,
-            'exchange_list': exchange_list,
             'interval': interval,
         }
         response = self.client.get('/spot/aggregated-taker-buy-sell-volume/history', params=params)

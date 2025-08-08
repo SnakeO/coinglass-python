@@ -12,12 +12,12 @@ class TopLongShortPositionRatioAPI:
         """Initialize TopLongShortPositionRatio API with client."""
         self.client = client
 
-    def get_history(self, symbol: str, exchange: str, interval: str) -> List[Dict[str, Any]]:
+    def get_history(self, symbol: str, ex: str, interval: str) -> List[Dict[str, Any]]:
         """
         Get history.
         
         Args:
-            symbol: Symbol\n            exchange: Exchange name
+            symbol: Symbol\n            ex: Exchange name
             interval: Interval
         
         Returns:
@@ -25,7 +25,7 @@ class TopLongShortPositionRatioAPI:
         """
         params = {
             'symbol': symbol,
-            'exchange': exchange,
+            'exchange': ex,
             'interval': interval,
         }
         response = self.client.get('/futures/top-long-short-position-ratio/history', params=params)

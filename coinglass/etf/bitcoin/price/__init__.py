@@ -12,12 +12,24 @@ class PriceAPI:
         """Initialize Price API with client."""
         self.client = client
 
-    def get_history(self) -> List[Dict[str, Any]]:
+    def get_history(
+        self, 
+        ticker: str,
+        range: str
+    ) -> List[Dict[str, Any]]:
         """
-        Get history.
+        Get ETF price history.
+        
+        Args:
+            ticker: ETF ticker symbol
+            range: Time range (e.g., '1d', '7d', '30d', '90d', '1y')
         
         Returns:
-            List of data
+            List of price history data
         """
-        response = self.client.get('/etf/bitcoin/price/history')
+        params = {
+            'ticker': ticker,
+            'range': range
+        }
+        response = self.client.get('/etf/bitcoin/price/history', params=params)
         return response.get('data', [])

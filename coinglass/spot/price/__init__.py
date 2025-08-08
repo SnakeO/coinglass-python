@@ -3,7 +3,6 @@ Price API for CoinGlass Spot
 """
 from typing import Optional, List, Dict, Any
 from ...client import CoinGlassClient
-from ...constants import PlanLevel
 
 
 class PriceAPI:
@@ -16,6 +15,7 @@ class PriceAPI:
     def get_history(
         self,
         symbol: str,
+        exchange: str,
         interval: str,
         # Optional parameters (can be passed as kwargs):
         # startTime: int = None - Start timestamp in milliseconds
@@ -24,15 +24,11 @@ class PriceAPI:
         **kwargs
     ) -> List[Dict[str, Any]]:
         """
-        Get historical OHLC price data for spot markets.
-        
-        Plan Availability: 
-        - Hobbyist: Intervals ≥ 4h only
-        - Startup: Intervals ≥ 30m
-        - Standard+: No interval restrictions
+        Get historical price data for spot.
         
         Args:
             symbol: Symbol (e.g., 'BTC/USDT')
+            exchange: Exchange name (e.g., 'Binance')
             interval: Interval (1m, 3m, 5m, 15m, 30m, 1h, 4h, 6h, 8h, 12h, 1d, 1w)
             **kwargs: Optional parameters:
                 - startTime (int): Start timestamp in milliseconds
@@ -40,10 +36,11 @@ class PriceAPI:
                 - limit (int): Number of results (max: 1000)
         
         Returns:
-            List of spot price history OHLC data
+            List of price history data
         """
         params = {
             'symbol': symbol,
+            'exchange': exchange,
             'interval': interval,
         }
         # Add optional params from kwargs

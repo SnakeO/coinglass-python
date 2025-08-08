@@ -16,7 +16,7 @@ class EndpointRegistry:
         "futures.get_supported_exchange_pairs": 1,  # All plans
         "futures.get_coins_markets": 3,  # Standard+
         "futures.get_pairs_markets": 1,  # All plans
-        "futures.get_coins_price_change": 1,  # All plans
+        "futures.get_coins_price_change": 3,  # Standard+ (was getting Upgrade plan error at level 2)
         "futures.get_delisted_pairs": 1,  # All plans
         "futures.get_exchange_rank": 1,  # All plans
         "futures.get_basis": 1,  # All plans
@@ -30,6 +30,8 @@ class EndpointRegistry:
         # Futures Open Interest
         "futures.open_interest.get_history": 1,  # All plans
         "futures.open_interest.get_aggregated_history": 1,  # All plans
+        "futures.open_interest.get_aggregated_stablecoin_margin_history": 1,  # All plans
+        "futures.open_interest.get_aggregated_coin_margin_history": 1,  # All plans
         "futures.open_interest.get_exchange_list": 1,  # All plans
         "futures.open_interest.get_exchange_history_chart": 1,  # All plans
         
@@ -59,11 +61,15 @@ class EndpointRegistry:
         "futures.liquidation.aggregated_heatmap.get_model3": 4,  # Professional+
         
         # Futures Orderbook
+        "futures.orderbook.get_ask_bids_history": 1,  # All plans
+        "futures.orderbook.get_aggregated_ask_bids_history": 1,  # All plans
+        "futures.orderbook.get_history": 3,  # Standard+ (was getting Upgrade plan error at level 2)
         "futures.orderbook.get_large_limit_order": 3,  # Standard+
         "futures.orderbook.get_large_limit_order_history": 3,  # Standard+
         
         # Futures Taker Buy/Sell Volume
         "futures.taker_buy_sell_volume.get_history": 1,  # All plans
+        "futures.taker_buy_sell_volume.get_exchange_list": 1,  # All plans
         "futures.aggregated_taker_buy_sell_volume.get_history": 1,  # All plans
         
         # Futures Long/Short Ratios
@@ -84,6 +90,9 @@ class EndpointRegistry:
         "spot.price.get_history": 1,  # All plans (with interval restrictions)
         
         # Spot Orderbook
+        "spot.orderbook.get_ask_bids_history": 1,  # All plans
+        "spot.orderbook.get_aggregated_ask_bids_history": 1,  # All plans
+        "spot.orderbook.get_history": 3,  # Standard+ (was getting Upgrade plan error at level 2)
         "spot.orderbook.get_large_limit_order": 3,  # Standard+
         "spot.orderbook.get_large_limit_order_history": 3,  # Standard+
         
