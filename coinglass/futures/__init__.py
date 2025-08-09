@@ -130,43 +130,83 @@ class FuturesAPI:
     
     def get_basis(
         self, 
+        exchange: str,
         symbol: str,
+        interval: str,
         # Optional parameters (can be passed as kwargs):
-        # exchange: str = None - Specific exchange name
+        # startTime: int = None - Start timestamp in milliseconds
+        # endTime: int = None - End timestamp in milliseconds
+        # limit: int = None - Number of results (max: 1000)
         **kwargs
-    ) -> Dict[str, Any]:
+    ) -> List[Dict[str, Any]]:
         """
-        Get futures basis data.
+        Get futures basis history data.
         
         Min Plan Level: 1
-        Cache: Real-time
         
         Args:
-            symbol: Cryptocurrency symbol (e.g., 'BTC')
+            exchange: Exchange name (e.g., 'Binance')
+            symbol: Symbol (e.g., 'BTCUSDT')
+            interval: Interval (1m, 3m, 5m, 15m, 30m, 1h, 4h, 6h, 8h, 12h, 1d, 1w)
             **kwargs: Optional parameters:
-                - exchange (str): Specific exchange name
+                - startTime (int): Start timestamp in milliseconds
+                - endTime (int): End timestamp in milliseconds
+                - limit (int): Number of results (max: 1000)
         
         Returns:
-            Basis data
+            List of basis history data
         """
-        params = {'symbol': symbol}
-        if 'exchange' in kwargs:
-            params['exchange'] = kwargs['exchange']
+        params = {
+            'exchange': exchange,
+            'symbol': symbol,
+            'interval': interval
+        }
+        # Add optional params from kwargs
+        for key in ['startTime', 'endTime', 'limit']:
+            if key in kwargs:
+                params[key] = kwargs[key]
         response = self.client.get('/futures/basis/history', params=params)
-        return response.get('data', {})
+        return response.get('data', [])
     
-    def get_whale_index(self) -> Dict[str, Any]:
+    def get_whale_index(
+        self,
+        exchange: str,
+        symbol: str,
+        interval: str,
+        # Optional parameters (can be passed as kwargs):
+        # startTime: int = None - Start timestamp in milliseconds
+        # endTime: int = None - End timestamp in milliseconds
+        # limit: int = None - Number of results (max: 1000)
+        **kwargs
+    ) -> List[Dict[str, Any]]:
         """
-        Get Whale Index data.
+        Get Whale Index history data.
         
         Min Plan Level: 2
-        Cache: Every 1 minute
+        
+        Args:
+            exchange: Exchange name (e.g., 'Binance')
+            symbol: Symbol (e.g., 'BTCUSDT')
+            interval: Interval (1m, 3m, 5m, 15m, 30m, 1h, 4h, 6h, 8h, 12h, 1d, 1w)
+            **kwargs: Optional parameters:
+                - startTime (int): Start timestamp in milliseconds
+                - endTime (int): End timestamp in milliseconds
+                - limit (int): Number of results (max: 1000)
         
         Returns:
-            Whale index data
+            List of whale index history data
         """
-        response = self.client.get('/futures/whale-index/history')
-        return response.get('data', {})
+        params = {
+            'exchange': exchange,
+            'symbol': symbol,
+            'interval': interval
+        }
+        # Add optional params from kwargs
+        for key in ['startTime', 'endTime', 'limit']:
+            if key in kwargs:
+                params[key] = kwargs[key]
+        response = self.client.get('/futures/whale-index/history', params=params)
+        return response.get('data', [])
     
     def get_cgdi_index(self) -> Dict[str, Any]:
         """

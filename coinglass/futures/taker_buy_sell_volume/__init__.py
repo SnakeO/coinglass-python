@@ -14,8 +14,8 @@ class TakerBuySellVolumeAPI:
 
     def get_history(
         self, 
+        exchange: str,
         symbol: str, 
-        ex: str, 
         interval: str,
         # Optional parameters (can be passed as kwargs):
         # startTime: int = None - Start timestamp in milliseconds
@@ -27,8 +27,8 @@ class TakerBuySellVolumeAPI:
         Get taker buy/sell volume history.
         
         Args:
+            exchange: Exchange name (e.g., 'Binance')
             symbol: Symbol (e.g., 'BTCUSDT')
-            ex: Exchange name (e.g., 'Binance')
             interval: Interval (1m, 3m, 5m, 15m, 30m, 1h, 4h, 6h, 8h, 12h, 1d, 1w)
             **kwargs: Optional parameters:
                 - startTime (int): Start timestamp in milliseconds
@@ -39,8 +39,8 @@ class TakerBuySellVolumeAPI:
             List of taker buy/sell volume data
         """
         params = {
+            'exchange': exchange,
             'symbol': symbol,
-            'exchange': ex,
             'interval': interval,
         }
         # Add optional params from kwargs
@@ -48,7 +48,7 @@ class TakerBuySellVolumeAPI:
             if key in kwargs:
                 params[key] = kwargs[key]
         
-        response = self.client.get('/futures/taker-buy-sell-volume/history', params=params)
+        response = self.client.get('/futures/v2/taker-buy-sell-volume/history', params=params)
         return response.get('data', [])
     def get_exchange_list(self) -> List[Dict[str, Any]]:
         """

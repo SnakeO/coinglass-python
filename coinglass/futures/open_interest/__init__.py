@@ -15,8 +15,8 @@ class OpenInterestAPI:
     
     def get_history(
         self,
+        exchange: str,
         symbol: str,
-        ex: str,
         interval: str,
         # Optional parameters (can be passed as kwargs):
         # startTime: int = None - Start timestamp in milliseconds
@@ -30,8 +30,8 @@ class OpenInterestAPI:
         Min Plan Level: 1
         
         Args:
-            symbol: Futures instrument identifier (e.g., 'BTCUSDT_PERP')
-            ex: Exchange name (e.g., "Binance") (e.g., 'Binance')
+            exchange: Exchange name (e.g., 'Binance')
+            symbol: Symbol (e.g., 'BTCUSDT')
             interval: Candlestick interval (1m, 3m, 5m, 15m, 30m, 1h, 4h, 6h, 8h, 12h, 1d, 1w)
             **kwargs: Optional parameters:
                 - startTime (int): Start timestamp in milliseconds
@@ -42,8 +42,8 @@ class OpenInterestAPI:
             List of open interest OHLC data
         """
         params = {
+            'exchange': exchange,
             'symbol': symbol,
-            'exchange': ex,
             'interval': interval
         }
         # Add optional params from kwargs
@@ -94,6 +94,7 @@ class OpenInterestAPI:
     
     def get_aggregated_stablecoin_margin_history(
         self,
+        exchange_list: str,
         symbol: str,
         interval: str,
         # Optional parameters (can be passed as kwargs):
@@ -108,6 +109,7 @@ class OpenInterestAPI:
         Min Plan Level: 1
         
         Args:
+            exchange_list: Comma-separated exchange names (e.g., 'Binance,OKX')
             symbol: Cryptocurrency symbol (e.g., 'BTC')
             interval: Candlestick interval (1m, 3m, 5m, 15m, 30m, 1h, 4h, 6h, 8h, 12h, 1d, 1w)
             **kwargs: Optional parameters:
@@ -119,6 +121,7 @@ class OpenInterestAPI:
             List of stablecoin-margined OI OHLC data
         """
         params = {
+            'exchange_list': exchange_list,
             'symbol': symbol,
             'interval': interval
         }
@@ -132,6 +135,7 @@ class OpenInterestAPI:
     
     def get_aggregated_coin_margin_history(
         self,
+        exchange_list: str,
         symbol: str,
         interval: str,
         # Optional parameters (can be passed as kwargs):
@@ -146,6 +150,7 @@ class OpenInterestAPI:
         Min Plan Level: 1
         
         Args:
+            exchange_list: Comma-separated exchange names (e.g., 'Binance,OKX')
             symbol: Cryptocurrency symbol (e.g., 'BTC')
             interval: Candlestick interval (1m, 3m, 5m, 15m, 30m, 1h, 4h, 6h, 8h, 12h, 1d, 1w)
             **kwargs: Optional parameters:
@@ -157,6 +162,7 @@ class OpenInterestAPI:
             List of coin-margined OI OHLC data
         """
         params = {
+            'exchange_list': exchange_list,
             'symbol': symbol,
             'interval': interval
         }
@@ -201,7 +207,7 @@ class OpenInterestAPI:
     def get_exchange_history_chart(
         self,
         symbol: str,
-        interval: str
+        range: str
     ) -> Dict[str, Any]:
         """
         Get historical open interest distribution across exchanges for charting.
@@ -210,14 +216,14 @@ class OpenInterestAPI:
         
         Args:
             symbol: Cryptocurrency symbol (e.g., 'BTC')
-            interval: Interval (1h, 4h, 1d)
+            range: Time range (e.g., '12h', '1d', '3d', '7d')
         
         Returns:
             Historical OI distribution data
         """
         params = {
             'symbol': symbol,
-            'interval': interval
+            'range': range
         }
         response = self.client.get('/futures/open-interest/exchange-history-chart', params=params)
         return response.get('data', {})

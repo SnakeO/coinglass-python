@@ -15,6 +15,7 @@ class PriceAPI:
 
     def get_history(
         self,
+        exchange: str,
         symbol: str,
         interval: str,
         # Optional parameters (can be passed as kwargs):
@@ -29,7 +30,8 @@ class PriceAPI:
         Min Plan Level: 1
         
         Args:
-            symbol: Symbol (e.g., 'BTC' or 'BTCUSDT')
+            exchange: Exchange name (e.g., 'Binance')
+            symbol: Symbol (e.g., 'BTCUSDT')
             interval: Interval (1m, 3m, 5m, 15m, 30m, 1h, 4h, 6h, 8h, 12h, 1d, 1w)
             **kwargs: Optional parameters:
                 - startTime (int): Start timestamp in milliseconds
@@ -40,6 +42,7 @@ class PriceAPI:
             List of price history OHLC data
         """
         params = {
+            'exchange': exchange,
             'symbol': symbol,
             'interval': interval,
         }

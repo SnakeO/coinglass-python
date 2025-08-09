@@ -15,8 +15,8 @@ class OrderbookAPI:
 
     def get_ask_bids_history(
         self,
+        exchange: str,
         symbol: str,
-        ex: str,
         interval: str,
         # Optional parameters (can be passed as kwargs):
         # startTime: int = None - Start timestamp in milliseconds
@@ -30,8 +30,8 @@ class OrderbookAPI:
         Min Plan Level: 1
         
         Args:
+            exchange: Exchange name (e.g., 'Binance')
             symbol: Symbol (e.g., 'BTCUSDT')
-            ex: Exchange name (e.g., 'Binance')
             interval: Interval (1m, 3m, 5m, 15m, 30m, 1h, 4h, 6h, 8h, 12h, 1d, 1w)
             **kwargs: Optional parameters:
                 - startTime (int): Start timestamp in milliseconds
@@ -42,8 +42,8 @@ class OrderbookAPI:
             List of ask/bid history data
         """
         params = {
+            'exchange': exchange,
             'symbol': symbol,
-            'exchange': ex,
             'interval': interval,
         }
         # Add optional params from kwargs
@@ -56,6 +56,7 @@ class OrderbookAPI:
     
     def get_aggregated_ask_bids_history(
         self,
+        exchange_list: str,
         symbol: str,
         interval: str,
         # Optional parameters (can be passed as kwargs):
@@ -70,6 +71,7 @@ class OrderbookAPI:
         Min Plan Level: 1
         
         Args:
+            exchange_list: Comma-separated exchange names (e.g., 'Binance,OKX')
             symbol: Symbol (e.g., 'BTC')
             interval: Interval (1m, 3m, 5m, 15m, 30m, 1h, 4h, 6h, 8h, 12h, 1d, 1w)
             **kwargs: Optional parameters:
@@ -81,6 +83,7 @@ class OrderbookAPI:
             List of aggregated ask/bid history data
         """
         params = {
+            'exchange_list': exchange_list,
             'symbol': symbol,
             'interval': interval,
         }

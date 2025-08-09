@@ -42,7 +42,7 @@ class ExchangeAPI:
             List of exchange asset data
         """
         params = {
-            'ex': exchange,
+            'exchange': exchange,
         }
         # Add optional params from kwargs
         for key in ['limit']:

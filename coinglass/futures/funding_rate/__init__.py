@@ -15,8 +15,8 @@ class FundingRateAPI:
 
     def get_history(
         self,
+        exchange: str,
         symbol: str,
-        ex: str,
         interval: str,
         # Optional parameters (can be passed as kwargs):
         # startTime: int = None - Start timestamp in milliseconds
@@ -30,8 +30,8 @@ class FundingRateAPI:
         Min Plan Level: 1
         
         Args:
+            exchange: Exchange name (e.g., 'Binance')
             symbol: Symbol (e.g., 'BTCUSDT')
-            ex: Exchange name (e.g., "Binance") (e.g., 'Binance')
             interval: Interval (1m, 3m, 5m, 15m, 30m, 1h, 4h, 6h, 8h, 12h, 1d, 1w)
             **kwargs: Optional parameters:
                 - startTime (int): Start timestamp in milliseconds
@@ -42,8 +42,8 @@ class FundingRateAPI:
             List of funding rate history data
         """
         params = {
+            'exchange': exchange,
             'symbol': symbol,
-            'exchange': ex,
             'interval': interval,
         }
         # Add optional params from kwargs

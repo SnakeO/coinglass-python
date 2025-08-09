@@ -76,6 +76,7 @@ class BitcoinAPI:
         return response.get('data', [])
     def get_history(
         self,
+        ticker: str,
         # Optional parameters (can be passed as kwargs):
         # startTime: int = None - Start timestamp in milliseconds
         # endTime: int = None - End timestamp in milliseconds
@@ -87,6 +88,7 @@ class BitcoinAPI:
         Min Plan Level: 1
         
         Args:
+            ticker: ETF ticker symbol (e.g., 'GBTC')
             **kwargs: Optional parameters:
                 - startTime (int): Start timestamp in milliseconds
                 - endTime (int): End timestamp in milliseconds
@@ -94,12 +96,12 @@ class BitcoinAPI:
         Returns:
             List of Bitcoin ETF historical data
         """
-        params = {}
+        params = {'ticker': ticker}
         for key in ['startTime', 'endTime']:
             if key in kwargs:
                 params[key] = kwargs[key]
         
-        response = self.client.get('/etf/bitcoin/history', params=params if params else None)
+        response = self.client.get('/etf/bitcoin/history', params=params)
         return response.get('data', [])
     def get_detail(self, ticker: str) -> Dict[str, Any]:
         """

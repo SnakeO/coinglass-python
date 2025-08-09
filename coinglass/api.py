@@ -108,6 +108,10 @@ class CoinGlass:
         self.index = IndexAPI(self.client)
         self.hyperliquid = HyperliquidAPI(self.client)
         self.calendar = CalendarAPI(self.client)
+        
+        # Initialize borrow interest rate API
+        from .borrow_interest_rate import BorrowInterestRateAPI
+        self.borrow_interest_rate = BorrowInterestRateAPI(self.client)
     
     # Top-level indicator methods
     def get_coinbase_premium_index(self, interval: Optional[str] = None, **kwargs):
@@ -124,18 +128,21 @@ class CoinGlass:
         """
         return coinbase_premium_index.get_coinbase_premium_index(self.client, interval, **kwargs)
     
-    def get_bitfinex_margin_long_short(self, **kwargs):
+    def get_bitfinex_margin_long_short(self, symbol: str, interval: str, **kwargs):
         """
         Get Bitfinex margin long vs short positions data.
         
         Min Plan Level: 1
         
         Args:
+            symbol: Symbol (e.g., 'BTC')
+            interval: Interval (e.g., '1h', '4h', '1d')
             **kwargs: Optional parameters:
                 - startTime (int): Start timestamp in milliseconds
                 - endTime (int): End timestamp in milliseconds
+                - limit (int): Number of results (max: 1000)
         """
-        return bitfinex_margin_long_short.get_bitfinex_margin_long_short(self.client, **kwargs)
+        return bitfinex_margin_long_short.get_bitfinex_margin_long_short(self.client, symbol, interval, **kwargs)
     
     def get_borrow_interest_rate_history(self, symbol: str = 'BTC', **kwargs):
         """

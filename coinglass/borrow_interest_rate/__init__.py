@@ -12,22 +12,41 @@ class BorrowInterestRateAPI:
         """Initialize BorrowInterestRate API with client."""
         self.client = client
 
-    def get_history(self, symbol: str, **kwargs) -> List[Dict[str, Any]]:
+    def get_history(
+        self, 
+        exchange: str,
+        symbol: str,
+        interval: str,
+        # Optional parameters (can be passed as kwargs):
+        # startTime: int = None - Start timestamp in milliseconds
+        # endTime: int = None - End timestamp in milliseconds
+        # limit: int = None - Number of results (max: 1000)
+        **kwargs
+    ) -> List[Dict[str, Any]]:
         """
-        Get history.
+        Get borrow interest rate history.
         
         Args:
+            exchange: Exchange name (e.g., 'Binance')
             symbol: Symbol (e.g., 'BTC')
+            interval: Interval (e.g., 'h1', 'h4', 'd1')
             **kwargs: Optional parameters:
                 - startTime (int): Start timestamp in milliseconds
                 - endTime (int): End timestamp in milliseconds
+                - limit (int): Number of results (max: 1000)
         
         Returns:
-            List of data
+            List of borrow interest rate data
         """
-        params = {'symbol': symbol}
-        for key in ['startTime', 'endTime']:
+        params = {
+            'exchange': exchange,
+            'symbol': symbol,
+            'interval': interval
+        }
+        # Add optional params from kwargs
+        for key in ['startTime', 'endTime', 'limit']:
             if key in kwargs:
                 params[key] = kwargs[key]
+        
         response = self.client.get('/borrow-interest-rate/history', params=params)
         return response.get('data', [])
