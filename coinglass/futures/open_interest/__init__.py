@@ -94,7 +94,6 @@ class OpenInterestAPI:
     
     def get_aggregated_stablecoin_margin_history(
         self,
-        exchange_list: str,
         symbol: str,
         interval: str,
         # Optional parameters (can be passed as kwargs):
@@ -109,7 +108,6 @@ class OpenInterestAPI:
         Min Plan Level: 1
         
         Args:
-            exchange_list: Comma-separated exchange names (e.g., 'Binance,OKX')
             symbol: Cryptocurrency symbol (e.g., 'BTC')
             interval: Candlestick interval (1m, 3m, 5m, 15m, 30m, 1h, 4h, 6h, 8h, 12h, 1d, 1w)
             **kwargs: Optional parameters:
@@ -121,7 +119,6 @@ class OpenInterestAPI:
             List of stablecoin-margined OI OHLC data
         """
         params = {
-            'exchange_list': exchange_list,
             'symbol': symbol,
             'interval': interval
         }
@@ -130,12 +127,11 @@ class OpenInterestAPI:
             if key in kwargs:
                 params[key] = kwargs[key]
         
-        response = self.client.get('/futures/open-interest/aggregated-stablecoin-history', params=params)
+        response = self.client.get('/futures/open-interest/aggregated-stablecoin-margin-history', params=params)
         return response.get('data', [])
     
     def get_aggregated_coin_margin_history(
         self,
-        exchange_list: str,
         symbol: str,
         interval: str,
         # Optional parameters (can be passed as kwargs):
@@ -150,7 +146,6 @@ class OpenInterestAPI:
         Min Plan Level: 1
         
         Args:
-            exchange_list: Comma-separated exchange names (e.g., 'Binance,OKX')
             symbol: Cryptocurrency symbol (e.g., 'BTC')
             interval: Candlestick interval (1m, 3m, 5m, 15m, 30m, 1h, 4h, 6h, 8h, 12h, 1d, 1w)
             **kwargs: Optional parameters:
@@ -162,7 +157,6 @@ class OpenInterestAPI:
             List of coin-margined OI OHLC data
         """
         params = {
-            'exchange_list': exchange_list,
             'symbol': symbol,
             'interval': interval
         }

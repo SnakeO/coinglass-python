@@ -107,6 +107,9 @@ class EndpointTester:
             # Call the endpoint
             result = func(**params) if params else func()
             
+            # Add a small delay after each API call to avoid rate limiting
+            time.sleep(0.25)
+            
             # Format result for display
             if isinstance(result, (dict, list)):
                 if isinstance(result, list) and len(result) > 0:
@@ -168,8 +171,8 @@ class EndpointTester:
             "futures.price.get_history": "/futures/price/history",
             "futures.open_interest.get_history": "/futures/open-interest/history",
             "futures.open_interest.get_aggregated_history": "/futures/aggregated-open-interest/history",
-            "futures.open_interest.get_aggregated_stablecoin_margin_history": "/futures/aggregated-stablecoin-margin-open-interest/history",
-            "futures.open_interest.get_aggregated_coin_margin_history": "/futures/aggregated-coin-margin-open-interest/history",
+            "futures.open_interest.get_aggregated_stablecoin_margin_history": "/futures/open-interest/aggregated-stablecoin-margin-history",
+            "futures.open_interest.get_aggregated_coin_margin_history": "/futures/open-interest/aggregated-coin-margin-history",
             "futures.open_interest.get_exchange_list": "/futures/open-interest/exchange-list",
             "futures.open_interest.get_exchange_history_chart": "/futures/open-interest/exchange-history-chart",
             "futures.funding_rate.get_history": "/futures/funding-rate/history",
@@ -330,12 +333,13 @@ class EndpointTester:
         self.results.append(self.test_endpoint(
             "futures.get_basis",
             self.cg.futures.get_basis,
-            {"symbol": "BTC"}
+            {"exchange": "Binance", "symbol": "BTCUSDT", "interval": "1h"}
         ))
         
         self.results.append(self.test_endpoint(
             "futures.get_whale_index",
-            self.cg.futures.get_whale_index
+            self.cg.futures.get_whale_index,
+            {"exchange": "Binance", "symbol": "BTCUSDT", "interval": "1h"}
         ))
         
         self.results.append(self.test_endpoint(
@@ -352,32 +356,32 @@ class EndpointTester:
         self.results.append(self.test_endpoint(
             "futures.price.get_history",
             self.cg.futures.price.get_history,
-            {"symbol": "BTC", "exchange": "Binance", "interval": "1h"}
+            {"symbol": "BTCUSDT", "interval": "1h", "exchange": "Binance"}
         ))
         
         # Open Interest endpoints
         self.results.append(self.test_endpoint(
             "futures.open_interest.get_history",
             self.cg.futures.open_interest.get_history,
-            {"exchange": "Binance", "symbol": "BTC", "interval": "4h"}
+            {"exchange": "Binance", "symbol": "BTCUSDT", "interval": "4h"}
         ))
         
         self.results.append(self.test_endpoint(
             "futures.open_interest.get_aggregated_history",
             self.cg.futures.open_interest.get_aggregated_history,
-            {"exchange_list": "Binance,OKX", "symbol": "BTC", "interval": "1d"}
+            {"symbol": "BTC", "interval": "1d"}
         ))
         
         self.results.append(self.test_endpoint(
             "futures.open_interest.get_aggregated_stablecoin_margin_history",
             self.cg.futures.open_interest.get_aggregated_stablecoin_margin_history,
-            {"symbol": "BTC", "exchange_list": "Binance,OKX", "interval": "4h"}
+            {"symbol": "BTC", "interval": "4h"}
         ))
         
         self.results.append(self.test_endpoint(
             "futures.open_interest.get_aggregated_coin_margin_history",
             self.cg.futures.open_interest.get_aggregated_coin_margin_history,
-            {"symbol": "BTC", "exchange_list": "Binance,OKX", "interval": "4h"}
+            {"symbol": "BTC", "interval": "4h"}
         ))
         
         self.results.append(self.test_endpoint(
@@ -396,7 +400,7 @@ class EndpointTester:
         self.results.append(self.test_endpoint(
             "futures.funding_rate.get_history",
             self.cg.futures.funding_rate.get_history,
-            {"exchange": "Binance", "symbol": "BTC", "interval": "8h"}
+            {"exchange": "Binance", "symbol": "BTCUSDT", "interval": "8h"}
         ))
         
         self.results.append(self.test_endpoint(
@@ -433,32 +437,32 @@ class EndpointTester:
         self.results.append(self.test_endpoint(
             "futures.global_long_short_account_ratio.get_history",
             self.cg.futures.global_long_short_account_ratio.get_history,
-            {"exchange": "Binance", "symbol": "BTC", "interval": "1h"}
+            {"exchange": "Binance", "symbol": "BTCUSDT", "interval": "1h"}
         ))
         
         self.results.append(self.test_endpoint(
             "futures.top_long_short_account_ratio.get_history",
             self.cg.futures.top_long_short_account_ratio.get_history,
-            {"exchange": "Binance", "symbol": "BTC", "interval": "1h"}
+            {"exchange": "Binance", "symbol": "BTCUSDT", "interval": "1h"}
         ))
         
         self.results.append(self.test_endpoint(
             "futures.top_long_short_position_ratio.get_history",
             self.cg.futures.top_long_short_position_ratio.get_history,
-            {"exchange": "Binance", "symbol": "BTC", "interval": "1h"}
+            {"exchange": "Binance", "symbol": "BTCUSDT", "interval": "1h"}
         ))
         
         # Liquidation endpoints
         self.results.append(self.test_endpoint(
             "futures.liquidation.get_history",
             self.cg.futures.liquidation.get_history,
-            {"exchange": "Binance", "symbol": "BTC", "interval": "1h"}
+            {"exchange": "Binance", "symbol": "BTCUSDT", "interval": "1h"}
         ))
         
         self.results.append(self.test_endpoint(
             "futures.liquidation.get_aggregated_history",
             self.cg.futures.liquidation.get_aggregated_history,
-            {"symbol": "BTC", "exchange_list": "Binance,OKX", "interval": "1h"}
+            {"symbol": "BTCUSDT", "interval": "1h"}
         ))
         
         self.results.append(self.test_endpoint(
@@ -531,13 +535,13 @@ class EndpointTester:
         self.results.append(self.test_endpoint(
             "futures.orderbook.get_ask_bids_history",
             self.cg.futures.orderbook.get_ask_bids_history,
-            {"exchange": "Binance", "symbol": "BTC", "interval": "1h"}
+            {"exchange": "Binance", "symbol": "BTCUSDT", "interval": "1h"}
         ))
         
         self.results.append(self.test_endpoint(
             "futures.orderbook.get_aggregated_ask_bids_history",
             self.cg.futures.orderbook.get_aggregated_ask_bids_history,
-            {"symbol": "BTC", "exchange_list": "Binance,OKX", "interval": "1h"}
+            {"symbol": "BTCUSDT", "interval": "1h"}
         ))
         
         self.results.append(self.test_endpoint(
@@ -562,19 +566,19 @@ class EndpointTester:
         self.results.append(self.test_endpoint(
             "futures.taker_buy_sell_volume.get_history",
             self.cg.futures.taker_buy_sell_volume.get_history,
-            {"exchange": "Binance", "symbol": "BTC", "interval": "1h"}
+            {"exchange": "Binance", "symbol": "BTCUSDT", "interval": "1h"}
         ))
         
         self.results.append(self.test_endpoint(
             "futures.taker_buy_sell_volume.get_exchange_list",
             self.cg.futures.taker_buy_sell_volume.get_exchange_list,
-            {"symbol": "BTC"}
+            {"symbol": "BTCUSDT"}
         ))
         
         self.results.append(self.test_endpoint(
             "futures.aggregated_taker_buy_sell_volume.get_history",
             self.cg.futures.aggregated_taker_buy_sell_volume.get_history,
-            {"symbol": "BTC", "exchange_list": "Binance,OKX", "interval": "1h"}
+            {"symbol": "BTCUSDT", "interval": "1h"}
         ))
         
         # RSI
@@ -611,19 +615,19 @@ class EndpointTester:
         self.results.append(self.test_endpoint(
             "spot.price.get_history",
             self.cg.spot.price.get_history,
-            {"symbol": "BTC/USDT", "exchange": "Binance", "interval": "1h"}
+            {"symbol": "BTCUSDT", "exchange": "Binance", "interval": "1h"}
         ))
         
         self.results.append(self.test_endpoint(
             "spot.orderbook.get_ask_bids_history",
             self.cg.spot.orderbook.get_ask_bids_history,
-            {"exchange": "Binance", "symbol": "BTC/USDT", "interval": "1h"}
+            {"exchange": "Binance", "symbol": "BTCUSDT", "interval": "1h"}
         ))
         
         self.results.append(self.test_endpoint(
             "spot.orderbook.get_aggregated_ask_bids_history",
             self.cg.spot.orderbook.get_aggregated_ask_bids_history,
-            {"exchange_list": "Binance,OKX", "symbol": "BTC", "interval": "1h"}
+            {"symbol": "BTCUSDT", "interval": "1h"}
         ))
         
         self.results.append(self.test_endpoint(
@@ -647,13 +651,13 @@ class EndpointTester:
         self.results.append(self.test_endpoint(
             "spot.taker_buy_sell_volume.get_history",
             self.cg.spot.taker_buy_sell_volume.get_history,
-            {"exchange": "Binance", "symbol": "BTC/USDT", "interval": "1h"}
+            {"exchange": "Binance", "symbol": "BTCUSDT", "interval": "1h"}
         ))
         
         self.results.append(self.test_endpoint(
             "spot.aggregated_taker_buy_sell_volume.get_history",
             self.cg.spot.aggregated_taker_buy_sell_volume.get_history,
-            {"exchange_list": "Binance,OKX", "symbol": "BTC", "interval": "1h"}
+            {"symbol": "BTCUSDT", "interval": "1h"}
         ))
     
     def test_all_option_endpoints(self):
@@ -681,7 +685,7 @@ class EndpointTester:
         self.results.append(self.test_endpoint(
             "option.get_exchange_vol_history",
             self.cg.option.get_exchange_vol_history,
-            {"symbol": "BTC", "unit": "USD", "range": "1d"}
+            {"symbol": "BTC", "time_type": "all"}
         ))
     
     def test_all_exchange_endpoints(self):

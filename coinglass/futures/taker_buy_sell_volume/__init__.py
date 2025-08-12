@@ -50,12 +50,21 @@ class TakerBuySellVolumeAPI:
         
         response = self.client.get('/futures/v2/taker-buy-sell-volume/history', params=params)
         return response.get('data', [])
-    def get_exchange_list(self) -> List[Dict[str, Any]]:
+    def get_exchange_list(self, symbol: str = None, **kwargs) -> List[Dict[str, Any]]:
         """
         Get exchange list.
+        
+        Args:
+            symbol: Symbol (e.g., 'BTCUSDT')
         
         Returns:
             List of data
         """
-        response = self.client.get('/futures/taker-buy-sell-volume/exchange-list')
+        params = {}
+        if symbol:
+            params['symbol'] = symbol
+        # Add any additional params from kwargs
+        params.update(kwargs)
+        
+        response = self.client.get('/futures/taker-buy-sell-volume/exchange-list', params=params)
         return response.get('data', [])

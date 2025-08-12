@@ -125,6 +125,8 @@ types:
   displayName: Futures Supported Coins
   description: |
     Get all supported futures coins  
+    **Cache:** Every 1 minute  
+    **Plan Availability:** All plans  
     **Example cURL:**  
     ```shell
     curl --request GET "https://open-api-v4.coinglass.com/api/futures/supported-coins"
@@ -136,11 +138,24 @@ types:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": [
+                  "BTC",
+                  "ETH",
+                  "SOL",
+                  "XRP"
+                ]
+              }
 
 /api/futures/supported-exchange-pairs:
   displayName: Futures Exchange Pairs
   description: |
     Get supported exchanges and trading pairs  
+    **Cache:** Every 1 minute  
+    **Plan Availability:** All plans  
     **Example cURL:**  
     ```shell
     curl --request GET "https://open-api-v4.coinglass.com/api/futures/supported-exchange-pairs"
@@ -152,11 +167,25 @@ types:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": {
+                  "Binance": [
+                    {
+                      "instrument_id": "BTCUSD_PERP",
+                      "base_asset": "BTC",
+                      "quote_asset": "USD"
+                    }
+                  ]
+                }
+              }
 
 /api/futures/coins-markets:
   displayName: Futures Coins Markets
   description: |
-    Futures coins market performance data  
+    Futures coins market performance data including price changes, open interest, funding rates, and liquidations  
     **Plan Availability:** Standard+ only  
     **Example cURL:**  
     ```shell
@@ -169,11 +198,30 @@ types:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": [
+                  {
+                    "symbol": "BTC",
+                    "current_price": 45000.0,
+                    "market_cap_usd": 850000000000,
+                    "avg_funding_rate_by_oi": 0.01,
+                    "avg_funding_rate_by_vol": 0.008,
+                    "open_interest_usd": 15000000000,
+                    "open_interest_quantity": 333333,
+                    "open_interest_market_cap_ratio": 0.176,
+                    "open_interest_volume_ratio": 2.5
+                  }
+                ]
+              }
 
 /api/futures/pairs-markets:
   displayName: Futures Pairs Markets
   description: |
-    Futures pairs market performance data  
+    Futures pairs market performance data with trading metrics  
+    **Plan Availability:** All plans  
     **Example cURL:**  
     ```shell
     curl --request GET "https://open-api-v4.coinglass.com/api/futures/pairs-markets"
@@ -185,11 +233,35 @@ types:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": [
+                  {
+                    "instrument_id": "BTCUSDT",
+                    "exchange_name": "Binance",
+                    "symbol": "BTC",
+                    "current_price": 45000.0,
+                    "index_price": 45010.0,
+                    "price_change_percent_24h": 2.5,
+                    "volume_usd": 1500000000,
+                    "long_volume_usd": 750000000,
+                    "short_volume_usd": 750000000,
+                    "open_interest_quantity": 150000,
+                    "open_interest_usd": 6750000000,
+                    "funding_rate": 0.01,
+                    "next_funding_time": 1745222400000
+                  }
+                ]
+              }
 
 /api/futures/coins-price-change:
   displayName: Futures Price Changes
   description: |
-    Price change data for futures coins  
+    Price change data for futures coins across multiple timeframes  
+    **Plan Availability:** Standard+ only  
+    **Update:** Real-time  
     **Example cURL:**  
     ```shell
     curl --request GET "https://open-api-v4.coinglass.com/api/futures/coins-price-change"
@@ -201,6 +273,24 @@ types:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": [
+                  {
+                    "symbol": "BTC",
+                    "current_price": 45000.0,
+                    "price_change_percent_5m": 0.1,
+                    "price_change_percent_15m": 0.3,
+                    "price_change_percent_30m": 0.5,
+                    "price_change_percent_1h": 1.2,
+                    "price_change_percent_4h": 2.1,
+                    "price_change_percent_12h": 1.8,
+                    "price_change_percent_24h": 2.5
+                  }
+                ]
+              }
 
 /api/futures/price/history:
   displayName: Futures Price History
@@ -208,7 +298,7 @@ types:
     Historical price data for futures  
     **Example cURL:**  
     ```shell
-    curl --request GET "https://open-api-v4.coinglass.com/api/futures/price/history?symbol=BTC&interval=1h"
+    curl --request GET "https://open-api-v4.coinglass.com/api/futures/price/history?symbol=BTCUSDT&interval=1h&exchange=Binance"
     ```
   securedBy: [apiKey]
   get:
@@ -241,7 +331,9 @@ types:
 /api/futures/delisted-pairs:
   displayName: Delisted Futures Pairs
   description: |
-    List of delisted futures trading pairs  
+    List of delisted futures trading pairs by exchange  
+    **Cache:** Every 1 minute  
+    **Plan Availability:** All plans  
     **Example cURL:**  
     ```shell
     curl --request GET "https://open-api-v4.coinglass.com/api/futures/delisted-pairs"
@@ -253,11 +345,27 @@ types:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": {
+                  "Binance": [
+                    {
+                      "instrument_id": "BTCUSD_PERP",
+                      "base_asset": "BTC",
+                      "quote_asset": "USD"
+                    }
+                  ]
+                }
+              }
 
 /api/futures/exchange-rank:
   displayName: Futures Exchange Ranking
   description: |
-    Ranking of futures exchanges by metrics  
+    Ranking of futures exchanges by volume, open interest, and liquidations  
+    **Cache:** Every 1 minute  
+    **Plan Availability:** All plans  
     **Example cURL:**  
     ```shell
     curl --request GET "https://open-api-v4.coinglass.com/api/futures/exchange-rank"
@@ -269,15 +377,30 @@ types:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": [
+                  {
+                    "exchange": "Binance",
+                    "open_interest_usd": 8500000000,
+                    "volume_usd": 15000000000,
+                    "liquidation_usd_24h": 45000000
+                  }
+                ]
+              }
 
 # Open Interest Endpoints
 /api/futures/open-interest/history:
   displayName: Open Interest History
   description: |
-    Historical open interest data  
+    Historical open interest OHLC data for specific exchange and symbol  
+    **Plan Availability:** All plans (interval limits apply)  
+    **Interval Limits:** Hobbyist >=4h, Startup >=30m, Standard+ no limit  
     **Example cURL:**  
     ```shell
-    curl --request GET "https://open-api-v4.coinglass.com/api/futures/open-interest/history?symbol=BTC&ex=BINANCE&interval=1h"
+    curl --request GET "https://open-api-v4.coinglass.com/api/futures/open-interest/history?symbol=BTCUSDT&ex=Binance&interval=1h"
     ```
   securedBy: [apiKey]
   get:
@@ -285,39 +408,64 @@ types:
       symbol:
         type: string
         required: true
+        description: Cryptocurrency symbol
+        example: BTC
       ex:
         type: string
         required: true
         description: Exchange name
+        example: BINANCE
       interval:
         type: string
         required: true
         enum: [1m, 3m, 5m, 15m, 30m, 1h, 4h, 6h, 8h, 12h, 1d, 1w]
+        description: Time interval for OHLC data
+        example: 1h
       startTime:
         type: integer
         format: int64
         required: false
+        description: Start timestamp in milliseconds
       endTime:
         type: integer
         format: int64
         required: false
+        description: End timestamp in milliseconds
       limit:
         type: integer
         required: false
         maximum: 1000
+        description: Number of data points to return
+        default: 100
     responses:
       200:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": [
+                  {
+                    "time": 2644845344000,
+                    "open": "2644845344",
+                    "high": "2692643311",
+                    "low": "2576975597",
+                    "close": "2608846475"
+                  }
+                ]
+              }
 
 /api/futures/open-interest/aggregated-history:
   displayName: Aggregated Open Interest History
   description: |
-    Aggregated open interest across exchanges  
+    Aggregated open interest OHLC data across all exchanges  
+    **Plan Availability:** All plans (interval limits apply)  
+    **Interval Limits:** Hobbyist >=4h, Startup >=30m, Standard+ no limit  
     **Example cURL:**  
     ```shell
-    curl --request GET "https://open-api-v4.coinglass.com/api/futures/open-interest/aggregated-history?symbol=BTC&interval=1h"
+    curl --request GET "https://open-api-v4.coinglass.com/api/futures/open-interest/aggregated-history?symbol=BTCUSDT&interval=1h"
     ```
   securedBy: [apiKey]
   get:
@@ -325,35 +473,59 @@ types:
       symbol:
         type: string
         required: true
+        description: Cryptocurrency symbol
+        example: BTC
       interval:
         type: string
         required: true
         enum: [1m, 3m, 5m, 15m, 30m, 1h, 4h, 6h, 8h, 12h, 1d, 1w]
+        description: Time interval for OHLC data
+        example: 1h
       startTime:
         type: integer
         format: int64
         required: false
+        description: Start timestamp in milliseconds
       endTime:
         type: integer
         format: int64
         required: false
+        description: End timestamp in milliseconds
       limit:
         type: integer
         required: false
         maximum: 1000
+        description: Number of data points to return
+        default: 100
     responses:
       200:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": [
+                  {
+                    "time": 2644845344000,
+                    "open": "2644845344",
+                    "high": "2692643311",
+                    "low": "2576975597",
+                    "close": "2608846475"
+                  }
+                ]
+              }
 
 /api/futures/open-interest/aggregated-stablecoin-margin-history:
   displayName: Aggregated Stablecoin Margin OI History
   description: |
-    Aggregated open interest for stablecoin margin contracts  
+    Aggregated open interest OHLC data for USDT/USD-margined contracts  
+    **Plan Availability:** All plans (interval limits apply)  
+    **Interval Limits:** Hobbyist >=4h, Startup >=30m, Standard+ no limit  
     **Example cURL:**  
     ```shell
-    curl --request GET "https://open-api-v4.coinglass.com/api/futures/open-interest/aggregated-stablecoin-margin-history?symbol=BTC&interval=1h"
+    curl --request GET "https://open-api-v4.coinglass.com/api/futures/open-interest/aggregated-stablecoin-margin-history?symbol=BTCUSDT&interval=1h"
     ```
   securedBy: [apiKey]
   get:
@@ -361,35 +533,59 @@ types:
       symbol:
         type: string
         required: true
+        description: Cryptocurrency symbol
+        example: BTC
       interval:
         type: string
         required: true
         enum: [1m, 3m, 5m, 15m, 30m, 1h, 4h, 6h, 8h, 12h, 1d, 1w]
+        description: Time interval for OHLC data
+        example: 1h
       startTime:
         type: integer
         format: int64
         required: false
+        description: Start timestamp in milliseconds
       endTime:
         type: integer
         format: int64
         required: false
+        description: End timestamp in milliseconds
       limit:
         type: integer
         required: false
         maximum: 1000
+        description: Number of data points to return
+        default: 100
     responses:
       200:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": [
+                  {
+                    "time": 2644845344000,
+                    "open": "2644845344",
+                    "high": "2692643311",
+                    "low": "2576975597",
+                    "close": "2608846475"
+                  }
+                ]
+              }
 
 /api/futures/open-interest/aggregated-coin-margin-history:
   displayName: Aggregated Coin Margin OI History
   description: |
-    Aggregated open interest for coin margin contracts  
+    Aggregated open interest OHLC data for coin-margined contracts  
+    **Plan Availability:** All plans (interval limits apply)  
+    **Interval Limits:** Hobbyist >=4h, Startup >=30m, Standard+ no limit  
     **Example cURL:**  
     ```shell
-    curl --request GET "https://open-api-v4.coinglass.com/api/futures/open-interest/aggregated-coin-margin-history?symbol=BTC&interval=1h"
+    curl --request GET "https://open-api-v4.coinglass.com/api/futures/open-interest/aggregated-coin-margin-history?symbol=BTCUSDT&interval=1h"
     ```
   securedBy: [apiKey]
   get:
@@ -397,36 +593,59 @@ types:
       symbol:
         type: string
         required: true
+        description: Cryptocurrency symbol
+        example: BTC
       interval:
         type: string
         required: true
         enum: [1m, 3m, 5m, 15m, 30m, 1h, 4h, 6h, 8h, 12h, 1d, 1w]
+        description: Time interval for OHLC data
+        example: 1h
       startTime:
         type: integer
         format: int64
         required: false
+        description: Start timestamp in milliseconds
       endTime:
         type: integer
         format: int64
         required: false
+        description: End timestamp in milliseconds
       limit:
         type: integer
         required: false
         maximum: 1000
+        description: Number of data points to return
+        default: 100
     responses:
       200:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": [
+                  {
+                    "time": 2644845344000,
+                    "open": "2644845344",
+                    "high": "2692643311",
+                    "low": "2576975597",
+                    "close": "2608846475"
+                  }
+                ]
+              }
 
 /api/futures/open-interest/exchange-list:
   displayName: Open Interest by Exchange
   description: |
-    Current open interest by exchange  
+    Current open interest by exchange for specific coins  
     **Cache:** Every 10 seconds  
+    **Plan Availability:** All plans  
     **Example cURL:**  
     ```shell
-    curl --request GET "https://open-api-v4.coinglass.com/api/futures/open-interest/exchange-list?symbol=BTC"
+    curl --request GET "https://open-api-v4.coinglass.com/api/futures/open-interest/exchange-list?symbol=BTCUSDT"
     ```
   securedBy: [apiKey]
   get:
@@ -434,22 +653,41 @@ types:
       symbol:
         type: string
         required: false
+        description: Cryptocurrency symbol to filter by
+        example: BTC
       ex:
         type: string
         required: false
+        description: Exchange name to filter by
+        example: BINANCE
     responses:
       200:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": [
+                  {
+                    "exchange": "Binance",
+                    "open_interest_usd": 8500000000,
+                    "volume_usd": 15000000000,
+                    "liquidation_usd_24h": 45000000
+                  }
+                ]
+              }
 
 /api/futures/open-interest/exchange-history-chart:
   displayName: OI Exchange History Chart
   description: |
     Open interest history chart data by exchange  
+    **Cache:** Every 10 seconds  
+    **Plan Availability:** All plans  
     **Example cURL:**  
     ```shell
-    curl --request GET "https://open-api-v4.coinglass.com/api/futures/open-interest/exchange-history-chart?symbol=BTC&interval=1h"
+    curl --request GET "https://open-api-v4.coinglass.com/api/futures/open-interest/exchange-history-chart?symbol=BTCUSDT&interval=1h"
     ```
   securedBy: [apiKey]
   get:
@@ -457,24 +695,43 @@ types:
       symbol:
         type: string
         required: true
+        description: Cryptocurrency symbol
+        example: BTC
       interval:
         type: string
         required: true
         enum: [1h, 4h, 1d]
+        description: Time interval for chart data
+        example: 1h
     responses:
       200:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": {
+                  "time_list": [1658880000000, 1658883600000],
+                  "price_list": [45000, 45100],
+                  "data_map": {
+                    "Binance": [8500000000, 8520000000],
+                    "Bitmex": [1200000000, 1180000000]
+                  }
+                }
+              }
 
 # Funding Rate Endpoints
 /api/futures/funding-rate/history:
   displayName: Funding Rate History
   description: |
-    Historical funding rate data  
+    Historical funding rate OHLC data for specific exchange and symbol  
+    **Plan Availability:** All plans (interval limits apply)  
+    **Interval Limits:** Hobbyist >=4h, Startup >=30m, Standard+ no limit  
     **Example cURL:**  
     ```shell
-    curl --request GET "https://open-api-v4.coinglass.com/api/futures/funding-rate/history?symbol=BTC&ex=BINANCE&interval=1h"
+    curl --request GET "https://open-api-v4.coinglass.com/api/futures/funding-rate/history?symbol=BTCUSDT&ex=Binance&interval=1h"
     ```
   securedBy: [apiKey]
   get:
@@ -482,38 +739,64 @@ types:
       symbol:
         type: string
         required: true
+        description: Cryptocurrency symbol
+        example: BTC
       ex:
         type: string
         required: true
+        description: Exchange name
+        example: BINANCE
       interval:
         type: string
         required: true
         enum: [1m, 3m, 5m, 15m, 30m, 1h, 4h, 6h, 8h, 12h, 1d, 1w]
+        description: Time interval for OHLC data
+        example: 1h
       startTime:
         type: integer
         format: int64
         required: false
+        description: Start timestamp in milliseconds
       endTime:
         type: integer
         format: int64
         required: false
+        description: End timestamp in milliseconds
       limit:
         type: integer
         required: false
         maximum: 1000
+        description: Number of data points to return
+        default: 100
     responses:
       200:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": [
+                  {
+                    "time": 1658880000000,
+                    "open": "0.004603",
+                    "high": "0.009388",
+                    "low": "-0.005063",
+                    "close": "0.009229"
+                  }
+                ]
+              }
 
 /api/futures/funding-rate/oi-weight-history:
   displayName: OI-Weighted Funding Rate History
   description: |
-    Open interest weighted funding rate history  
+    Open interest weighted funding rate OHLC history across exchanges  
+    **Plan Availability:** All plans (interval limits apply)  
+    **Interval Limits:** Hobbyist >=4h, Startup >=30m, Standard+ no limit  
     **Example cURL:**  
     ```shell
-    curl --request GET "https://open-api-v4.coinglass.com/api/futures/funding-rate/oi-weight-history?symbol=BTC&interval=1h"
+    curl --request GET "https://open-api-v4.coinglass.com/api/futures/funding-rate/oi-weight-history?symbol=BTCUSDT&interval=1h"
     ```
   securedBy: [apiKey]
   get:
@@ -521,35 +804,59 @@ types:
       symbol:
         type: string
         required: true
+        description: Cryptocurrency symbol
+        example: BTC
       interval:
         type: string
         required: true
         enum: [1m, 3m, 5m, 15m, 30m, 1h, 4h, 6h, 8h, 12h, 1d, 1w]
+        description: Time interval for OHLC data
+        example: 1h
       startTime:
         type: integer
         format: int64
         required: false
+        description: Start timestamp in milliseconds
       endTime:
         type: integer
         format: int64
         required: false
+        description: End timestamp in milliseconds
       limit:
         type: integer
         required: false
         maximum: 1000
+        description: Number of data points to return
+        default: 100
     responses:
       200:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": [
+                  {
+                    "time": 1658880000000,
+                    "open": "0.004603",
+                    "high": "0.009388",
+                    "low": "-0.005063",
+                    "close": "0.009229"
+                  }
+                ]
+              }
 
 /api/futures/funding-rate/vol-weight-history:
   displayName: Volume-Weighted Funding Rate History
   description: |
-    Volume weighted funding rate history  
+    Volume weighted funding rate OHLC history across exchanges  
+    **Plan Availability:** All plans (interval limits apply)  
+    **Interval Limits:** Hobbyist >=4h, Startup >=30m, Standard+ no limit  
     **Example cURL:**  
     ```shell
-    curl --request GET "https://open-api-v4.coinglass.com/api/futures/funding-rate/vol-weight-history?symbol=BTC&interval=1h"
+    curl --request GET "https://open-api-v4.coinglass.com/api/futures/funding-rate/vol-weight-history?symbol=BTCUSDT&interval=1h"
     ```
   securedBy: [apiKey]
   get:
@@ -557,36 +864,59 @@ types:
       symbol:
         type: string
         required: true
+        description: Cryptocurrency symbol
+        example: BTC
       interval:
         type: string
         required: true
         enum: [1m, 3m, 5m, 15m, 30m, 1h, 4h, 6h, 8h, 12h, 1d, 1w]
+        description: Time interval for OHLC data
+        example: 1h
       startTime:
         type: integer
         format: int64
         required: false
+        description: Start timestamp in milliseconds
       endTime:
         type: integer
         format: int64
         required: false
+        description: End timestamp in milliseconds
       limit:
         type: integer
         required: false
         maximum: 1000
+        description: Number of data points to return
+        default: 100
     responses:
       200:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": [
+                  {
+                    "time": 1658880000000,
+                    "open": "0.004603",
+                    "high": "0.009388",
+                    "low": "-0.005063",
+                    "close": "0.009229"
+                  }
+                ]
+              }
 
 /api/futures/funding-rate/exchange-list:
   displayName: Funding Rate by Exchange
   description: |
-    Current funding rates by exchange  
+    Current funding rates by exchange for stablecoin and coin margin modes  
     **Cache:** Every 20 seconds  
+    **Plan Availability:** All plans  
     **Example cURL:**  
     ```shell
-    curl --request GET "https://open-api-v4.coinglass.com/api/futures/funding-rate/exchange-list?symbol=BTC"
+    curl --request GET "https://open-api-v4.coinglass.com/api/futures/funding-rate/exchange-list?symbol=BTCUSDT"
     ```
   securedBy: [apiKey]
   get:
@@ -594,22 +924,54 @@ types:
       symbol:
         type: string
         required: false
+        description: Cryptocurrency symbol to filter by
+        example: BTC
       ex:
         type: string
         required: false
+        description: Exchange name to filter by
+        example: BINANCE
     responses:
       200:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": [
+                  {
+                    "symbol": "BTC",
+                    "stablecoin_margin_list": [
+                      {
+                        "exchange": "Binance",
+                        "funding_rate_interval": 8,
+                        "funding_rate": 0.007343,
+                        "next_funding_time": 1745222400000
+                      }
+                    ],
+                    "token_margin_list": [
+                      {
+                        "exchange": "Binance",
+                        "funding_rate_interval": 8,
+                        "funding_rate": -0.001829,
+                        "next_funding_time": 1745222400000
+                      }
+                    ]
+                  }
+                ]
+              }
 
 /api/futures/funding-rate/accumulated-exchange-list:
   displayName: Accumulated Funding Rate by Exchange
   description: |
-    Accumulated funding rate data by exchange  
+    Accumulated funding rate data by exchange for both margin types  
+    **Cache:** Every 1 hour  
+    **Plan Availability:** All plans  
     **Example cURL:**  
     ```shell
-    curl --request GET "https://open-api-v4.coinglass.com/api/futures/funding-rate/accumulated-exchange-list?symbol=BTC"
+    curl --request GET "https://open-api-v4.coinglass.com/api/futures/funding-rate/accumulated-exchange-list?symbol=BTCUSDT"
     ```
   securedBy: [apiKey]
   get:
@@ -617,745 +979,894 @@ types:
       symbol:
         type: string
         required: false
+        description: Cryptocurrency symbol to filter by
+        example: BTC
       ex:
         type: string
         required: false
+        description: Exchange name to filter by
+        example: BINANCE
     responses:
       200:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": [
+                  {
+                    "symbol": "BTC",
+                    "stablecoin_margin_list": [
+                      {
+                        "exchange": "BINANCE",
+                        "funding_rate": 0.001873
+                      }
+                    ],
+                    "token_margin_list": [
+                      {
+                        "exchange": "BINANCE",
+                        "funding_rate": -0.003149
+                      }
+                    ]
+                  }
+                ]
+              }
 
 /api/futures/funding-rate/arbitrage:
   displayName: Funding Rate Arbitrage
   description: |
-    Funding rate arbitrage opportunities  
-    **Plan Availability:** Standard+ only  
-    **Cache:** Every 30 seconds  
+    Funding rate arbitrage opportunities between exchanges showing potential profit from funding rate differences  
+    **Plan Availability:** Startup, Standard, Professional, Enterprise (Not available for Hobbyist plan)  
+    **Cache:** 20 second for all the API plans  
     **Example cURL:**  
     ```shell
-    curl --request GET "https://open-api-v4.coinglass.com/api/futures/funding-rate/arbitrage?symbol=BTC&minSpread=0.001"
+    curl --request GET "https://open-api-v4.coinglass.com/api/futures/funding-rate/arbitrage"
     ```
   securedBy: [apiKey]
   get:
-    queryParameters:
-      symbol:
-        type: string
-        required: true
-      minSpread:
-        type: number
-        required: false
-      limit:
-        type: integer
-        required: false
-        maximum: 100
     responses:
       200:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": [
+                  {
+                    "symbol": "SUPRA",
+                    "buy": {
+                      "exchange": "MEXC",
+                      "open_interest_usd": 848218.2833,
+                      "funding_rate_interval": 4,
+                      "funding_rate": -0.994
+                    },
+                    "sell": {
+                      "exchange": "Gate.io",
+                      "open_interest_usd": 448263.5072,
+                      "funding_rate_interval": 4,
+                      "funding_rate": 0.005
+                    },
+                    "apr": 2187.81,
+                    "funding": 0.999,
+                    "fee": 0.03,
+                    "spread": -0.09,
+                    "next_funding_time": 1745222400000
+                  }
+                ]
+              }
 
 # Long/Short Ratio Endpoints
 /api/futures/global-long-short-account-ratio/history:
   displayName: Global Long/Short Account Ratio
   description: |
-    Historical global account ratio data  
+    Historical global long/short account ratio data showing percentage distribution of long and short accounts  
+    **Plan Availability:** Available on all API plans (Hobbyist to Enterprise)  
     **Example cURL:**  
     ```shell
-    curl --request GET "https://open-api-v4.coinglass.com/api/futures/global-long-short-account-ratio/history?symbol=BTC&interval=1h"
+    curl --request GET "https://open-api-v4.coinglass.com/api/futures/global-long-short-account-ratio/history"
     ```
   securedBy: [apiKey]
   get:
-    queryParameters:
-      symbol:
-        type: string
-        required: true
-      interval:
-        type: string
-        required: true
-        enum: [5m, 15m, 30m, 1h, 4h, 1d]
-      startTime:
-        type: integer
-        format: int64
-        required: false
-      endTime:
-        type: integer
-        format: int64
-        required: false
-      limit:
-        type: integer
-        required: false
-        maximum: 1000
     responses:
       200:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": [
+                  {
+                    "time": 1741604400000,
+                    "global_account_long_percent": 73.88,
+                    "global_account_short_percent": 26.12,
+                    "global_account_long_short_ratio": 2.83
+                  }
+                ]
+              }
 
 /api/futures/top-long-short-account-ratio/history:
   displayName: Top Long/Short Account Ratio
   description: |
-    Historical top trader account ratio data  
+    Historical top trader account ratio data showing long/short position distribution among top accounts  
+    **Plan Availability:** Available on all API plans (Hobbyist to Enterprise)  
     **Example cURL:**  
     ```shell
-    curl --request GET "https://open-api-v4.coinglass.com/api/futures/top-long-short-account-ratio/history?symbol=BTC&ex=BINANCE&interval=1h"
+    curl --request GET "https://open-api-v4.coinglass.com/api/futures/top-long-short-account-ratio/history"
     ```
   securedBy: [apiKey]
   get:
-    queryParameters:
-      symbol:
-        type: string
-        required: true
-      ex:
-        type: string
-        required: true
-      interval:
-        type: string
-        required: true
-        enum: [5m, 15m, 30m, 1h, 4h, 1d]
-      startTime:
-        type: integer
-        format: int64
-        required: false
-      endTime:
-        type: integer
-        format: int64
-        required: false
-      limit:
-        type: integer
-        required: false
-        maximum: 1000
     responses:
       200:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": [
+                  {
+                    "time": 1741615200000,
+                    "top_account_long_percent": 73.3,
+                    "top_account_short_percent": 26.7,
+                    "top_account_long_short_ratio": 2.75
+                  }
+                ]
+              }
 
 /api/futures/top-long-short-position-ratio/history:
   displayName: Top Long/Short Position Ratio
   description: |
-    Historical top trader position ratio data  
+    Historical top trader position ratio data showing long/short position distribution among top position holders  
+    **Plan Availability:** Available on all API plans (Hobbyist to Enterprise)  
     **Example cURL:**  
     ```shell
-    curl --request GET "https://open-api-v4.coinglass.com/api/futures/top-long-short-position-ratio/history?symbol=BTC&ex=BINANCE&interval=1h"
+    curl --request GET "https://open-api-v4.coinglass.com/api/futures/top-long-short-position-ratio/history"
     ```
   securedBy: [apiKey]
   get:
-    queryParameters:
-      symbol:
-        type: string
-        required: true
-      ex:
-        type: string
-        required: true
-      interval:
-        type: string
-        required: true
-        enum: [5m, 15m, 30m, 1h, 4h, 1d]
-      startTime:
-        type: integer
-        format: int64
-        required: false
-      endTime:
-        type: integer
-        format: int64
-        required: false
-      limit:
-        type: integer
-        required: false
-        maximum: 1000
     responses:
       200:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": [
+                  {
+                    "time": 1741615200000,
+                    "top_position_long_percent": 64.99,
+                    "top_position_short_percent": 35.01,
+                    "top_position_long_short_ratio": 1.86
+                  }
+                ]
+              }
 
 # Taker Buy/Sell Volume Endpoints
 /api/futures/taker-buy-sell-volume/exchange-list:
   displayName: Taker Buy/Sell Volume by Exchange
   description: |
-    Current taker buy/sell volume by exchange  
+    Current taker buy/sell volume data aggregated by exchange with buy/sell ratios and USD volume metrics  
+    **Plan Availability:** Available across all plans: Hobbyist, Startup, Standard, Professional, Enterprise  
+    **Cache:** 1 second for all the API plans  
     **Example cURL:**  
     ```shell
-    curl --request GET "https://open-api-v4.coinglass.com/api/futures/taker-buy-sell-volume/exchange-list?symbol=BTC&ex=BINANCE"
+    curl --request GET "https://open-api-v4.coinglass.com/api/futures/taker-buy-sell-volume/exchange-list?symbol=BTCUSDT&range=4h"
     ```
   securedBy: [apiKey]
   get:
     queryParameters:
       symbol:
         type: string
-        required: false
-      ex:
+        required: true
+        description: Symbol (e.g., 'BTCUSDT')
+      range:
         type: string
-        required: false
+        required: true
+        description: Time range (e.g., '4h', '24h')
     responses:
       200:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": [
+                  {
+                    "symbol": "BTC",
+                    "buy_ratio": 52.3,
+                    "sell_ratio": 47.7,
+                    "buy_vol_usd": 1500000000,
+                    "sell_vol_usd": 1373000000,
+                    "exchange_list": [
+                      {
+                        "exchange": "Binance",
+                        "buy_ratio": 53.1,
+                        "sell_ratio": 46.9,
+                        "buy_vol_usd": 750000000,
+                        "sell_vol_usd": 695000000
+                      },
+                      {
+                        "exchange": "OKX",
+                        "buy_ratio": 51.5,
+                        "sell_ratio": 48.5,
+                        "buy_vol_usd": 750000000,
+                        "sell_vol_usd": 678000000
+                      }
+                    ]
+                  }
+                ]
+              }
 
 /api/futures/taker-buy-sell-volume/history:
   displayName: Taker Buy/Sell Volume History
   description: |
-    Historical taker buy/sell volume data  
+    Historical taker buy/sell volume data providing long/short ratio insights for futures market  
+    **Plan Availability:** Available across all API plans (Hobbyist to Enterprise)  
     **Example cURL:**  
     ```shell
-    curl --request GET "https://open-api-v4.coinglass.com/api/futures/taker-buy-sell-volume/history?symbol=BTC&ex=BINANCE&interval=1h"
+    curl --request GET "https://open-api-v4.coinglass.com/api/futures/v2/taker-buy-sell-volume/history"
     ```
   securedBy: [apiKey]
   get:
-    queryParameters:
-      symbol:
-        type: string
-        required: true
-      ex:
-        type: string
-        required: true
-      interval:
-        type: string
-        required: true
-        enum: [1m, 3m, 5m, 15m, 30m, 1h, 4h, 6h, 8h, 12h, 1d, 1w]
-      startTime:
-        type: integer
-        format: int64
-        required: false
-      endTime:
-        type: integer
-        format: int64
-        required: false
-      limit:
-        type: integer
-        required: false
-        maximum: 1000
     responses:
       200:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "data": [
+                  {
+                    "time": 1750183200000,
+                    "taker_buy_volume_usd": "414120141.0714",
+                    "taker_sell_volume_usd": "350417509.655"
+                  }
+                ]
+              }
 
 /api/futures/aggregated-taker-buy-sell-volume/history:
   displayName: Aggregated Taker Buy/Sell Volume History
   description: |
-    Aggregated taker buy/sell volume across exchanges  
+    Historical aggregated taker buy/sell volume data across all exchanges providing long/short ratio insights  
+    **Plan Availability:** Available on all plans (Hobbyist to Enterprise)  
     **Example cURL:**  
     ```shell
-    curl --request GET "https://open-api-v4.coinglass.com/api/futures/aggregated-taker-buy-sell-volume/history?symbol=BTC&interval=1h"
+    curl --request GET "https://open-api-v4.coinglass.com/api/futures/aggregated-taker-buy-sell-volume/history"
     ```
   securedBy: [apiKey]
   get:
-    queryParameters:
-      symbol:
-        type: string
-        required: true
-      interval:
-        type: string
-        required: true
-        enum: [1m, 3m, 5m, 15m, 30m, 1h, 4h, 6h, 8h, 12h, 1d, 1w]
-      startTime:
-        type: integer
-        format: int64
-        required: false
-      endTime:
-        type: integer
-        format: int64
-        required: false
-      limit:
-        type: integer
-        required: false
-        maximum: 1000
     responses:
       200:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": [
+                  {
+                    "time": 1741622400000,
+                    "aggregated_buy_volume_usd": 968834542.3787,
+                    "aggregated_sell_volume_usd": 1054582654.8138
+                  }
+                ]
+              }
 
 # Liquidation Endpoints
 /api/futures/liquidation/history:
   displayName: Liquidation History
   description: |
-    Historical liquidation data for pairs  
+    Historical liquidation data for long and short positions of a trading pair  
+    **Plan Availability:** Available across all API plans (Hobbyist to Enterprise)  
+    **Interval Limits:** Hobbyist: >= 4 hours, Startup: >= 30 minutes, Standard/Professional/Enterprise: No limits  
     **Example cURL:**  
     ```shell
-    curl --request GET "https://open-api-v4.coinglass.com/api/futures/liquidation/history?ex=BINANCE&symbol=BTC&interval=1h"
+    curl --request GET "https://open-api-v4.coinglass.com/api/futures/liquidation/history"
     ```
   securedBy: [apiKey]
   get:
-    queryParameters:
-      ex:
-        type: string
-        required: true
-      symbol:
-        type: string
-        required: true
-      interval:
-        type: string
-        required: true
-        enum: [1m, 3m, 5m, 15m, 30m, 1h, 4h, 6h, 8h, 12h, 1d, 1w]
     responses:
       200:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": [
+                  {
+                    "time": 1658880000000,
+                    "long_liquidation_usd": "2369935.19562",
+                    "short_liquidation_usd": "6947459.43674"
+                  }
+                ]
+              }
 
 /api/futures/liquidation/aggregated-history:
   displayName: Aggregated Liquidation History
   description: |
-    Aggregated liquidation data across exchanges  
+    Aggregated historical liquidation data across all exchanges for total long and short position liquidations  
+    **Plan Availability:** Available on all plans (Hobbyist to Enterprise)  
+    **Interval Limits:** Hobbyist: >= 4 hours, Startup: >= 30 minutes, Standard/Professional/Enterprise: No limits  
     **Example cURL:**  
     ```shell
-    curl --request GET "https://open-api-v4.coinglass.com/api/futures/liquidation/aggregated-history?symbol=BTC&interval=1h"
+    curl --request GET "https://open-api-v4.coinglass.com/api/futures/liquidation/aggregated-history"
     ```
   securedBy: [apiKey]
   get:
-    queryParameters:
-      symbol:
-        type: string
-        required: true
-      interval:
-        type: string
-        required: true
-        enum: [1m, 3m, 5m, 15m, 30m, 1h, 4h, 6h, 8h, 12h, 1d, 1w]
-      startTime:
-        type: integer
-        format: int64
-        required: false
-      endTime:
-        type: integer
-        format: int64
-        required: false
-      limit:
-        type: integer
-        required: false
-        maximum: 1000
     responses:
       200:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": [
+                  {
+                    "time": 1658966400000,
+                    "aggregated_long_liquidation_usd": 5916885.14234,
+                    "aggregated_short_liquidation_usd": 12969583.87632
+                  }
+                ]
+              }
 
 /api/futures/liquidation/coin-list:
   displayName: Liquidation by Coin
   description: |
-    Liquidation data grouped by coin  
-    **Plan Availability:** Startup+ only  
+    Liquidation statistics grouped by coin symbol showing liquidation amounts for different time periods (24h, 12h, 4h, 1h)  
+    **Plan Availability:** Startup, Standard, Professional, and Enterprise (Not available on Hobbyist plan)  
     **Example cURL:**  
     ```shell
-    curl --request GET "https://open-api-v4.coinglass.com/api/futures/liquidation/coin-list?ex=BINANCE"
+    curl --request GET "https://open-api-v4.coinglass.com/api/futures/liquidation/coin-list"
     ```
   securedBy: [apiKey]
   get:
-    queryParameters:
-      ex:
-        type: string
-        required: false
     responses:
       200:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": [
+                  {
+                    "symbol": "BTC",
+                    "liquidation_24h_total_usd": 82280481.50,
+                    "liquidation_24h_long_usd": 68437447.34,
+                    "liquidation_24h_short_usd": 13843034.17,
+                    "liquidation_12h_total_usd": 45000000.00,
+                    "liquidation_12h_long_usd": 35000000.00,
+                    "liquidation_12h_short_usd": 10000000.00,
+                    "liquidation_4h_total_usd": 15000000.00,
+                    "liquidation_4h_long_usd": 12000000.00,
+                    "liquidation_4h_short_usd": 3000000.00,
+                    "liquidation_1h_total_usd": 5000000.00,
+                    "liquidation_1h_long_usd": 4000000.00,
+                    "liquidation_1h_short_usd": 1000000.00
+                  }
+                ]
+              }
 
 /api/futures/liquidation/exchange-list:
   displayName: Liquidation by Exchange
   description: |
-    Current liquidation data by exchange  
+    Current liquidation data aggregated by exchange showing total, long, and short liquidation amounts  
+    **Plan Availability:** Available on all plans (Hobbyist, Startup, Standard, Professional, Enterprise)  
+    **Cache:** 10 second for all the API plans  
     **Example cURL:**  
     ```shell
-    curl --request GET "https://open-api-v4.coinglass.com/api/futures/liquidation/exchange-list?symbol=BTC"
+    curl --request GET "https://open-api-v4.coinglass.com/api/futures/liquidation/exchange-list"
     ```
   securedBy: [apiKey]
   get:
-    queryParameters:
-      symbol:
-        type: string
-        required: false
-      ex:
-        type: string
-        required: false
     responses:
       200:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": [
+                  {
+                    "exchange": "All",
+                    "liquidation_usd": 150000000.0,
+                    "long_liquidation_usd": 90000000.0,
+                    "short_liquidation_usd": 60000000.0
+                  },
+                  {
+                    "exchange": "Binance",
+                    "liquidation_usd": 75000000.0,
+                    "long_liquidation_usd": 45000000.0,
+                    "short_liquidation_usd": 30000000.0
+                  }
+                ]
+              }
 
 /api/futures/liquidation/order:
   displayName: Liquidation Orders
   description: |
-    Recent liquidation orders  
-    **Plan Availability:** Standard+ only  
-    **Cache:** Every 1 second  
+    Recent individual liquidation order data from the past 7 days with exchange, symbol, price, and order details  
+    **Plan Availability:** Standard, Professional, and Enterprise plans (Not available on Hobbyist or Startup plans)  
+    **Cache:** 1 second for all the API plans  
     **Example cURL:**  
     ```shell
-    curl --request GET "https://open-api-v4.coinglass.com/api/futures/liquidation/order?ex=BINANCE&symbol=BTC"
+    curl --request GET "https://open-api-v4.coinglass.com/api/futures/liquidation/order"
     ```
   securedBy: [apiKey]
   get:
-    queryParameters:
-      ex:
-        type: string
-        required: true
-      symbol:
-        type: string
-        required: true
     responses:
       200:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": [
+                  {
+                    "exchange_name": "BINANCE",
+                    "symbol": "BTCUSDT",
+                    "base_asset": "BTC",
+                    "price": 87535.9,
+                    "usd_value": 205534.2932,
+                    "side": 2,
+                    "time": 1745216319263
+                  }
+                ]
+              }
 
 # Liquidation Heatmap Endpoints
 /api/futures/liquidation/heatmap/model1:
   displayName: Liquidation Heatmap Model 1
   description: |
-    Liquidation heatmap visualization data  
-    **Plan Availability:** Professional+ only  
+    Liquidation heatmap visualization data with price levels and liquidation leverage data for chart display  
+    **Plan Availability:** Professional and Enterprise API plans only  
+    **Cache:** Real time for all the API plans  
     **Example cURL:**  
     ```shell
-    curl --request GET "https://open-api-v4.coinglass.com/api/futures/liquidation/heatmap/model1?ex=BINANCE&symbol=BTC"
+    curl --request GET "https://open-api-v4.coinglass.com/api/futures/liquidation/heatmap/model1"
     ```
   securedBy: [apiKey]
   get:
-    queryParameters:
-      ex:
-        type: string
-        required: true
-      symbol:
-        type: string
-        required: true
     responses:
       200:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": {
+                  "y_axis": [85000, 85100, 85200, 85300],
+                  "liquidation_leverage_data": [[0, 1, 1500000], [1, 2, 2300000]],
+                  "price_candlesticks": [[1745216400, 85050, 85200, 84900, 85100, 15000000]]
+                }
+              }
 
 /api/futures/liquidation/heatmap/model2:
   displayName: Liquidation Heatmap Model 2
   description: |
-    Alternative liquidation heatmap model  
-    **Plan Availability:** Professional+ only  
+    Alternative liquidation heatmap model with price levels and liquidation leverage calculations  
+    **Plan Availability:** Professional and Enterprise API plans only  
+    **Cache:** Real time for all the API plans  
     **Example cURL:**  
     ```shell
-    curl --request GET "https://open-api-v4.coinglass.com/api/futures/liquidation/heatmap/model2?ex=BINANCE&symbol=BTC"
+    curl --request GET "https://open-api-v4.coinglass.com/api/futures/liquidation/heatmap/model2"
     ```
   securedBy: [apiKey]
   get:
-    queryParameters:
-      ex:
-        type: string
-        required: true
-      symbol:
-        type: string
-        required: true
     responses:
       200:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": {
+                  "y_axis": [85000, 85100, 85200, 85300],
+                  "liquidation_leverage_data": [[0, 1, 1500000], [1, 2, 2300000]],
+                  "price_candlesticks": [[1745216400, 85050, 85200, 84900, 85100, 15000000]]
+                }
+              }
 
 /api/futures/liquidation/heatmap/model3:
   displayName: Liquidation Heatmap Model 3
   description: |
-    Third liquidation heatmap model  
-    **Plan Availability:** Professional+ only  
+    Third liquidation heatmap model providing heatmap-style visualization of liquidation levels across different price points and leverage levels  
+    **Plan Availability:** Professional and Enterprise API plans only  
+    **Cache:** Real time for all the API plans  
     **Example cURL:**  
     ```shell
-    curl --request GET "https://open-api-v4.coinglass.com/api/futures/liquidation/heatmap/model3?ex=BINANCE&symbol=BTC"
+    curl --request GET "https://open-api-v4.coinglass.com/api/futures/liquidation/heatmap/model3"
     ```
   securedBy: [apiKey]
   get:
-    queryParameters:
-      ex:
-        type: string
-        required: true
-      symbol:
-        type: string
-        required: true
     responses:
       200:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": {
+                  "y_axis": [85000, 85100, 85200, 85300],
+                  "liquidation_leverage_data": [[0, 1, 1500000], [1, 2, 2300000]],
+                  "price_candlesticks": [[1745216400, 85050, 85200, 84900, 85100, 15000000]]
+                }
+              }
 
 /api/futures/liquidation/aggregated-heatmap/model1:
   displayName: Aggregated Liquidation Heatmap Model 1
   description: |
-    Aggregated liquidation heatmap across exchanges  
-    **Plan Availability:** Professional+ only  
+    Aggregated liquidation heatmap across all exchanges showing consolidated liquidation levels  
+    **Plan Availability:** Professional and Enterprise API plans only  
+    **Cache:** Real time for all the API plans  
     **Example cURL:**  
     ```shell
-    curl --request GET "https://open-api-v4.coinglass.com/api/futures/liquidation/aggregated-heatmap/model1?symbol=BTC"
+    curl --request GET "https://open-api-v4.coinglass.com/api/futures/liquidation/aggregated-heatmap/model1"
     ```
   securedBy: [apiKey]
   get:
-    queryParameters:
-      symbol:
-        type: string
-        required: true
     responses:
       200:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": {
+                  "y_axis": [85000, 85100, 85200, 85300],
+                  "liquidation_leverage_data": [[0, 1, 1500000], [1, 2, 2300000]],
+                  "price_candlesticks": [[1745216400, 85050, 85200, 84900, 85100, 15000000]]
+                }
+              }
 
 /api/futures/liquidation/aggregated-heatmap/model2:
   displayName: Aggregated Liquidation Heatmap Model 2
   description: |
-    Alternative aggregated liquidation heatmap  
-    **Plan Availability:** Professional+ only  
+    Alternative aggregated liquidation heatmap model providing real-time liquidation levels across all exchanges  
+    **Plan Availability:** Professional and Enterprise API plans only  
+    **Cache:** Real time for all the API plans  
     **Example cURL:**  
     ```shell
-    curl --request GET "https://open-api-v4.coinglass.com/api/futures/liquidation/aggregated-heatmap/model2?symbol=BTC"
+    curl --request GET "https://open-api-v4.coinglass.com/api/futures/liquidation/aggregated-heatmap/model2"
     ```
   securedBy: [apiKey]
   get:
-    queryParameters:
-      symbol:
-        type: string
-        required: true
     responses:
       200:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": {
+                  "y_axis": [85000, 85100, 85200, 85300],
+                  "liquidation_leverage_data": [[0, 1, 1500000], [1, 2, 2300000]],
+                  "price_candlesticks": [[1745216400, 85050, 85200, 84900, 85100, 15000000]]
+                }
+              }
 
 /api/futures/liquidation/aggregated-heatmap/model3:
   displayName: Aggregated Liquidation Heatmap Model 3
   description: |
-    Third aggregated liquidation heatmap model  
-    **Plan Availability:** Professional+ only  
+    Third aggregated liquidation heatmap model providing real-time aggregated liquidation levels across all exchanges  
+    **Plan Availability:** Professional and Enterprise API plans only  
+    **Cache:** Real time for all the API plans  
     **Example cURL:**  
     ```shell
-    curl --request GET "https://open-api-v4.coinglass.com/api/futures/liquidation/aggregated-heatmap/model3?symbol=BTC"
+    curl --request GET "https://open-api-v4.coinglass.com/api/futures/liquidation/aggregated-heatmap/model3"
     ```
   securedBy: [apiKey]
   get:
-    queryParameters:
-      symbol:
-        type: string
-        required: true
     responses:
       200:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": {
+                  "y_axis": [85000, 85100, 85200, 85300],
+                  "liquidation_leverage_data": [[0, 1, 1500000], [1, 2, 2300000]],
+                  "price_candlesticks": [[1745216400, 85050, 85200, 84900, 85100, 15000000]]
+                }
+              }
 
 /api/futures/liquidation/map:
   displayName: Liquidation Map
   description: |
-    Liquidation map visualization  
-    **Plan Availability:** Professional+ only  
+    Liquidation map visualization providing mapped liquidation events with price, level, and leverage data  
+    **Plan Availability:** Professional and Enterprise API plans only  
+    **Cache:** Real time for all the API plans  
     **Example cURL:**  
     ```shell
-    curl --request GET "https://open-api-v4.coinglass.com/api/futures/liquidation/map?ex=BINANCE&symbol=BTC"
+    curl --request GET "https://open-api-v4.coinglass.com/api/futures/liquidation/map"
     ```
   securedBy: [apiKey]
   get:
-    queryParameters:
-      ex:
-        type: string
-        required: true
-      symbol:
-        type: string
-        required: true
     responses:
       200:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": {
+                  "data": {
+                    "48935": [
+                      [
+                        48935,
+                        1579370.77,
+                        25,
+                        null
+                      ]
+                    ]
+                  }
+                }
+              }
 
 /api/futures/liquidation/aggregated-map:
   displayName: Aggregated Liquidation Map
   description: |
-    Aggregated liquidation map across exchanges  
-    **Plan Availability:** Professional+ only  
+    Aggregated liquidation map visualization across all exchanges showing liquidation price and level data  
+    **Plan Availability:** Professional and Enterprise API plans only  
+    **Cache:** Real time for all the API plans  
     **Example cURL:**  
     ```shell
-    curl --request GET "https://open-api-v4.coinglass.com/api/futures/liquidation/aggregated-map?symbol=BTC"
+    curl --request GET "https://open-api-v4.coinglass.com/api/futures/liquidation/aggregated-map"
     ```
   securedBy: [apiKey]
   get:
-    queryParameters:
-      symbol:
-        type: string
-        required: true
     responses:
       200:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": {
+                  "data": {
+                    "48935": [
+                      [
+                        48935,
+                        1579370.77,
+                        null,
+                        null
+                      ]
+                    ]
+                  }
+                }
+              }
 
 # Orderbook Endpoints
 /api/futures/orderbook/ask-bids-history:
   displayName: Futures Ask/Bids History
   description: |
-    Historical ask/bid data for futures  
+    Historical order book data for futures showing bid/ask amounts and quantities over time  
+    **Plan Availability:** Available on all plans (Hobbyist to Enterprise)  
+    **Cache:** every 5 seconds for all the API plans  
     **Example cURL:**  
     ```shell
-    curl --request GET "https://open-api-v4.coinglass.com/api/futures/orderbook/ask-bids-history?symbol=BTC&ex=BINANCE&interval=1h"
+    curl --request GET "https://open-api-v4.coinglass.com/api/futures/orderbook/ask-bids-history"
     ```
   securedBy: [apiKey]
   get:
-    queryParameters:
-      symbol:
-        type: string
-        required: true
-      ex:
-        type: string
-        required: true
-      interval:
-        type: string
-        required: true
-        enum: [1m, 3m, 5m, 15m, 30m, 1h, 4h, 6h, 8h, 12h, 1d, 1w]
-      startTime:
-        type: integer
-        format: int64
-        required: false
-      endTime:
-        type: integer
-        format: int64
-        required: false
-      limit:
-        type: integer
-        required: false
-        maximum: 1000
     responses:
       200:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": [
+                  {
+                    "bids_usd": 150000000.0,
+                    "bids_quantity": 3500.5,
+                    "asks_usd": 140000000.0,
+                    "asks_quantity": 3250.2,
+                    "time": 1745216400000
+                  }
+                ]
+              }
 
 /api/futures/orderbook/aggregated-ask-bids-history:
   displayName: Aggregated Futures Ask/Bids History
   description: |
-    Aggregated ask/bid data across exchanges  
+    Historical aggregated order book data across all exchanges showing consolidated bid/ask amounts and quantities  
+    **Plan Availability:** Available across all API plans (Hobbyist to Enterprise)  
     **Example cURL:**  
     ```shell
-    curl --request GET "https://open-api-v4.coinglass.com/api/futures/orderbook/aggregated-ask-bids-history?symbol=BTC&interval=1h"
+    curl --request GET "https://open-api-v4.coinglass.com/api/futures/orderbook/aggregated-ask-bids-history"
     ```
   securedBy: [apiKey]
   get:
-    queryParameters:
-      symbol:
-        type: string
-        required: true
-      interval:
-        type: string
-        required: true
-        enum: [1m, 3m, 5m, 15m, 30m, 1h, 4h, 6h, 8h, 12h, 1d, 1w]
-      startTime:
-        type: integer
-        format: int64
-        required: false
-      endTime:
-        type: integer
-        format: int64
-        required: false
-      limit:
-        type: integer
-        required: false
-        maximum: 1000
     responses:
       200:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": [
+                  {
+                    "aggregated_bids_usd": 500000000.0,
+                    "aggregated_bids_quantity": 12000.5,
+                    "aggregated_asks_usd": 480000000.0,
+                    "aggregated_asks_quantity": 11500.2,
+                    "time": 1745216400000
+                  }
+                ]
+              }
 
 /api/futures/orderbook/history:
   displayName: Futures Orderbook History
   description: |
-    Historical orderbook data  
+    Historical orderbook heatmap data showing price levels and quantities over time  
+    **Plan Availability:** Standard, Professional, Enterprise (Not available for Hobbyist or Startup plans)  
+    **Cache:** Real time for all the API plans  
     **Example cURL:**  
     ```shell
-    curl --request GET "https://open-api-v4.coinglass.com/api/futures/orderbook/history?symbol=BTC&ex=BINANCE"
+    curl --request GET "https://open-api-v4.coinglass.com/api/futures/orderbook/history"
     ```
   securedBy: [apiKey]
   get:
-    queryParameters:
-      symbol:
-        type: string
-        required: true
-      ex:
-        type: string
-        required: true
-      startTime:
-        type: integer
-        format: int64
-        required: false
-      endTime:
-        type: integer
-        format: int64
-        required: false
-      limit:
-        type: integer
-        required: false
-        maximum: 1000
     responses:
       200:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": [
+                  [
+                    1723611600,
+                    [
+                      [56420, 4.777],
+                      [40300, 2.191]
+                    ],
+                    [
+                      [56420, 4.777],
+                      [40300, 2.191]
+                    ]
+                  ]
+                ],
+                "success": true
+              }
 
 /api/futures/orderbook/large-limit-order:
   displayName: Futures Large Limit Orders
   description: |
-    Current large limit orders in futures  
-    **Plan Availability:** Standard+ only  
+    Current large open limit orders from the order book (BTC: ≥ 1M, ETH: ≥ 500K, Other: ≥ 50K)  
+    **Plan Availability:** Standard, Professional, Enterprise (Not available on Hobbyist or Startup plans)  
+    **Cache:** Real time for all the API plans  
     **Example cURL:**  
     ```shell
-    curl --request GET "https://open-api-v4.coinglass.com/api/futures/orderbook/large-limit-order?symbol=BTC&ex=BINANCE"
+    curl --request GET "https://open-api-v4.coinglass.com/api/futures/orderbook/large-limit-order"
     ```
   securedBy: [apiKey]
   get:
-    queryParameters:
-      symbol:
-        type: string
-        required: true
-      ex:
-        type: string
-        required: true
     responses:
       200:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": [
+                  {
+                    "id": "12345",
+                    "exchange_name": "Binance",
+                    "symbol": "BTCUSDT",
+                    "base_asset": "BTC",
+                    "quote_asset": "USDT",
+                    "price": 85000.0,
+                    "start_time": 1745216400000,
+                    "start_quantity": 25.5,
+                    "start_usd_value": 2167500.0,
+                    "current_quantity": 20.3,
+                    "current_usd_value": 1725500.0,
+                    "current_time": 1745219400000,
+                    "executed_volume": 5.2,
+                    "executed_usd_value": 442000.0,
+                    "trade_count": 15,
+                    "order_side": 2,
+                    "order_state": 1
+                  }
+                ]
+              }
 
 /api/futures/orderbook/large-limit-order-history:
   displayName: Futures Large Limit Order History
   description: |
-    Historical large limit orders for futures  
-    **Plan Availability:** Standard+ only  
+    Historical completed large limit orders (BTC: ≥ 1M, ETH: ≥ 500K, Other: ≥ 50K)  
+    **Plan Availability:** Standard, Professional, Enterprise (Not available on Hobbyist or Startup plans)  
+    **Cache:** Real time for all the API plans  
     **Example cURL:**  
     ```shell
-    curl --request GET "https://open-api-v4.coinglass.com/api/futures/orderbook/large-limit-order-history?symbol=BTC&ex=BINANCE"
+    curl --request GET "https://open-api-v4.coinglass.com/api/futures/orderbook/large-limit-order-history"
     ```
   securedBy: [apiKey]
   get:
-    queryParameters:
-      symbol:
-        type: string
-        required: true
-      ex:
-        type: string
-        required: true
-      startTime:
-        type: integer
-        format: int64
-        required: false
-      endTime:
-        type: integer
-        format: int64
-        required: false
     responses:
       200:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": [
+                  {
+                    "id": "12346",
+                    "exchange_name": "Binance",
+                    "symbol": "BTCUSDT",
+                    "base_asset": "BTC",
+                    "quote_asset": "USDT",
+                    "price": 84500.0,
+                    "start_time": 1745216400000,
+                    "start_quantity": 30.0,
+                    "start_usd_value": 2535000.0,
+                    "current_quantity": 0.0,
+                    "current_usd_value": 0.0,
+                    "order_side": 1,
+                    "order_state": 2
+                  }
+                ]
+              }
 
 # Hyperliquid Endpoints
 /api/hyperliquid/whale-alert:
   displayName: Hyperliquid Whale Alert
   description: |
-    Real-time whale alerts on Hyperliquid (positions >$1M)  
-    **Cache:** Real-time  
+    Real-time whale alerts on Hyperliquid highlighting positions with notional value over $1 million  
+    **Plan Availability:** Startup, Standard, Professional, Enterprise (Not available on Hobbyist plan)  
+    **Cache:** Real time for all the API plans  
     **Example cURL:**  
     ```shell
     curl --request GET "https://open-api-v4.coinglass.com/api/hyperliquid/whale-alert"
@@ -1367,12 +1878,30 @@ types:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": [
+                  {
+                    "user": "0x123456789abcdef...",
+                    "symbol": "ETH",
+                    "position_size": 12700,
+                    "entry_price": 1611.62,
+                    "liq_price": 527.2521,
+                    "position_value_usd": 21003260,
+                    "position_action": 2,
+                    "create_time": 1745219517000
+                  }
+                ]
+              }
 
 /api/hyperliquid/whale-position:
   displayName: Hyperliquid Whale Position
   description: |
-    Whale positions on Hyperliquid (>$1M notional)  
-    **Cache:** Real-time  
+    Current whale positions on Hyperliquid with notional value exceeding $1 million  
+    **Plan Availability:** Startup, Standard, Professional, Enterprise (Not available on Hobbyist plan)  
+    **Cache:** Real time for all the API plans  
     **Example cURL:**  
     ```shell
     curl --request GET "https://open-api-v4.coinglass.com/api/hyperliquid/whale-position"
@@ -1384,13 +1913,37 @@ types:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": [
+                  {
+                    "user": "0x123456789abcdef...",
+                    "symbol": "ETH",
+                    "position_size": 15000,
+                    "entry_price": 1650.0,
+                    "mark_price": 1680.5,
+                    "liq_price": 550.2,
+                    "leverage": 10.5,
+                    "margin_balance": 1500000.0,
+                    "position_value_usd": 25207500,
+                    "unrealized_pnl": 457500.0,
+                    "funding_fee": -1200.5,
+                    "margin_mode": "cross",
+                    "create_time": 1745216400000,
+                    "update_time": 1745219400000
+                  }
+                ]
+              }
 
 # Spot Market Endpoints
 /api/spot/supported-coins:
   displayName: Spot Supported Coins
   description: |
-    Get all supported spot coins  
-    **Cache:** Every 1 minute  
+    Get all supported spot cryptocurrency coins as a list of ticker symbols  
+    **Plan Availability:** Available on all plans: Hobbyist, Startup, Standard, Professional, Enterprise  
+    **Cache:** every 1 minutes for all the API plans  
     **Example cURL:**  
     ```shell
     curl --request GET "https://open-api-v4.coinglass.com/api/spot/supported-coins"
@@ -1402,11 +1955,21 @@ types:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": [
+                  "BTC", "ETH", "USDT", "BNB", "USDC", "XRP", "ADA", "SOL", "DOGE", "TRX"
+                ]
+              }
 
 /api/spot/supported-exchange-pairs:
   displayName: Spot Exchange Pairs
   description: |
-    Get supported spot exchanges and trading pairs  
+    Get comprehensive list of supported spot exchanges and their trading pairs with instrument details  
+    **Plan Availability:** Available across all API plans: Hobbyist, Startup, Standard, Professional, Enterprise  
+    **Cache:** every 1 minutes for all the API plans  
     **Example cURL:**  
     ```shell
     curl --request GET "https://open-api-v4.coinglass.com/api/spot/supported-exchange-pairs"
@@ -1418,12 +1981,45 @@ types:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": {
+                  "Binance": [
+                    {
+                      "instrument_id": "BTCUSDT",
+                      "base_asset": "BTC",
+                      "quote_asset": "USDT"
+                    },
+                    {
+                      "instrument_id": "ETHUSDT",
+                      "base_asset": "ETH",
+                      "quote_asset": "USDT"
+                    }
+                  ],
+                  "Bitget": [
+                    {
+                      "instrument_id": "AAVEUSD",
+                      "base_asset": "AAVE",
+                      "quote_asset": "USD"
+                    },
+                    {
+                      "instrument_id": "ADAUSD",
+                      "base_asset": "ADA",
+                      "quote_asset": "USD"
+                    }
+                  ]
+                }
+              }
 
 /api/spot/coins-markets:
   displayName: Spot Coins Markets
   description: |
-    Spot coin market performance metrics  
-    **Plan Availability:** Standard+ only  
+    Provides performance-related metrics for all available spot coins including price changes across multiple timeframes,
+    trading volumes, market caps, buy/sell breakdowns, and net volume flows.
+    **Plan Availability:** Standard, Professional, Enterprise (not available for Hobbyist/Startup)
+    **Update:** Real-time
     **Example cURL:**  
     ```shell
     curl --request GET "https://open-api-v4.coinglass.com/api/spot/coins-markets"
@@ -1435,11 +2031,46 @@ types:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": [
+                  {
+                    "symbol": "BTC",
+                    "current_price": 87503.55,
+                    "market_cap": 1500000000000,
+                    "price_change_5m": 0.1,
+                    "price_change_percent_5m": 0.001,
+                    "price_change_15m": 0.3,
+                    "price_change_percent_15m": 0.003,
+                    "price_change_30m": 0.5,
+                    "price_change_percent_30m": 0.005,
+                    "price_change_1h": 1.2,
+                    "price_change_percent_1h": 0.012,
+                    "price_change_4h": 2.1,
+                    "price_change_percent_4h": 0.021,
+                    "price_change_12h": 1.8,
+                    "price_change_percent_12h": 0.018,
+                    "price_change_24h": 2735.79,
+                    "price_change_percent_24h": 3.23,
+                    "price_change_1w": 5000.0,
+                    "price_change_percent_1w": 6.05,
+                    "volume_usd_24h": 1585522232.60,
+                    "volume_buy_usd_24h": 792761116.30,
+                    "volume_sell_usd_24h": 792761116.30,
+                    "net_volume_flow_24h": 0.0
+                  }
+                ]
+              }
 
 /api/spot/pairs-markets:
   displayName: Spot Pairs Markets
   description: |
-    Spot pairs market performance data  
+    Provides trading pair market performance data with detailed metrics including price changes, trading volumes,
+    buy/sell volumes, and net flows across different timeframes for each exchange.
+    **Plan Availability:** All plans (Hobbyist, Startup, Standard, Professional, Enterprise)
+    **Update:** Real-time
     **Example cURL:**  
     ```shell
     curl --request GET "https://open-api-v4.coinglass.com/api/spot/pairs-markets"
@@ -1451,6 +2082,35 @@ types:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": [
+                  {
+                    "symbol": "BTC/USDT",
+                    "exchange_name": "Binance",
+                    "current_price": 87503.55,
+                    "price_change_1h": 150.25,
+                    "price_change_percent_1h": 0.17,
+                    "price_change_4h": 680.50,
+                    "price_change_percent_4h": 0.78,
+                    "price_change_12h": 1250.75,
+                    "price_change_percent_12h": 1.45,
+                    "price_change_24h": 2735.79,
+                    "price_change_percent_24h": 3.23,
+                    "price_change_1w": 5000.0,
+                    "price_change_percent_1w": 6.05,
+                    "volume_usd_1h": 125000000.0,
+                    "volume_buy_usd_1h": 62500000.0,
+                    "volume_sell_usd_1h": 62500000.0,
+                    "volume_usd_24h": 1585522232.60,
+                    "volume_buy_usd_24h": 792761116.30,
+                    "volume_sell_usd_24h": 792761116.30,
+                    "net_flows_24h": 0.0
+                  }
+                ]
+              }
 
 /api/spot/price/history:
   displayName: Spot Price History
@@ -1459,7 +2119,7 @@ types:
     **Interval Limits:** Hobbyist >=4h, Startup >=30m, Standard+ no limit  
     **Example cURL:**  
     ```shell
-    curl --request GET "https://open-api-v4.coinglass.com/api/spot/price/history?symbol=BTC&interval=1h"
+    curl --request GET "https://open-api-v4.coinglass.com/api/spot/price/history?symbol=BTCUSDT&interval=1h"
     ```
   securedBy: [apiKey]
   get:
@@ -1493,7 +2153,11 @@ types:
 /api/spot/orderbook/ask-bids-history:
   displayName: Spot Ask/Bids History
   description: |
-    Historical ask/bid data for spot  
+    Retrieve historical spot trading order book data with bid/ask volumes and quantities.
+    Updates every 5 seconds for all API plans.
+    **Plan Availability:** All plans (Hobbyist, Startup, Standard, Professional, Enterprise)
+    **Interval Limits:** Hobbyist ≥4h, Startup ≥30m, Standard/Professional/Enterprise no limit
+    **Cache:** Updated every 5 seconds
     **Example cURL:**  
     ```shell
     curl --request GET "https://open-api-v4.coinglass.com/api/spot/orderbook/ask-bids-history?symbol=BTCUSDT&ex=BINANCE&interval=1h"
@@ -1528,11 +2192,28 @@ types:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": [
+                  {
+                    "bids_usd": 81639959.93,
+                    "bids_quantity": 1276.645,
+                    "asks_usd": 78533053.69,
+                    "asks_quantity": 1217.125,
+                    "time": 1714003200000
+                  }
+                ]
+              }
 
 /api/spot/orderbook/aggregated-ask-bids-history:
   displayName: Aggregated Spot Ask/Bids History
   description: |
-    Aggregated spot ask/bid data across exchanges  
+    Retrieve historical aggregated order book data for spot trading across all supported exchanges.
+    Provides consolidated bid/ask data with total USD values and quantities.
+    **Plan Availability:** All plans (Hobbyist, Startup, Standard, Professional, Enterprise)
+    **Interval Limits:** Hobbyist ≥4h, Startup ≥30m, Standard/Professional/Enterprise no limit
     **Example cURL:**  
     ```shell
     curl --request GET "https://open-api-v4.coinglass.com/api/spot/orderbook/aggregated-ask-bids-history?symbol=BTCUSDT&interval=1h"
@@ -1564,11 +2245,28 @@ types:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": [
+                  {
+                    "aggregated_bids_usd": 12679537.08,
+                    "aggregated_bids_quantity": 197.999,
+                    "aggregated_asks_usd": 10985519.93,
+                    "aggregated_asks_quantity": 170.382,
+                    "time": 1714003200000
+                  }
+                ]
+              }
 
 /api/spot/orderbook/history:
   displayName: Spot Orderbook History
   description: |
-    Historical spot orderbook data  
+    Retrieve historical order book depth data for spot trading, supporting heatmap visualization.
+    Provides detailed price and quantity arrays for bid/ask levels.
+    **Plan Availability:** Standard, Professional, Enterprise (not available for Hobbyist/Startup)
+    **Cache:** Real-time updates
     **Example cURL:**  
     ```shell
     curl --request GET "https://open-api-v4.coinglass.com/api/spot/orderbook/history?symbol=BTCUSDT&ex=BINANCE"
@@ -1603,8 +2301,10 @@ types:
 /api/spot/orderbook/large-limit-order:
   displayName: Spot Large Limit Orders
   description: |
-    Current large limit orders in spot markets  
-    **Plan Availability:** Standard+ only  
+    Provides large open limit orders from the current order book for spot trading.
+    **Thresholds:** BTC ≥350K, ETH ≥250K, Other coins ≥10K
+    **Plan Availability:** Standard, Professional, Enterprise (not available for Hobbyist/Startup)
+    **Cache:** Real-time updates
     **Example cURL:**  
     ```shell
     curl --request GET "https://open-api-v4.coinglass.com/api/spot/orderbook/large-limit-order?symbol=BTCUSDT&ex=BINANCE"
@@ -1627,8 +2327,10 @@ types:
 /api/spot/orderbook/large-limit-order-history:
   displayName: Spot Large Limit Order History
   description: |
-    Historical large limit orders for spot markets  
-    **Plan Availability:** Standard+ only  
+    Provides completed historical large limit orders from the order book for spot trading.
+    **Thresholds:** BTC ≥350K, ETH ≥250K, Other coins ≥10K
+    **Plan Availability:** Standard, Professional, Enterprise (not available for Hobbyist/Startup)
+    **Cache:** Real-time updates
     **Example cURL:**  
     ```shell
     curl --request GET "https://open-api-v4.coinglass.com/api/spot/orderbook/large-limit-order-history?symbol=BTCUSDT&ex=BINANCE"
@@ -1660,7 +2362,9 @@ types:
 /api/spot/taker-buy-sell-volume/history:
   displayName: Spot Taker Buy/Sell Volume History
   description: |
-    Historical spot taker buy/sell volume data  
+    Historical taker buy and sell volume data for spot trading pairs on specific exchanges.
+    **Plan Availability:** All plans (Hobbyist, Startup, Standard, Professional, Enterprise)
+    **Interval Limits:** Hobbyist ≥4h, Startup ≥30m, Standard/Professional/Enterprise no limit
     **Example cURL:**  
     ```shell
     curl --request GET "https://open-api-v4.coinglass.com/api/spot/taker-buy-sell-volume/history?symbol=BTCUSDT&ex=BINANCE&interval=1h"
@@ -1695,11 +2399,25 @@ types:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": [
+                  {
+                    "time": 1741622400000,
+                    "taker_buy_volume_usd": "10551.033",
+                    "taker_sell_volume_usd": "11308"
+                  }
+                ]
+              }
 
 /api/spot/aggregated-taker-buy-sell-volume/history:
   displayName: Aggregated Spot Taker Buy/Sell Volume History
   description: |
-    Aggregated spot taker buy/sell volume across exchanges  
+    Historical aggregated taker buy and sell volumes for spot cryptocurrencies across all supported exchanges.
+    **Plan Availability:** All plans (Hobbyist, Startup, Standard, Professional, Enterprise)
+    **Interval Limits:** Hobbyist ≥4h, Startup ≥30m, Standard/Professional/Enterprise no limit
     **Example cURL:**  
     ```shell
     curl --request GET "https://open-api-v4.coinglass.com/api/spot/aggregated-taker-buy-sell-volume/history?symbol=BTCUSDT&interval=1h"
@@ -1731,16 +2449,30 @@ types:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": [
+                  {
+                    "time": 1741622400000,
+                    "aggregated_buy_volume_usd": 968834542.38,
+                    "aggregated_sell_volume_usd": 1054582654.81
+                  }
+                ]
+              }
 
 # Options Endpoints
 /api/option/max-pain:
   displayName: Options Max Pain
   description: |
-    Options max pain calculation  
-    **Cache:** Every 1 minute  
+    Options max pain calculation providing the price point that would cause maximum financial loss to option holders.
+    Returns call/put open interest values, market values, notional values, and the calculated max pain price.
+    **Plan Availability:** All plans (Hobbyist, Startup, Standard, Professional, Enterprise)
+    **Cache:** Updated every 1 minute
     **Example cURL:**  
     ```shell
-    curl --request GET "https://open-api-v4.coinglass.com/api/option/max-pain?symbol=BTC"
+    curl --request GET "https://open-api-v4.coinglass.com/api/option/max-pain?symbol=BTCUSDT"
     ```
   securedBy: [apiKey]
   get:
@@ -1748,22 +2480,41 @@ types:
       symbol:
         type: string
         required: false
-        description: Symbol (default: BTC)
+        description: Symbol (default: BTCUSDT)
         default: BTC
     responses:
       200:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": [
+                  {
+                    "date": "250422",
+                    "call_open_interest_market_value": 2500000000,
+                    "put_open_interest": 150000,
+                    "put_open_interest_market_value": 2200000000,
+                    "max_pain_price": "84000",
+                    "call_open_interest": 175000,
+                    "call_open_interest_notional": 14700000000,
+                    "put_open_interest_notional": 12600000000
+                  }
+                ]
+              }
 
 /api/option/info:
   displayName: Options Market Info
   description: |
-    Options market overview  
-    **Cache:** Every 30 seconds  
+    Provides detailed information about open interest and trading volume for options across different exchanges.
+    Includes market share percentages, 24-hour changes, and USD values for comprehensive market overview.
+    **Plan Availability:** All plans (Hobbyist, Startup, Standard, Professional, Enterprise)
+    **Cache:** Updated every 30 seconds
     **Example cURL:**  
     ```shell
-    curl --request GET "https://open-api-v4.coinglass.com/api/option/info?symbol=BTC"
+    curl --request GET "https://open-api-v4.coinglass.com/api/option/info?symbol=BTCUSDT"
     ```
   securedBy: [apiKey]
   get:
@@ -1771,21 +2522,48 @@ types:
       symbol:
         type: string
         required: false
-        description: Symbol (default: BTC)
+        description: Symbol (default: BTCUSDT)
         default: BTC
     responses:
       200:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": [
+                  {
+                    "exchange_name": "All",
+                    "open_interest": 25000000,
+                    "oi_market_share": 100.0,
+                    "open_interest_change_24h": 2.5,
+                    "open_interest_usd": 2100000000,
+                    "volume_usd_24h": 500000000,
+                    "volume_change_percent_24h": 15.3
+                  },
+                  {
+                    "exchange_name": "Deribit",
+                    "open_interest": 22500000,
+                    "oi_market_share": 90.0,
+                    "open_interest_change_24h": 1.8,
+                    "open_interest_usd": 1890000000,
+                    "volume_usd_24h": 450000000,
+                    "volume_change_percent_24h": 12.1
+                  }
+                ]
+              }
 
 /api/option/exchange-oi-history:
   displayName: Options OI History by Exchange
   description: |
-    Historical open interest by exchange for options  
+    Provides historical open interest data for options across different exchanges with time series data,
+    price correlations, and exchange-specific metrics.
+    **Plan Availability:** All plans (Hobbyist, Startup, Standard, Professional, Enterprise)
     **Example cURL:**  
     ```shell
-    curl --request GET "https://open-api-v4.coinglass.com/api/option/exchange-oi-history?symbol=BTC&time_type=all"
+    curl --request GET "https://open-api-v4.coinglass.com/api/option/exchange-oi-history?symbol=BTCUSDT&time_type=all"
     ```
   securedBy: [apiKey]
   get:
@@ -1808,10 +2586,12 @@ types:
 /api/option/exchange-vol-history:
   displayName: Options Volume History by Exchange
   description: |
-    Historical volume by exchange for options  
+    Provides historical trading volume data for options across different exchanges with time series data,
+    price correlations, and exchange-specific volume metrics.
+    **Plan Availability:** All plans (Hobbyist, Startup, Standard, Professional, Enterprise)
     **Example cURL:**  
     ```shell
-    curl --request GET "https://open-api-v4.coinglass.com/api/option/exchange-vol-history?symbol=BTC&time_type=all"
+    curl --request GET "https://open-api-v4.coinglass.com/api/option/exchange-vol-history?symbol=BTCUSDT&time_type=all"
     ```
   securedBy: [apiKey]
   get:
@@ -1835,11 +2615,13 @@ types:
 /api/exchange/assets:
   displayName: Exchange Assets
   description: |
-    Exchange wallet assets and addresses  
-    **Cache:** Every 1 hour  
+    Retrieve asset holdings data for exchange wallets including wallet addresses, balances, USD values,
+    asset names, and current prices. Shows cryptocurrency assets held by major exchanges.
+    **Plan Availability:** All plans (Hobbyist, Startup, Standard, Professional, Enterprise)
+    **Cache:** Updated every 1 hour
     **Example cURL:**  
     ```shell
-    curl --request GET "https://open-api-v4.coinglass.com/api/exchange/assets?symbol=BTC&exchange=Binance"
+    curl --request GET "https://open-api-v4.coinglass.com/api/exchange/assets?symbol=BTCUSDT&exchange=Binance"
     ```
   securedBy: [apiKey]
   get:
@@ -1855,14 +2637,32 @@ types:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": [
+                  {
+                    "wallet_address": "34xp4vRoCGJym3xR7yCVPFHoCNxv4Twseo",
+                    "balance": 248597.54,
+                    "balance_usd": 21757721869.92,
+                    "symbol": "BTC",
+                    "assets_name": "Bitcoin",
+                    "price": 87521.87
+                  }
+                ]
+              }
 
 /api/exchange/balance/list:
   displayName: Exchange Balance List
   description: |
-    Exchange balance summary and changes  
+    Retrieve exchange-level asset balance data with total balances and balance changes over 1-day, 7-day,
+    and 30-day periods. Provides comparative balance tracking across exchanges.
+    **Plan Availability:** All plans (Hobbyist, Startup, Standard, Professional, Enterprise)
+    **Cache:** Updated every 1 hour
     **Example cURL:**  
     ```shell
-    curl --request GET "https://open-api-v4.coinglass.com/api/exchange/balance/list?symbol=BTC"
+    curl --request GET "https://open-api-v4.coinglass.com/api/exchange/balance/list?symbol=BTCUSDT"
     ```
   securedBy: [apiKey]
   get:
@@ -1879,10 +2679,12 @@ types:
 /api/exchange/balance/chart:
   displayName: Exchange Balance Chart
   description: |
-    Exchange balance chart data over time  
+    Historical exchange balance data for charting with time series data, price correlations,
+    and exchange-specific balance changes over time.
+    **Plan Availability:** All plans (Hobbyist, Startup, Standard, Professional, Enterprise)
     **Example cURL:**  
     ```shell
-    curl --request GET "https://open-api-v4.coinglass.com/api/exchange/balance/chart?symbol=BTC&exchange=Binance"
+    curl --request GET "https://open-api-v4.coinglass.com/api/exchange/balance/chart?symbol=BTCUSDT&exchange=Binance"
     ```
   securedBy: [apiKey]
   get:
@@ -1910,7 +2712,10 @@ types:
 /api/exchange/chain/tx/list:
   displayName: Exchange Chain Transactions
   description: |
-    ERC-20 token transfers and on-chain transactions  
+    ERC-20 token transfer records and on-chain transactions with detailed transaction information
+    including hashes, amounts, addresses, and transfer types (inflow/outflow/internal).
+    **Plan Availability:** All plans (Hobbyist, Startup, Standard, Professional, Enterprise)
+    **Cache:** Real-time updates
     **Example cURL:**  
     ```shell
     curl --request GET "https://open-api-v4.coinglass.com/api/exchange/chain/tx/list?symbol=USDT&exchange=Binance&type=out&limit=100"
@@ -1950,7 +2755,10 @@ types:
 /api/etf/bitcoin/list:
   displayName: Bitcoin ETF List
   description: |
-    Bitcoin ETF status, metrics, and holdings data  
+    Provides comprehensive Bitcoin Exchange-Traded Fund (ETF) information including ticker details,
+    fund names, regions, market status, trading data, AUM, management fees, and Bitcoin holdings.
+    **Plan Availability:** All plans (Hobbyist, Startup, Standard, Professional, Enterprise)
+    **Cache:** Real-time updates
     **Example cURL:**  
     ```shell
     curl --request GET "https://open-api-v4.coinglass.com/api/etf/bitcoin/list"
@@ -1962,11 +2770,40 @@ types:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": [
+                  {
+                    "ticker": "IBIT",
+                    "fund_name": "iShares Bitcoin Trust",
+                    "region": "US",
+                    "market_status": "Open",
+                    "primary_exchange": "NASDAQ",
+                    "fund_type": "ETF",
+                    "shares_outstanding": 500000000,
+                    "aum_usd": 25000000000,
+                    "management_fee_percent": 0.25,
+                    "volume_quantity": 15000000,
+                    "volume_usd": 900000000,
+                    "price_change_usd": 2.50,
+                    "price_change_percent": 4.2,
+                    "asset_details": {
+                      "net_asset_value": 62.50,
+                      "premium_discount": 0.1,
+                      "btc_holdings": 400000
+                    }
+                  }
+                ]
+              }
 
 /api/hk-etf/bitcoin/flow-history:
   displayName: Hong Kong Bitcoin ETF Flow History
   description: |
-    Hong Kong Bitcoin ETF flow data  
+    Historical capital flow data for Hong Kong Bitcoin ETFs with individual ETF breakdowns,
+    total flow amounts, and corresponding Bitcoin prices.
+    **Plan Availability:** All plans (Hobbyist, Startup, Standard, Professional, Enterprise)
     **Example cURL:**  
     ```shell
     curl --request GET "https://open-api-v4.coinglass.com/api/hk-etf/bitcoin/flow-history"
@@ -1987,11 +2824,31 @@ types:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": [
+                  {
+                    "timestamp": 1714435200000,
+                    "flow_usd": 247866000,
+                    "price_usd": 63842.4,
+                    "etf_flows": [
+                      {
+                        "etf_ticker": "CHINAAMC",
+                        "flow_usd": 123610690
+                      }
+                    ]
+                  }
+                ]
+              }
 
 /api/etf/bitcoin/net-assets/history:
   displayName: Bitcoin ETF Net Assets History
   description: |
-    Historical Bitcoin ETF net assets data  
+    Historical net asset value data for Bitcoin ETFs with daily capital changes,
+    timestamps, and corresponding Bitcoin prices.
+    **Plan Availability:** All plans (Hobbyist, Startup, Standard, Professional, Enterprise)
     **Example cURL:**  
     ```shell
     curl --request GET "https://open-api-v4.coinglass.com/api/etf/bitcoin/net-assets/history"
@@ -2016,7 +2873,9 @@ types:
 /api/etf/bitcoin/flow-history:
   displayName: Bitcoin ETF Flow History
   description: |
-    Historical Bitcoin ETF flow data  
+    Historical Bitcoin ETF capital flow data with individual ETF breakdowns,
+    total daily flows, and corresponding Bitcoin prices.
+    **Plan Availability:** All plans (Hobbyist, Startup, Standard, Professional, Enterprise)
     **Example cURL:**  
     ```shell
     curl --request GET "https://open-api-v4.coinglass.com/api/etf/bitcoin/flow-history"
@@ -2041,7 +2900,9 @@ types:
 /api/etf/bitcoin/premium-discount/history:
   displayName: Bitcoin ETF Premium/Discount History
   description: |
-    Historical Bitcoin ETF premium/discount data  
+    Historical premium/discount rates for Bitcoin ETFs showing the difference between
+    market price and net asset value (NAV) for multiple ETF tickers.
+    **Plan Availability:** All plans (Hobbyist, Startup, Standard, Professional, Enterprise)
     **Example cURL:**  
     ```shell
     curl --request GET "https://open-api-v4.coinglass.com/api/etf/bitcoin/premium-discount/history"
@@ -2066,7 +2927,9 @@ types:
 /api/etf/bitcoin/history:
   displayName: Bitcoin ETF History
   description: |
-    Comprehensive Bitcoin ETF historical data  
+    Comprehensive Bitcoin ETF historical data including assets dates, BTC holdings, market dates,
+    market prices, NAV, net assets, premium/discount rates, shares outstanding, and ticker information.
+    **Plan Availability:** All plans (Hobbyist, Startup, Standard, Professional, Enterprise)
     **Example cURL:**  
     ```shell
     curl --request GET "https://open-api-v4.coinglass.com/api/etf/bitcoin/history"
@@ -2091,7 +2954,9 @@ types:
 /api/etf/bitcoin/price/history:
   displayName: Bitcoin ETF Price History
   description: |
-    Bitcoin ETF price historical data  
+    Historical OHLC price data for Bitcoin Exchange-Traded Funds with timestamps,
+    opening, high, low, closing prices, and trading volumes.
+    **Plan Availability:** All plans (Hobbyist, Startup, Standard, Professional, Enterprise)
     **Example cURL:**  
     ```shell
     curl --request GET "https://open-api-v4.coinglass.com/api/etf/bitcoin/price/history"
@@ -2112,11 +2977,28 @@ types:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": [
+                  {
+                    "time": 1731056460000,
+                    "open": 60.47,
+                    "high": 60.47,
+                    "low": 60.47,
+                    "close": 60.47,
+                    "volume": 100
+                  }
+                ]
+              }
 
 /api/etf/bitcoin/detail:
   displayName: Bitcoin ETF Detail
   description: |
-    Detailed Bitcoin ETF information  
+    Provides detailed information on Bitcoin Exchange-Traded Funds including ticker information,
+    market status, performance metrics, last quote/trade data, and comprehensive ETF details.
+    **Plan Availability:** All plans (Hobbyist, Startup, Standard, Professional, Enterprise)
     **Example cURL:**  
     ```shell
     curl --request GET "https://open-api-v4.coinglass.com/api/etf/bitcoin/detail"
@@ -2132,7 +3014,10 @@ types:
 /api/etf/bitcoin/aum:
   displayName: Bitcoin ETF AUM
   description: |
-    Bitcoin ETF assets under management  
+    Historical Assets Under Management (AUM) data for Bitcoin ETFs with timestamps
+    and AUM values in USD. Updated daily with API credential requirements.
+    **Plan Availability:** All plans (Hobbyist, Startup, Standard, Professional, Enterprise)
+    **Cache:** Updated daily
     **Example cURL:**  
     ```shell
     curl --request GET "https://open-api-v4.coinglass.com/api/etf/bitcoin/aum"
@@ -2148,7 +3033,31 @@ types:
 /api/etf/ethereum/list:
   displayName: Ethereum ETF List
   description: |
-    Ethereum ETF status and metrics  
+    Provides comprehensive Ethereum Exchange-Traded Fund (ETF) information including ticker details,
+    fund names, regions, market status, trading data, AUM, management fees, and Ethereum holdings.
+    
+    **Response Fields:**
+    - ticker (string): ETF ticker symbol
+    - name (string): Full ETF name
+    - region (string): Geographic region
+    - market_status (string): Current market status
+    - primary_exchange (string): Primary stock exchange
+    - cik_code (string): CIK identification code
+    - type (string): ETF type (e.g., "Spot")
+    - market_cap (string): Market capitalization
+    - list_date (number): Timestamp of ETF listing
+    - shares_outstanding (string): Number of shares
+    - aum (string): Assets under management
+    - management_fee_percent (string): Management fee percentage
+    - last_trade_time (number): Timestamp of last trade
+    - volume_quantity (number): Trading volume
+    - volume_usd (number): Trading volume in USD
+    - price (number): Current market price
+    - price_change (number): Price change amount
+    - price_change_percent (number): Price change percentage
+    
+    **Plan Availability:** All plans (Hobbyist, Startup, Standard, Professional, Enterprise)
+    **Cache:** Real-time updates
     **Example cURL:**  
     ```shell
     curl --request GET "https://open-api-v4.coinglass.com/api/etf/ethereum/list"
@@ -2164,7 +3073,9 @@ types:
 /api/etf/ethereum/net-assets/history:
   displayName: Ethereum ETF Net Assets History
   description: |
-    Historical Ethereum ETF net assets data  
+    Historical net asset value data for Ethereum ETFs with daily capital changes,
+    timestamps, and corresponding Ethereum prices.
+    **Plan Availability:** All plans (Hobbyist, Startup, Standard, Professional, Enterprise)
     **Example cURL:**  
     ```shell
     curl --request GET "https://open-api-v4.coinglass.com/api/etf/ethereum/net-assets/history"
@@ -2185,26 +3096,42 @@ types:
         body:
           application/json:
             type: StandardResponse
+            example: |
+              {
+                "code": "0",
+                "msg": "success",
+                "data": [
+                  {
+                    "net_assets_usd": 51671409241.39,
+                    "change_usd": 655300000,
+                    "timestamp": 1704931200000,
+                    "price_usd": 1637.8
+                  }
+                ]
+              }
 
 /api/etf/ethereum/flow-history:
   displayName: Ethereum ETF Flow History
   description: |
-    Historical Ethereum ETF flow data  
+    Historical Ethereum ETF capital flow data with individual ETF breakdowns,
+    total daily flows, and corresponding Ethereum prices.
+    
+    **Response Fields:**
+    - timestamp (number): Timestamp of the record
+    - change_usd (number): Flow in/out in USD
+    - price (number): Current price
+    - close_price (number): Closing price
+    - etf_flows (array): List of individual ETF flows
+      - ticker (string): ETF ticker symbol
+      - change_usd (number): ETF flow in USD
+    
+    **Plan Availability:** All plans (Hobbyist, Startup, Standard, Professional, Enterprise)
     **Example cURL:**  
     ```shell
     curl --request GET "https://open-api-v4.coinglass.com/api/etf/ethereum/flow-history"
     ```
   securedBy: [apiKey]
   get:
-    queryParameters:
-      startTime:
-        type: integer
-        format: int64
-        required: false
-      endTime:
-        type: integer
-        format: int64
-        required: false
     responses:
       200:
         body:
@@ -2215,7 +3142,22 @@ types:
 /api/grayscale/holdings/list:
   displayName: Grayscale Holdings List
   description: |
-    Grayscale holdings and trust data  
+    Grayscale holdings and trust data with detailed token information and premium rates.
+    
+    **Response Fields:**
+    - symbol (string): Token symbol
+    - primary_market_price (number): Price in primary market
+    - secondary_market_price (number): Price in secondary market
+    - premium_rate (number): Premium rate (%)
+    - holdings_amount (number): Current holding amount in tokens
+    - holdings_usd (number): Total market value of holdings in USD
+    - holdings_amount_change_30d (number): Change in holding amount over 30 days
+    - holdings_amount_change_7d (number): Change in holding amount over 7 days
+    - holdings_amount_change1d (number): Change in holding amount over 1 day
+    - close_time (number): Market close timestamp (milliseconds)
+    - update_time (number): Data update timestamp (milliseconds)
+    
+    **Plan Availability:** All plans (Hobbyist, Startup, Standard, Professional, Enterprise)
     **Example cURL:**  
     ```shell
     curl --request GET "https://open-api-v4.coinglass.com/api/grayscale/holdings/list"
@@ -2231,22 +3173,21 @@ types:
 /api/grayscale/premium/history:
   displayName: Grayscale Premium History
   description: |
-    Historical Grayscale premium/discount data  
+    Historical Grayscale premium/discount data with market prices and premium rates over time.
+    
+    **Response Fields:**
+    - primary_market_price: Array of numeric prices
+    - date_list: Array of timestamps
+    - secondary_market_price_list: Array of numeric prices
+    - premium_rate_list: Array of numeric premium rates
+    
+    **Plan Availability:** All plans (Hobbyist, Startup, Standard, Professional, Enterprise)
     **Example cURL:**  
     ```shell
     curl --request GET "https://open-api-v4.coinglass.com/api/grayscale/premium/history"
     ```
   securedBy: [apiKey]
   get:
-    queryParameters:
-      startTime:
-        type: integer
-        format: int64
-        required: false
-      endTime:
-        type: integer
-        format: int64
-        required: false
     responses:
       200:
         body:
@@ -2257,9 +3198,22 @@ types:
 /api/futures/rsi/list:
   displayName: Futures RSI List
   description: |
-    RSI values across multiple timeframes  
-    **Plan Availability:** Standard+ only  
-    **Cache:** Every 10 seconds  
+    RSI values across multiple timeframes for various cryptocurrencies with price change data.
+    
+    **Response Fields:**
+    - symbol (string): Cryptocurrency token symbol (e.g., "BTC", "ETH")
+    - RSI values for timeframes:
+      - 15m (float)
+      - 1h (float)
+      - 4h (float)
+      - 12h (float)
+      - 24h (float)
+      - 1w (float)
+    - Price change percentages for corresponding timeframes
+    - current_price (float): Market price of the cryptocurrency
+    
+    **Plan Availability:** Standard, Professional, Enterprise (not available for Hobbyist or Startup plans)
+    **Cache:** Every 10 seconds for all the API plans
     **Example cURL:**  
     ```shell
     curl --request GET "https://open-api-v4.coinglass.com/api/futures/rsi/list"
@@ -2273,13 +3227,26 @@ types:
             type: StandardResponse
 
 /api/futures/basis/history:
-  displayName: Futures Basis
+  displayName: Futures Basis History
   description: |
-    Current futures basis data  
-    **Cache:** Real-time  
+    Historical futures basis data showing the price difference between futures and spot markets.
+    
+    **Response Fields:**
+    - time: Timestamp (milliseconds)
+    - open_basis: Opening basis percentage
+    - close_basis: Closing basis percentage
+    - open_change: Percentage change in basis at opening
+    - close_change: Percentage change in basis at closing
+    
+    **Plan Availability:** All plans (Hobbyist, Startup, Standard, Professional, Enterprise)
+    **Interval Limits:**
+    - Hobbyist: >= 4h
+    - Startup: >= 30m
+    - Standard/Professional/Enterprise: No Limit
+    **Cache:** Real-time for all the API plans
     **Example cURL:**  
     ```shell
-    curl --request GET "https://open-api-v4.coinglass.com/api/futures/basis/history?symbol=BTC&exchange=Binance"
+    curl --request GET "https://open-api-v4.coinglass.com/api/futures/basis/history?symbol=BTCUSDT&exchange=Binance"
     ```
   securedBy: [apiKey]
   get:
@@ -2297,11 +3264,16 @@ types:
             type: StandardResponse
 
 /api/futures/whale-index/history:
-  displayName: Futures Whale Index
+  displayName: Futures Whale Index History
   description: |
-    Whale index for futures markets  
-    **Cache:** Every 1 minute  
-    **Plan Availability:** Startup+ only  
+    Historical whale index data for futures markets showing large trader activity indicators.
+    
+    **Response Fields:**
+    - time: Timestamp (milliseconds)
+    - whale_index_value: Number (can be negative)
+    
+    **Plan Availability:** Startup, Standard, Professional, Enterprise (not available on Hobbyist plan)
+    **Cache:** Every 1 minute for all the API plans
     **Example cURL:**  
     ```shell
     curl --request GET "https://open-api-v4.coinglass.com/api/futures/whale-index/history"
@@ -2325,10 +3297,16 @@ types:
               }
 
 /api/futures/cgdi-index/history:
-  displayName: CGDI Index
+  displayName: CGDI Index History
   description: |
-    CoinGlass Derivatives Index  
-    **Cache:** Real-time  
+    Historical CoinGlass Derivatives Index data tracking market sentiment and derivatives activity.
+    
+    **Response Fields:**
+    - time: Timestamp (milliseconds)
+    - cgdi_index_value: Number
+    
+    **Plan Availability:** All plans (Hobbyist, Startup, Standard, Professional, Enterprise)
+    **Cache:** Every 1 minute for all the API plans
     **Example cURL:**  
     ```shell
     curl --request GET "https://open-api-v4.coinglass.com/api/futures/cgdi-index/history"
@@ -2342,11 +3320,17 @@ types:
             type: StandardResponse
 
 /api/futures/cdri-index/history:
-  displayName: CDRI Index
+  displayName: CDRI Index History
   description: |
-    Crypto Derivatives Risk Index  
-    **Cache:** Real-time  
-    **Example cURL:**  
+    Historical CoinGlass Derivatives Risk Index (CDRI) data measuring market risk levels.
+    
+    **Response Fields:**
+    - time: Timestamp (milliseconds)
+    - cdri_index_value: Numeric value
+    
+    **Plan Availability:** All plans (Hobbyist, Startup, Standard, Professional, Enterprise)
+    **Cache:** Every 1 minute for all the API plans
+    **Example cURL:  
     ```shell
     curl --request GET "https://open-api-v4.coinglass.com/api/futures/cdri-index/history"
     ```
@@ -2361,8 +3345,19 @@ types:
 /api/coinbase-premium-index:
   displayName: Coinbase Premium Index
   description: |
-    Coinbase premium index data  
-    **Cache:** Every 1 minute  
+    Coinbase premium index data indicating price difference between Bitcoin on Coinbase Pro and Binance.
+    
+    **Response Fields:**
+    - time: Timestamp (in seconds)
+    - premium: Premium amount (USD)
+    - premium_rate: Premium rate (decimal representation)
+    
+    **Plan Availability:** All plans (Hobbyist, Startup, Standard, Professional, Enterprise)
+    **Interval Limits:**
+    - Hobbyist: >= 4 hours
+    - Startup: >= 30 minutes
+    - Standard/Professional/Enterprise: No Limit
+    **Cache:** Real time for all the API plans
     **Example cURL:**  
     ```shell
     curl --request GET "https://open-api-v4.coinglass.com/api/coinbase-premium-index"
@@ -2378,7 +3373,19 @@ types:
 /api/bitfinex-margin-long-short:
   displayName: Bitfinex Margin Long/Short
   description: |
-    Bitfinex margin long/short ratio data  
+    Historical Bitfinex margin long/short position data.
+    
+    **Response Fields:**
+    - time: Timestamp (Unix time)
+    - long_quantity: Number (long position quantity)
+    - short_quantity: Number (short position quantity)
+    
+    **Plan Availability:** All plans (Hobbyist, Startup, Standard, Professional, Enterprise)
+    **Interval Limits:**
+    - Hobbyist: >= 4 hours
+    - Startup: >= 30 minutes
+    - Standard/Professional/Enterprise: No limit
+    **Cache:** Real time for all the API plans
     **Example cURL:**  
     ```shell
     curl --request GET "https://open-api-v4.coinglass.com/api/bitfinex-margin-long-short"
@@ -2394,10 +3401,16 @@ types:
 /api/borrow-interest-rate/history:
   displayName: Borrow Interest Rate History
   description: |
-    Historical borrow interest rate data  
+    Historical borrow interest rate data showing daily interest rates over time.
+    
+    **Response Fields:**
+    - time: Unix timestamp (in seconds)
+    - interest_rate: Number (daily interest rate)
+    
+    **Plan Availability:** All plans (Hobbyist, Startup, Standard, Professional, Enterprise)
     **Example cURL:**  
     ```shell
-    curl --request GET "https://open-api-v4.coinglass.com/api/borrow-interest-rate/history?symbol=BTC"
+    curl --request GET "https://open-api-v4.coinglass.com/api/borrow-interest-rate/history?symbol=BTCUSDT"
     ```
   securedBy: [apiKey]
   get:
@@ -2423,8 +3436,16 @@ types:
 /api/index/ahr999:
   displayName: AHR999 Indicator
   description: |
-    AHR999 Bitcoin indicator  
-    **Cache:** Daily updates  
+    Historical AHR999 Bitcoin indicator data for market analysis.
+    
+    **Response Fields:**
+    - date_string (string): Format "YYYY/MM/DD"
+    - average_price (number): Average price on the given date
+    - ahr999_value (number): AHR999 index value
+    - current_value (number): Current value on the given date
+    
+    **Plan Availability:** All plans (Hobbyist, Startup, Standard, Professional, Enterprise)
+    **Cache:** Daily updates
     **Example cURL:**  
     ```shell
     curl --request GET "https://open-api-v4.coinglass.com/api/index/ahr999"
@@ -2440,9 +3461,20 @@ types:
 /api/bull-market-peak-indicator:
   displayName: Bull Market Peak Indicators
   description: |
-    Multiple bull market peak indicator metrics  
-    **Cache:** Daily updates  
-    **Example cURL:**  
+    Multiple bull market peak indicator metrics providing various market signals.
+    
+    **Response Fields:**
+    - indicator_name (string): Name of the market indicator
+    - current_value (string): Current indicator value
+    - target_value (string): Target value for the indicator
+    - previous_value (string): Previous indicator value
+    - change_value (string): Change in value
+    - comparison_type (string): Comparison operator (e.g., ">=")
+    - hit_status (boolean): Whether target condition is met
+    
+    **Plan Availability:** All plans (Hobbyist, Startup, Standard, Professional, Enterprise)
+    **Cache:** Every day for all the API plans
+    **Example cURL:  
     ```shell
     curl --request GET "https://open-api-v4.coinglass.com/api/bull-market-peak-indicator"
     ```
@@ -2457,8 +3489,15 @@ types:
 /api/index/puell-multiple:
   displayName: Puell Multiple
   description: |
-    Bitcoin Puell Multiple indicator  
-    **Cache:** Daily updates  
+    Historical Bitcoin Puell Multiple indicator data for market cycle analysis.
+    
+    **Response Fields:**
+    - timestamp: Number (milliseconds)
+    - price: Number
+    - puell_multiple: Number
+    
+    **Plan Availability:** All plans (Hobbyist, Startup, Standard, Professional, Enterprise)
+    **Cache:** Every day for all the API plans
     **Example cURL:**  
     ```shell
     curl --request GET "https://open-api-v4.coinglass.com/api/index/puell-multiple"
@@ -2474,9 +3513,16 @@ types:
 /api/index/stock-flow:
   displayName: Stock-to-Flow Model
   description: |
-    Bitcoin Stock-to-Flow model data  
-    **Cache:** Daily updates  
-    **Example cURL:**  
+    Historical Bitcoin Stock-to-Flow model data with pricing predictions.
+    
+    **Response Fields:**
+    - timestamp (milliseconds)
+    - price (numeric)
+    - next_halving (number of days)
+    
+    **Plan Availability:** All plans (Hobbyist, Startup, Standard, Professional, Enterprise)
+    **Cache:** Every day for all the API plans
+    **Example cURL:  
     ```shell
     curl --request GET "https://open-api-v4.coinglass.com/api/index/stock-flow"
     ```
@@ -2491,8 +3537,16 @@ types:
 /api/index/pi-cycle-indicator:
   displayName: Pi Cycle Top Indicator
   description: |
-    Bitcoin Pi Cycle Top indicator  
-    **Cache:** Daily updates  
+    Historical Bitcoin Pi Cycle Top indicator data for market timing analysis.
+    
+    **Response Fields:**
+    - ma_110 (number): 110-day moving average price
+    - timestamp (number): Timestamp in milliseconds
+    - ma_350_mu_2 (number): 2x value of 350-day moving average
+    - price (number): Daily price
+    
+    **Plan Availability:** All plans (Hobbyist, Startup, Standard, Professional, Enterprise)
+    **Cache:** Every day for all the API plans
     **Example cURL:**  
     ```shell
     curl --request GET "https://open-api-v4.coinglass.com/api/index/pi-cycle-indicator"
@@ -2508,9 +3562,23 @@ types:
 /api/index/golden-ratio-multiplier:
   displayName: Golden Ratio Multiplier
   description: |
-    Bitcoin Golden Ratio Multiplier  
-    **Cache:** Daily updates  
-    **Example cURL:**  
+    Historical Bitcoin Golden Ratio Multiplier data with various Fibonacci-based price levels.
+    
+    **Response Fields:**
+    - low_bull_high_2 (number): Bull market low-high ratio coefficient
+    - timestamp (number): Timestamp in milliseconds
+    - price (number): Current price
+    - ma_350 (number): 350-day moving average
+    - accumulation_high_1_6 (number): Accumulation high ratio (1/6 golden ratio)
+    - x_3 (number): Golden ratio multiple x3
+    - x_5 (number): Golden ratio multiple x5
+    - x_8 (number): Golden ratio multiple x8
+    - x_13 (number): Golden ratio multiple x13
+    - x_21 (number): Golden ratio multiple x21
+    
+    **Plan Availability:** All plans (Hobbyist, Startup, Standard, Professional, Enterprise)
+    **Cache:** Every day for all the API plans
+    **Example cURL:  
     ```shell
     curl --request GET "https://open-api-v4.coinglass.com/api/index/golden-ratio-multiplier"
     ```
@@ -2525,8 +3593,15 @@ types:
 /api/index/bitcoin/profitable-days:
   displayName: Bitcoin Profitable Days
   description: |
-    Bitcoin profitable days indicator  
-    **Cache:** Daily updates  
+    Historical Bitcoin profitable days data showing buy/sell signals based on price analysis.
+    
+    **Response Fields:**
+    - side: Integer (1 = buy, 0 = sell)
+    - timestamp: Integer (milliseconds)
+    - price: Number
+    
+    **Plan Availability:** All plans (Hobbyist, Startup, Standard, Professional, Enterprise)
+    **Cache:** Every day for all the API plans
     **Example cURL:**  
     ```shell
     curl --request GET "https://open-api-v4.coinglass.com/api/index/bitcoin/profitable-days"
@@ -2542,9 +3617,17 @@ types:
 /api/index/bitcoin/rainbow-chart:
   displayName: Bitcoin Rainbow Chart
   description: |
-    Bitcoin Rainbow Chart data  
-    **Cache:** Daily updates  
-    **Example cURL:**  
+    Historical Bitcoin Rainbow Chart data with price valuation bands and market sentiment indicators.
+    
+    **Response Fields:**
+    - Current price (float)
+    - Minimum shadow value (float)
+    - 9 price layers (floats)
+    - Timestamp (integer, milliseconds)
+    
+    **Plan Availability:** All plans (Hobbyist, Startup, Standard, Professional, Enterprise)
+    **Cache:** Every day for all the API plans
+    **Example cURL:  
     ```shell
     curl --request GET "https://open-api-v4.coinglass.com/api/index/bitcoin/rainbow-chart"
     ```
@@ -2560,8 +3643,15 @@ types:
 /api/index/fear-greed-history:
   displayName: Fear & Greed Index History
   description: |
-    Crypto Fear & Greed Index historical data  
-    **Cache:** Daily updates  
+    Historical Crypto Fear & Greed Index data with corresponding price information.
+    
+    **Response Fields:**
+    - data_list: Array of Fear and Greed Index values
+    - price_list: Array of corresponding price data
+    - time_list: Array of timestamps
+    
+    **Plan Availability:** All plans (Hobbyist, Startup, Standard, Professional, Enterprise)
+    **Cache:** Every day for all the API plans
     **Example cURL:**  
     ```shell
     curl --request GET "https://open-api-v4.coinglass.com/api/index/fear-greed-history"
@@ -2666,7 +3756,15 @@ types:
 /api/index/altcoin-season-index:
   displayName: Altcoin Season Index
   description: |
-    Altcoin season performance index  
+    Altcoin season performance index tracking market dominance shifts.
+    
+    **Response Fields:**
+    - timestamp: Number (milliseconds)
+    - altcoin_index: Number
+    - altcoin_marketcap: Number
+    
+    **Plan Availability:** Startup, Standard, Professional, Enterprise (not available on Hobbyist plan)
+    **Cache:** 5 minute for all the API plans
     **Example cURL:**  
     ```shell
     curl --request GET "https://open-api-v4.coinglass.com/api/index/altcoin-season-index"

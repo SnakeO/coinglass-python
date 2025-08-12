@@ -204,3 +204,4 @@ test_output_*.txt
 test_report_*.html
 *_test_results.*
 /test_output.txt
+/.codebuddy
